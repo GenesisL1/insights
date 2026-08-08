@@ -1,0 +1,74 @@
+name: Publish Article 02 sources, assets and pinned evidence
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "content/**"
+      - "site/**/*.html"
+      - "site/**/*.css"
+      - "site/**/*.js"
+      - "tools/**"
+      - "requirements.txt"
+      - ".github/workflows/publish-article-02.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-article-02
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements.txt
+          python -m playwright install --with-deps chromium
+      - name: Generate publication graphics
+        run: python tools/graphics/create_graphics.py
+      - name: Capture pinned consensus evidence
+        run: |
+          rm -rf .tmp/consensus evidence/article-02/consensus/block-13412747
+          python tools/evidence/capture_validator_snapshot.py --height 13412747 --output-root .tmp/consensus --no-latest
+          SNAP=$(find .tmp/consensus -mindepth 1 -maxdepth 1 -type d -name 'height-13412747-*' | head -1)
+          test -n "$SNAP"
+          mkdir -p evidence/article-02/consensus
+          mv "$SNAP" evidence/article-02/consensus/block-13412747
+          cd evidence/article-02/consensus/block-13412747 && sha256sum -c SHA256SUMS.txt
+      - name: Capture pinned MOLNFT evidence
+        run: |
+          rm -rf .tmp/molnft evidence/article-02/molnft/block-13412747
+          python tools/evidence/capture_molnft_snapshot.py --block 13412747 --expected-block-hash 19F42CD995E384E09D5CD4FB2751668E613D762DD1F22301D065EC84950F0F9A --output-root .tmp/molnft/snapshots
+          SNAP=$(find .tmp/molnft/snapshots -mindepth 1 -maxdepth 1 -type d -name 'block-13412747-*' | head -1)
+          test -n "$SNAP"
+          mkdir -p evidence/article-02/molnft
+          mv "$SNAP" evidence/article-02/molnft/block-13412747
+          cd evidence/article-02/molnft/block-13412747 && sha256sum -c SHA256SUMS.txt
+      - name: Validate SVG geometry and repository
+        run: |
+          python tools/qa/validate_svg_layout.py
+          python tools/qa/validate_repository.py
+      - name: Commit generated publication and evidence files
+        run: |
+          rm -rf .tmp
+          git config user.name "GenesisL1 Insights Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A content site evidence
+          if git diff --cached --quiet; then
+            echo "No generated changes."
+          else
+            git commit -m "build: publish Article 02 assets and pinned evidence"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
