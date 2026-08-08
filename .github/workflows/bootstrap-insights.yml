@@ -5,14 +5,13 @@ on:
   push:
     branches: [main]
     paths:
-      - "bootstrap-v3/SHA256SUMS.txt"
       - ".github/workflows/bootstrap-insights.yml"
 
 permissions:
   contents: write
 
 concurrency:
-  group: bootstrap-insights-v3
+  group: bootstrap-insights-v4
   cancel-in-progress: false
 
 jobs:
@@ -40,14 +39,27 @@ jobs:
           test -f /tmp/seed/insights_repo_seed/tools/evidence/capture_validator_snapshot.py
           test -f /tmp/seed/insights_repo_seed/tools/evidence/capture_molnft_snapshot.py
 
-      - name: Replace the staging tree with the clean source tree
+      - name: Replace staging files while preserving current workflow definitions
         run: |
+          mkdir -p /tmp/current-workflows
+          cp .github/workflows/bootstrap-insights.yml /tmp/current-workflows/bootstrap-insights.yml
+          if test -f .github/workflows/compact-history.yml; then
+            cp .github/workflows/compact-history.yml /tmp/current-workflows/compact-history.yml
+          fi
+
           find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
           cp -a /tmp/seed/insights_repo_seed/. .
+
+          rm -f .github/workflows/publish-article-02.yml
+          mkdir -p .github/workflows
+          cp /tmp/current-workflows/bootstrap-insights.yml .github/workflows/bootstrap-insights.yml
+          if test -f /tmp/current-workflows/compact-history.yml; then
+            cp /tmp/current-workflows/compact-history.yml .github/workflows/compact-history.yml
+          fi
+
           test ! -d bootstrap-v3
           test ! -d migration
-          test ! -f .github/workflows/bootstrap-insights.yml
-          test ! -f .github/workflows/compact-history.yml
+          test -f .github/workflows/bootstrap-insights.yml
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -95,12 +107,13 @@ jobs:
           python tools/qa/validate_svg_layout.py
           python tools/qa/validate_repository.py
 
-      - name: Publish the clean repository tree
+      - name: Publish clean content without changing workflow files
         run: |
           rm -rf .tmp
           git config user.name "GenesisL1 Insights Bot"
           git config user.email "actions@users.noreply.github.com"
           git add -A
+          git diff --cached -- .github/workflows/ | tee /tmp/workflow-diff.txt
+          test ! -s /tmp/workflow-diff.txt
           git commit -m "feat: publish complete GenesisL1 Insights repository"
-          git pull --rebase origin main
           git push origin HEAD:main
