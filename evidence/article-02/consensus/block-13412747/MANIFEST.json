@@ -4,7 +4,7 @@
     {
       "bytes": 3412,
       "path": "README.md",
-      "sha256": "67c87220b70afaf75cc98b90281ccd3b4adcbda940edbe635876f1c654177a74"
+      "sha256": "2eaec30b402e3ccdd4e2a3224cca17662fce518f8e54671c232139be90aae108"
     },
     {
       "bytes": 166,
@@ -22,9 +22,9 @@
       "sha256": "aea2271fa20193dc9dc22e02bdc9f88d797b80d6e04aac29a247af72bcca8cce"
     },
     {
-      "bytes": 960,
+      "bytes": 959,
       "path": "raw/rpc-status.json",
-      "sha256": "2b82565aba633aca03df046f0aeebdf4e248423434080bee85abb0d128e0b05b"
+      "sha256": "f91027601f58f86bcd01f517cbc527e15f26a195660ed441ab7b27e8facbf747"
     },
     {
       "bytes": 5590,
@@ -32,9 +32,9 @@
       "sha256": "b1ae55c6c7cf10fa1008366bac1a0bcd3300f0a3a1ffebe83bd082fc52eea87d"
     },
     {
-      "bytes": 2874,
+      "bytes": 2873,
       "path": "snapshot.json",
-      "sha256": "9fb4a60cbbd07481ebee620aa66510f06e7cea7a99a818054692086c9fcf87c2"
+      "sha256": "797ae27fc2ca2f64131f7159c876b2b2cf3cd14f5329215ba2ff1f96d18db70d"
     },
     {
       "bytes": 6608,

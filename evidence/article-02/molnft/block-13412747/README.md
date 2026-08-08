@@ -3,7 +3,7 @@
 **Pinned GenesisL1 block:** `13412747`  
 **Block hash:** `0x19f42cd995e384e09d5cd4fb2751668e613d762dd1f22301d065ec84950f0f9a`  
 **Block time:** `2026-08-06T12:29:02Z`  
-**Captured:** `2026-08-08T07:51:56Z`  
+**Captured:** `2026-08-08T07:54:16Z`  
 **RPC provider:** `GenesisL1 public`
 
 ## Exact collection observations

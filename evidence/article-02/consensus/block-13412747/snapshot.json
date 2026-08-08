@@ -3,7 +3,7 @@
     "app_hash": "446FEDBB09C700FF1C766AB21A1FAC13B8DD38FE432CCC4FD71A1F26F660A0D0",
     "block_hash": "19F42CD995E384E09D5CD4FB2751668E613D762DD1F22301D065EC84950F0F9A",
     "block_time_utc": "2026-08-06T12:29:02.693197721Z",
-    "captured_at_utc": "2026-08-08T07:51:47Z",
+    "captured_at_utc": "2026-08-08T07:53:58Z",
     "chain_id": "genesis_29-2",
     "cometbft_version": "0.38.13",
     "height_verification": {
@@ -13,7 +13,7 @@
       ],
       "rpc_block_height": 13412747
     },
-    "lag_blocks_from_rpc_tip": 10173,
+    "lag_blocks_from_rpc_tip": 10181,
     "matching": {
       "consensus_validator_count": 26,
       "matched_by_consensus_pubkey": 26,
@@ -44,8 +44,8 @@
     ],
     "rest_endpoint": "https://genesisl1.api.m.anode.team",
     "rpc_endpoint": "https://genesisl1.rpc.m.anode.team",
-    "rpc_latest_height_at_start": 13422920,
-    "rpc_latest_time_at_start": "2026-08-08T07:51:26.802956292Z",
+    "rpc_latest_height_at_start": 13422928,
+    "rpc_latest_time_at_start": "2026-08-08T07:53:31.49620107Z",
     "schema": "org.genesisl1.decentralization_snapshot.v2"
   },
   "metrics": {

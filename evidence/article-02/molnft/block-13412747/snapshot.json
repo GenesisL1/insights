@@ -31,7 +31,7 @@
     "block_hash": "0x19f42cd995e384e09d5cd4fb2751668e613d762dd1f22301d065ec84950f0f9a",
     "block_number": 13412747,
     "block_time_utc": "2026-08-06T12:29:02Z",
-    "captured_at_utc": "2026-08-08T07:51:56Z",
+    "captured_at_utc": "2026-08-08T07:54:16Z",
     "chain_id": "genesis_29-2",
     "child_counter_function": "nextChildId()",
     "evm_chain_id": 29,

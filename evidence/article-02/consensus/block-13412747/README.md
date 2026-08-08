@@ -2,7 +2,7 @@
 
 **Pinned block:** `13412747`  
 **Block time:** `2026-08-06T12:29:02.693197721Z`  
-**Captured:** `2026-08-08T07:51:47Z`  
+**Captured:** `2026-08-08T07:53:58Z`  
 **Block hash:** `19F42CD995E384E09D5CD4FB2751668E613D762DD1F22301D065EC84950F0F9A`  
 **Provider:** `ANODE.TEAM`
 
