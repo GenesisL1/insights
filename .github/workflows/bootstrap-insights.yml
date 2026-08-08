@@ -5,14 +5,14 @@ on:
   push:
     branches: [main]
     paths:
+      - "bootstrap-v3/SHA256SUMS.txt"
       - ".github/workflows/bootstrap-insights.yml"
 
 permissions:
   contents: write
-  actions: write
 
 concurrency:
-  group: bootstrap-insights
+  group: bootstrap-insights-v3
   cancel-in-progress: false
 
 jobs:
@@ -25,23 +25,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Reassemble and verify the clean repository seed
+      - name: Verify and reassemble the clean repository seed
         run: |
-          cat \
-            migration/seed5.part00.b64 \
-            migration/seedR.part00.b64 \
-            migration/seedR.part01.b64 \
-            migration/seedR.part02.b64 \
-            migration/seedR.part03.b64 \
-            migration/seedR.part04.b64 \
-            migration/seedR.part05.b64 \
-            migration/seedR.part06.b64 \
-            migration/final.part07a.b64 \
-            migration/final.part07b.b64 \
-            migration/final.part08.b64 \
-            migration/final.part09.b64 \
-            migration/final.part10.b64 \
-            | tr -d '\r\n\t ' > /tmp/seed.b64
+          cd bootstrap-v3
+          sha256sum -c SHA256SUMS.txt
+          cat part-{00..13}.b64 > /tmp/seed.b64
           test "$(wc -c < /tmp/seed.b64)" -eq 111412
           base64 --decode /tmp/seed.b64 > /tmp/seed.zip
           echo "4cbf3b5beef144f539510db6185aa9497e9ea431a26bb014c0bb5e7c731fd77e  /tmp/seed.zip" | sha256sum -c -
@@ -49,13 +37,17 @@ jobs:
           test -f /tmp/seed/insights_repo_seed/README.md
           test -f /tmp/seed/insights_repo_seed/.github/workflows/publish-article-02.yml
           test -f /tmp/seed/insights_repo_seed/tools/graphics/create_graphics.py
+          test -f /tmp/seed/insights_repo_seed/tools/evidence/capture_validator_snapshot.py
+          test -f /tmp/seed/insights_repo_seed/tools/evidence/capture_molnft_snapshot.py
 
       - name: Replace the staging tree with the clean source tree
         run: |
           find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
           cp -a /tmp/seed/insights_repo_seed/. .
+          test ! -d bootstrap-v3
           test ! -d migration
           test ! -f .github/workflows/bootstrap-insights.yml
+          test ! -f .github/workflows/compact-history.yml
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -103,11 +95,12 @@ jobs:
           python tools/qa/validate_svg_layout.py
           python tools/qa/validate_repository.py
 
-      - name: Publish the final repository tree
+      - name: Publish the clean repository tree
         run: |
           rm -rf .tmp
           git config user.name "GenesisL1 Insights Bot"
           git config user.email "actions@users.noreply.github.com"
           git add -A
-          git commit -m "feat: publish GenesisL1 Insights, graphics and pinned evidence"
+          git commit -m "feat: publish complete GenesisL1 Insights repository"
+          git pull --rebase origin main
           git push origin HEAD:main
