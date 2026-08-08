@@ -36,11 +36,13 @@ jobs:
             migration/seedR.part04.b64 \
             migration/seedR.part05.b64 \
             migration/seedR.part06.b64 \
-            migration/final.part07.b64 \
+            migration/final.part07a.b64 \
+            migration/final.part07b.b64 \
             migration/final.part08.b64 \
             migration/final.part09.b64 \
             migration/final.part10.b64 \
             | tr -d '\r\n\t ' > /tmp/seed.b64
+          test "$(wc -c < /tmp/seed.b64)" -eq 111412
           base64 --decode /tmp/seed.b64 > /tmp/seed.zip
           echo "4cbf3b5beef144f539510db6185aa9497e9ea431a26bb014c0bb5e7c731fd77e  /tmp/seed.zip" | sha256sum -c -
           unzip -q /tmp/seed.zip -d /tmp/seed
