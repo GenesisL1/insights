@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^insights/genesisl1-decentralization-sovereign-science\.html$ /insights/genesisl1-decentralization-scientific-renaissance.html [R=301,L]
+RewriteRule ^insights/genesisl1-token-distribution-no-insider-allocation\.html$ /insights/genesisl1-decentralization-scientific-renaissance.html [R=301,L]
