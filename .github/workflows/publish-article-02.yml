@@ -2,6 +2,10 @@ name: Refresh Article 02 current network evidence
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publish-article-02.yml"
 
 permissions:
   contents: write
@@ -11,8 +15,163 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  paused:
+  refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
-      - name: Migration guard
-        run: echo "The current-network evidence workflow is being upgraded and will be re-enabled in the final commit."
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install verified network-state tooling
+        run: |
+          cat migration/network-refresh/part-{00..05}.b64 > /tmp/network-refresh.b64
+          test "$(wc -c < /tmp/network-refresh.b64)" -eq 47680
+          echo "2a69084e4253e3bb84f6d8ce28edeabea442835b9c541435eceaa6e87c009cd2  /tmp/network-refresh.b64" | sha256sum -c -
+          base64 --decode /tmp/network-refresh.b64 > /tmp/network-refresh.zip
+          echo "70bdd4a6132b5286ca770d5b239ac58a42f535f5850c2cd8e38098c497ead0ef  /tmp/network-refresh.zip" | sha256sum -c -
+          unzip -q -o /tmp/network-refresh.zip -d .
+          patch -p0 < migration/network-refresh/refresh-idempotency.patch
+          rm -rf migration
+          test -f tools/evidence/capture_network_state.py
+          test -f tools/publication/refresh_network_state.py
+          test -f tools/graphics/create_graphics.py
+          test -f tools/qa/validate_repository.py
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install publication dependencies
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Capture current validators, delegators and stake
+        run: |
+          rm -rf .tmp/network-state
+          python tools/evidence/capture_network_state.py --output-root .tmp/network-state
+          SNAP=$(find .tmp/network-state -mindepth 1 -maxdepth 1 -type d -name 'block-*' | head -1)
+          test -n "$SNAP"
+          HEIGHT=$(python - "$SNAP/snapshot.json" <<'PY'
+          import json, sys
+          print(json.load(open(sys.argv[1], encoding="utf-8"))["metadata"]["pinned_height"])
+          PY
+          )
+          DEST="evidence/article-02/network-state/block-${HEIGHT}"
+          rm -rf "$DEST"
+          mkdir -p evidence/article-02/network-state
+          mv "$SNAP" "$DEST"
+          cd "$DEST"
+          sha256sum -c SHA256SUMS.txt
+          cd - >/dev/null
+          python - "$DEST" <<'PY'
+          import hashlib, json, pathlib, sys
+          directory = pathlib.Path(sys.argv[1])
+          snapshot_path = directory / "snapshot.json"
+          snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
+          digest = hashlib.sha256(snapshot_path.read_bytes()).hexdigest()
+          metadata = snapshot["metadata"]
+          pointer = {
+              "schema": "org.genesisl1.network_state_latest_pointer.v1",
+              "pinned_height": metadata["pinned_height"],
+              "block_time_utc": metadata["block_time_utc"],
+              "block_hash": metadata["block_hash"],
+              "snapshot_directory": directory.name,
+              "snapshot_relative_path": directory.as_posix(),
+              "snapshot_sha256": digest,
+              "captured_at_utc": metadata["captured_at_utc"],
+          }
+          latest = directory.parent / "LATEST.json"
+          latest.write_text(json.dumps(pointer, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          PY
+          echo "NETWORK_SNAPSHOT=$DEST" >> "$GITHUB_ENV"
+          echo "NETWORK_HEIGHT=$HEIGHT" >> "$GITHUB_ENV"
+
+      - name: Refresh only the dated network evidence in Article 02
+        run: python tools/publication/refresh_network_state.py --snapshot "$NETWORK_SNAPSHOT/snapshot.json"
+
+      - name: Regenerate evidence-aware publication graphics
+        run: python tools/graphics/create_graphics.py
+
+      - name: Validate checksums, article precision and SVG geometry
+        run: |
+          python tools/qa/validate_repository.py
+          python tools/qa/validate_svg_layout.py
+
+      - name: Build complete, deploy and raw-evidence bundles
+        run: |
+          rm -rf .artifacts
+          mkdir -p .artifacts
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib
+          import json
+          import pathlib
+          import zipfile
+
+          root = pathlib.Path('.').resolve()
+          artifacts = root / '.artifacts'
+          facts = json.loads((root / 'content/article-02-next-verifiable-renaissance/network-state.json').read_text(encoding='utf-8'))
+          height = facts['pinned_height']
+          snapshot = root / facts['snapshot_relative_path']
+          skip_parts = {'.git', '.tmp', '.artifacts', '__pycache__', 'migration'}
+
+          def allowed(path: pathlib.Path) -> bool:
+              rel = path.relative_to(root)
+              return not any(part in skip_parts for part in rel.parts) and path.suffix not in {'.pyc', '.pyo'}
+
+          def add_tree(zf: zipfile.ZipFile, source: pathlib.Path, prefix: str = '') -> None:
+              for path in sorted(source.rglob('*')):
+                  if path.is_file() and allowed(path):
+                      relative = path.relative_to(source).as_posix()
+                      arcname = f'{prefix}/{relative}'.strip('/')
+                      zf.write(path, arcname)
+
+          full = artifacts / f'GenesisL1_Insights_Article_02_Current_Network_FULL_block-{height}.zip'
+          with zipfile.ZipFile(full, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+              add_tree(zf, root, 'GenesisL1-insights')
+
+          deploy = artifacts / f'GenesisL1_Insights_Article_02_Current_Network_DEPLOY_block-{height}.zip'
+          deploy_note = artifacts / 'DEPLOY_README.md'
+          deploy_note.write_text(
+              '# GenesisL1 Article 02 deployment\n\n'
+              f'Current validator, delegator and stake evidence is pinned to block `{height:,}`.\n\n'
+              'Upload `site/insights/` to `/insights/` and `site/decentralization/` to `/decentralization/`. '
+              'Apply the redirect and sitemap snippets under `deployment/`. The MOLNFT scientific evidence remains pinned separately to block `13,412,747`.\n',
+              encoding='utf-8',
+          )
+          with zipfile.ZipFile(deploy, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+              add_tree(zf, root / 'site', 'site')
+              add_tree(zf, root / 'deployment', 'deployment')
+              zf.write(deploy_note, 'DEPLOY_README.md')
+
+          evidence = artifacts / f'GenesisL1_Network_State_Evidence_block-{height}.zip'
+          with zipfile.ZipFile(evidence, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+              add_tree(zf, snapshot, f'network-state-block-{height}')
+
+          checksum_lines = []
+          for path in sorted(artifacts.glob('*.zip')):
+              checksum_lines.append(f'{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}')
+          (artifacts / 'SHA256SUMS.txt').write_text('\n'.join(checksum_lines) + '\n', encoding='utf-8')
+          PY
+
+      - name: Commit the current state, article and reproducible evidence
+        run: |
+          git config user.name "GenesisL1 Insights Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git reset -- .artifacts || true
+          git commit -m "data: refresh Article 02 network state at block ${NETWORK_HEIGHT}"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Upload ready-to-use publication bundles
+        uses: actions/upload-artifact@v4
+        with:
+          name: genesisl1-article-02-current-network-${{ env.NETWORK_HEIGHT }}
+          path: .artifacts/*
+          if-no-files-found: error
+          retention-days: 90
