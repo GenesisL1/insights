@@ -1,0 +1,1 @@
+{"delegation_responses":[{"delegation":{"delegator_address":"genesis1de58e3hzv0f2qrltsclrfq90298mhudafzyzly","validator_address":"genesisvaloper1de58e3hzv0f2qrltsclrfq90298mhudad6w7cz","shares":"1000000000000000000.000000000000000000"},"balance":{"denom":"el1","amount":"990000000000000000"}}],"pagination":{"next_key":null,"total":"1"}}

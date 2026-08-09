@@ -1,0 +1,10 @@
+{
+  "block_hash": "468D9995659870F007565CB912E0496DDF56FEA68768B6621EC9109BA7873D73",
+  "block_time_utc": "2026-08-09T21:09:57.580118257Z",
+  "captured_at_utc": "2026-08-09T21:12:10Z",
+  "pinned_height": 13431705,
+  "schema": "org.genesisl1.network_state_latest_pointer.v1",
+  "snapshot_directory": "block-13431705",
+  "snapshot_relative_path": "evidence/article-02/network-state/block-13431705",
+  "snapshot_sha256": "2535099bc52cf4170d943e045d05a8cfee3caabb2e17e9a8f4dea14ac4932911"
+}

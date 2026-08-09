@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import html
+import json
 from pathlib import Path
 from typing import Iterable
 
@@ -15,6 +16,41 @@ FIGURES = ROOT / "content" / ARTICLE_SLUG / "figures"
 ASSETS = ROOT / "site" / "insights" / "assets"
 FIGURES.mkdir(parents=True, exist_ok=True)
 ASSETS.mkdir(parents=True, exist_ok=True)
+
+STATE_PATH = ROOT / "content" / ARTICLE_SLUG / "network-state.json"
+DEFAULT_STATE = {
+    "pinned_height": 13412747,
+    "pinned_height_display": "13,412,747",
+    "block_date_label": "AUGUST 6 · BLOCK 13,412,747",
+    "active_validators": 26,
+    "active_delta": 6,
+    "active_growth_percent": "30",
+    "largest_share_percent": "9.36",
+    "top3_share_percent": "25.27",
+    "top5_share_percent": "38.74",
+    "top5_delta_points": "−12.33",
+    "one_third_coefficient": 5,
+    "two_thirds_coefficient": 10,
+    "bonded_stake_display": "—",
+    "unique_active_delegators": 0,
+    "active_delegation_relationships": 0,
+}
+NETWORK_STATE = json.loads(STATE_PATH.read_text(encoding="utf-8")) if STATE_PATH.exists() else DEFAULT_STATE
+CURRENT_HEIGHT = NETWORK_STATE["pinned_height_display"]
+CURRENT_BLOCK_LABEL = NETWORK_STATE["block_date_label"]
+CURRENT_ACTIVE = int(NETWORK_STATE["active_validators"])
+CURRENT_ACTIVE_DELTA = int(NETWORK_STATE["active_delta"])
+CURRENT_ACTIVE_GROWTH = str(NETWORK_STATE["active_growth_percent"])
+CURRENT_LARGEST = str(NETWORK_STATE["largest_share_percent"])
+CURRENT_TOP3 = str(NETWORK_STATE["top3_share_percent"])
+CURRENT_TOP5 = str(NETWORK_STATE["top5_share_percent"])
+CURRENT_TOP5_FLOAT = float(CURRENT_TOP5)
+CURRENT_TOP5_DELTA = str(NETWORK_STATE["top5_delta_points"])
+CURRENT_ONE_THIRD = int(NETWORK_STATE["one_third_coefficient"])
+CURRENT_TWO_THIRDS = int(NETWORK_STATE["two_thirds_coefficient"])
+CURRENT_BONDED_STAKE = str(NETWORK_STATE.get("bonded_stake_display", "—"))
+CURRENT_DELEGATORS = int(NETWORK_STATE.get("unique_active_delegators", 0))
+CURRENT_RELATIONSHIPS = int(NETWORK_STATE.get("active_delegation_relationships", 0))
 
 INK = "#071522"
 TEXT = "#0B1420"
@@ -304,10 +340,10 @@ def hero() -> None:
     s += [rect(bx, by, bw, bh, WHITE, LINE, 18, 1)]
     cell = bw / 4
     metrics = [
-        ("ACTIVE SET", "20 → 26", "Pinned consensus"),
-        ("TOP FIVE", "51.07 → 38.74%", "Lower leading share"),
-        ("THRESHOLD BREADTH", "⅓ 3→5 · ⅔ 8→10", "Broader critical cohorts"),
-        ("REPRODUCIBLE EVIDENCE", "BLOCK 13,412,747", "Raw JSON + SHA-256"),
+        ("ACTIVE SET", f"20 → {CURRENT_ACTIVE}", "Pinned consensus"),
+        ("TOP FIVE", f"51.07 → {CURRENT_TOP5}%", "Lower leading share"),
+        ("THRESHOLD BREADTH", f"⅓ 3→{CURRENT_ONE_THIRD} · ⅔ 8→{CURRENT_TWO_THIRDS}", "Broader critical cohorts"),
+        ("REPRODUCIBLE EVIDENCE", f"BLOCK {CURRENT_HEIGHT}", "Raw JSON + SHA-256"),
     ]
     for i, (label, big, small) in enumerate(metrics):
         x = bx + i * cell
@@ -362,11 +398,11 @@ def consensus() -> None:
     s += [rect(0, 0, w, h, WHITE, "none"), '<rect width="1600" height="900" fill="url(#grid)" opacity=".6"/>']
     s += [txt(72, 72, "HEIGHT-PINNED CONSENSUS EVIDENCE", 15, 700, BLUE, spacing=2.3)]
     s += [multiline(72, 139, ["The active set grew.", "Critical cohorts widened."], 50, 57, 500, INK, spacing=-1.7)]
-    s += [txt(72, 270, "Every August figure below is reproducible from the raw CometBFT response at block 13,412,747.", 20, 500, MUTED)]
+    s += [txt(72, 270, f"Every current figure below is reproducible from the raw CometBFT response at block {CURRENT_HEIGHT}.", 20, 500, MUTED)]
 
     cards = [
         (72, 328, "JULY 19 · WHITEPAPER", "20 ACTIVE VALIDATORS", 51.07, "13.09%", "35.62%", "3", "8", INK),
-        (852, 328, "AUGUST 6 · BLOCK 13,412,747", "26 ACTIVE VALIDATORS", 38.74, "9.36%", "25.27%", "5", "10", BLUE),
+        (852, 328, CURRENT_BLOCK_LABEL, f"{CURRENT_ACTIVE} ACTIVE VALIDATORS", CURRENT_TOP5_FLOAT, f"{CURRENT_LARGEST}%", f"{CURRENT_TOP3}%", str(CURRENT_ONE_THIRD), str(CURRENT_TWO_THIRDS), BLUE),
     ]
     for x, y, label, count, pct, largest, top3, one, two, fill in cards:
         s += [rect(x, y, 676, 440, WHITE, LINE, 18, 1), txt(x+34, y+45, label, 13, 700, BLUE, spacing=1.25), txt(x+34, y+88, count, 28, 600, INK)]
@@ -386,7 +422,7 @@ def consensus() -> None:
         s += [rect(x+356, y+334, 286, 72, WHITE, LINE, 9, 1), txt(x+372, y+358, "STRICT TWO-THIRDS", 11, 700, MUTED, spacing=.75), txt(x+372, y+394, two, 31, 650, INK)]
 
     s += [circle(800, 548, 45, INK, INK, 0), txt(800, 558, "→", 34, 400, WHITE, "middle")]
-    s += [rect(230, 798, 1140, 59, LIGHT, LINE, 10, 1), txt(800, 835, "TOP FIVE: −12.33 points · ACTIVE SET: +30% · ⅓: 3 → 5 · ⅔: 8 → 10", 17, 700, INK, "middle")]
+    s += [rect(230, 798, 1140, 59, LIGHT, LINE, 10, 1), txt(800, 835, f"TOP FIVE: {CURRENT_TOP5_DELTA} points · ACTIVE SET: +{CURRENT_ACTIVE_GROWTH}% · ⅓: 3 → {CURRENT_ONE_THIRD} · ⅔: 8 → {CURRENT_TWO_THIRDS}", 17, 700, INK, "middle")]
     s += [txt(800, 884, "Raw JSON, ranked CSV, full metrics and SHA-256 checksums are published with the snapshot.", 13, 500, MUTED, "middle")]
     s += ["</svg>"]
     p = write_svg("genesisl1-consensus-widening", "".join(s)); render(p, w, h)
@@ -513,7 +549,7 @@ def card() -> None:
         s += [txt(x+62, y+42, title, 12, 700, INK, spacing=.62), txt(x+62, y+69, sub, 9, 700, BLUE, spacing=.65)]
 
     s += [rect(52, 744, 996, 122, WHITE, LINE, 0, 1)]
-    metrics = [(78, "20 → 26", "ACTIVE SET"), (354, "51.07 → 38.74%", "TOP FIVE"), (734, "⅓ 3→5 · ⅔ 8→10", "COHORTS")]
+    metrics = [(78, f"20 → {CURRENT_ACTIVE}", "ACTIVE SET"), (354, f"51.07 → {CURRENT_TOP5}%", "TOP FIVE"), (734, f"⅓ 3→{CURRENT_ONE_THIRD} · ⅔ 8→{CURRENT_TWO_THIRDS}", "COHORTS")]
     for i, (x, big, label) in enumerate(metrics):
         if i: s += [line(x-24, 765, x-24, 844, LINE, 1)]
         s += [txt(x, 796, big, 22 if i<2 else 18, 650, INK), txt(x, 830, label, 11, 700, BLUE, spacing=1.25)]
@@ -546,7 +582,7 @@ def social() -> None:
         s += [txt(x+68, y+45, title, 11, 700, INK, spacing=.55), txt(x+68, y+72, sub, 10, 700, BLUE, spacing=.75)]
 
     s += [rect(46, 496, 1114, 86, WHITE, LINE, 0, 1)]
-    metrics = [(68, "20 → 26", "ACTIVE SET"), (324, "51.07 → 38.74%", "TOP FIVE"), (660, "⅓ 3→5 · ⅔ 8→10", "COHORTS"), (966, "13,412,747", "PINNED BLOCK")]
+    metrics = [(68, f"20 → {CURRENT_ACTIVE}", "ACTIVE SET"), (324, f"51.07 → {CURRENT_TOP5}%", "TOP FIVE"), (660, f"⅓ 3→{CURRENT_ONE_THIRD} · ⅔ 8→{CURRENT_TWO_THIRDS}", "COHORTS"), (966, CURRENT_HEIGHT, "PINNED BLOCK")]
     for i, (x, big, label) in enumerate(metrics):
         if i: s += [line(x-20, 512, x-20, 566, LINE, 1)]
         s += [txt(x, 535, big, 17 if i!=2 else 15, 650, INK), txt(x, 562, label, 9, 700, BLUE, spacing=1.05)]

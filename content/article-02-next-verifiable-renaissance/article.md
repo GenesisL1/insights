@@ -78,18 +78,18 @@ William Nordhaus estimated that innovators retained roughly 2.2% of the social s
 
 Decentralization is most persuasive when it is timestamped, reproducible and open to correction.
 
-The GenesisL1 comparison below uses the July 2026 whitepaper reference at block **13,313,640** and a preserved CometBFT snapshot at block **13,412,747**. Publication values are rounded consistently to two decimal places; exact integer voting power and higher-precision calculations remain available in the machine-readable evidence. <sup><a href="#source-1">1</a></sup><sup><a href="#source-2">2</a></sup>
+The GenesisL1 comparison below uses the July 2026 whitepaper reference at block **13,313,640** and a preserved current network-state snapshot at block **13,431,705**. Publication values are rounded consistently to two decimal places; exact integer voting power and higher-precision calculations remain available in the machine-readable evidence. <sup><a href="#source-1">1</a></sup><sup><a href="#source-2">2</a></sup>
 
-| Measure | Whitepaper reference | Block 13,412,747 | Change |
+| Measure | Whitepaper reference | Block 13,431,705 | Change |
 |---|---:|---:|---:|
-| Active validators | 20 | 26 | +6 |
-| Largest validator | 13.09% | 9.36% | −3.73 points |
-| Top three | 35.62% | 25.27% | −10.35 points |
-| Top five | 51.07% | 38.74% | −12.33 points |
+| Active validators | 20 | 27 | +7 |
+| Largest validator | 13.09% | 9.03% | −4.06 points |
+| Top three | 35.62% | 24.76% | −10.86 points |
+| Top five | 51.07% | 37.44% | −13.63 points |
 | One-third coefficient | 3 | 5 | +2 validators |
-| Strict two-thirds coefficient | 8 | 10 | +2 validators |
+| Strict two-thirds coefficient | 8 | 11 | +3 validators |
 
-The active set expanded by 30%. Five leading validators were required to reach one-third of voting power, while ten were required to exceed the two-thirds commit threshold. The largest-validator, top-three and top-five shares all declined relative to the whitepaper reference.
+The active set expanded by 35%. Five leading validators were required to reach one-third of voting power, while eleven were required to exceed the two-thirds commit threshold. At the same height, **24,954,378.94 L1** was bonded across **1,298 unique delegator addresses** and **1,943 active delegation relationships**. The largest-validator, top-three and top-five shares all declined relative to the whitepaper reference.
 
 This does not mean “five validators control GenesisL1.” In CometBFT, more than two-thirds of voting power is required to commit a block. One-third is principally a liveness threshold: a coordinated cohort at or above it can prevent the remainder from exceeding two-thirds, but cannot alone finalize arbitrary state. <sup><a href="#source-3">3</a></sup>
 
@@ -175,7 +175,7 @@ MOLNFT gives molecular structures durable identity and contract-readable provena
 
 ### How has GenesisL1 decentralization changed since the whitepaper?
 
-The active set expanded from 20 to 26 validators. Rounded consistently to two decimals, the largest-validator share moved from 13.09% to 9.36%, the top-three share from 35.62% to 25.27%, and the top-five share from 51.07% to 38.74%. The one-third coefficient widened from three validators to five, and the strict two-thirds coefficient from eight to ten.
+The active set expanded from 20 to 27 validators. Rounded consistently to two decimals, the largest-validator share moved from 13.09% to 9.03%, the top-three share from 35.62% to 24.76%, and the top-five share from 51.07% to 37.44%. The one-third coefficient widened from three validators to five, and the strict two-thirds coefficient from eight to eleven. The same snapshot records 24,954,378.94 L1 bonded across 1,298 unique active delegator addresses.
 
 ### Can an institution retain sovereign control of sensitive data?
 
@@ -188,7 +188,7 @@ No. On-chain verification establishes the computational record: which object, mo
 ## Sources and verification
 
 1. **GenesisL1 Technical Whitepaper, Version 1.0, July 2026.** Public genesis and distribution, validator reference state, institution-operated nodes and indexers, community-pool governance, L1 coin utility and consensus model. [Whitepaper ↗](https://genesisl1.com/whitepaper.pdf)
-2. **GenesisL1 reproducible consensus snapshot at block 13,412,747.** Raw CometBFT and Cosmos JSON, ranked CSV, metrics, manifest and SHA-256 checksums. [Immutable snapshot ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/consensus/block-13412747)
+2. **GenesisL1 reproducible network-state snapshot at block 13,431,705.** Raw CometBFT and Cosmos JSON, complete validator and delegation CSVs, bonded-stake metrics, manifest and SHA-256 checksums. [Immutable snapshot ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/network-state/block-13431705)
 3. **CometBFT consensus specification, v0.38.** More-than-two-thirds commit threshold and voting-power model. [Specification ↗](https://docs.cometbft.com/v0.38/spec/consensus/consensus)
 4. **The Royal Society — History.** Institutional origins and *Nullius in verba*. [History ↗](https://royalsociety.org/about-us/who-we-are/history/)
 5. **The Royal Society — History of Philosophical Transactions.** The scientific periodical from 1665. [Journal history ↗](https://royalsociety.org/journals/publishing-activities/publishing350/history-philosophical-transactions/)
@@ -202,6 +202,6 @@ No. On-chain verification establishes the computational record: which object, mo
 13. **GenesisL1 pinned MOLNFT evidence at block 13,412,747.** Contract counters, raw JSON-RPC responses, runtime-code hashes, reconstructed BinaryCIF objects and SHA-256 manifests. [Evidence repository ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13412747)
 14. **GenesisL1 CIPNFT source repository.** Client-side encryption, fully on-chain ciphertext and recipient-bound delivery workflow. [Source ↗](https://github.com/GenesisL1/cipnft)
 
-Measurement note: Current consensus figures are pinned to block 13,412,747. Publication comparisons are rounded consistently to two decimal places; exact values remain in the machine-readable snapshot. MOLNFT reconstruction claims refer only to the predeclared sample published in the pinned evidence package.
+Measurement note: Current validator, delegator and stake figures are pinned to block 13,431,705. Publication comparisons are rounded consistently to two decimal places; exact integer state and higher-precision calculations remain in the machine-readable snapshot. MOLNFT reconstruction claims remain pinned separately to block 13,412,747 and refer only to the predeclared sample published in that evidence package.
 
 This article is informational and published by GenesisL1 about GenesisL1. L1 coin is the native utility and security asset of the network; nothing here is an offer, promise of return or investment advice.

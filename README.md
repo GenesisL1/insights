@@ -8,7 +8,7 @@ Long-form GenesisL1 publications, source graphics, reproducible evidence snapsho
 
 - [Editable article source](content/article-02-next-verifiable-renaissance/article.md)
 - [Production HTML](site/insights/genesisl1-decentralization-scientific-renaissance.html)
-- [Consensus evidence](evidence/article-02/consensus/block-13412747/)
+- [Current validator, delegator and stake evidence](evidence/article-02/network-state/block-13431705/)
 - [MOLNFT evidence](evidence/article-02/molnft/block-13412747/)
 - [Consensus methodology](methodology/consensus.md)
 - [MOLNFT methodology](methodology/molnft.md)
@@ -32,7 +32,7 @@ python tools/qa/validate_repository.py
 python tools/qa/validate_svg_layout.py
 ```
 
-The evidence workflow is pinned to GenesisL1 block `13,412,747` and rejects a mismatching block hash.
+The current network-state evidence is pinned to GenesisL1 block `13,431,705`. The MOLNFT reconstruction package remains independently pinned to block `13,412,747`.
 
 ## Licensing
 
