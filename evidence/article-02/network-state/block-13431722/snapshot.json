@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "app_hash": "B6D460AAA4907FA94800A74A3163EF3166ABDCF33E60C538B85CDC27A06B0B93",
-    "block_hash": "468D9995659870F007565CB912E0496DDF56FEA68768B6621EC9109BA7873D73",
-    "block_time_utc": "2026-08-09T21:09:57.580118257Z",
-    "captured_at_utc": "2026-08-09T21:12:10Z",
+    "app_hash": "6C26A54579C4B3D0CD645AFB67701B82E90A0310D57107EBC0167EB7244954C2",
+    "block_hash": "DB6953F971F56420374FAF84FEE98A1BFB280A723462F0D05774C76BCDD6535A",
+    "block_time_utc": "2026-08-09T21:14:01.357862732Z",
+    "captured_at_utc": "2026-08-09T21:16:14Z",
     "chain_id": "genesis_29-2",
     "cometbft_version": "0.38.13",
     "lag_blocks_from_rpc_tip": 2,
@@ -15,7 +15,7 @@
     },
     "methodology_version": "3.0.0",
     "network": "GenesisL1",
-    "pinned_height": 13431705,
+    "pinned_height": 13431722,
     "provider_name": "ANODE.TEAM",
     "raw_rest_delegation_pages": [
       {
@@ -1200,7 +1200,7 @@
         "count": 27,
         "page": 1,
         "total": 27,
-        "url": "https://genesisl1.rpc.m.anode.team/validators?height=13431705&page=1&per_page=100"
+        "url": "https://genesisl1.rpc.m.anode.team/validators?height=13431722&page=1&per_page=100"
       }
     ],
     "request_height_verification": {
@@ -1330,12 +1330,12 @@
         null,
         null
       ],
-      "rpc_block_height": 13431705
+      "rpc_block_height": 13431722
     },
     "rest_endpoint": "https://genesisl1.api.m.anode.team",
     "rpc_endpoint": "https://genesisl1.rpc.m.anode.team",
-    "rpc_latest_height_at_start": 13431707,
-    "rpc_latest_time_at_start": "2026-08-09T21:10:27.446404531Z",
+    "rpc_latest_height_at_start": 13431724,
+    "rpc_latest_time_at_start": "2026-08-09T21:14:31.512768312Z",
     "schema": "org.genesisl1.network_state_snapshot.v3"
   },
   "metrics": {
@@ -1414,7 +1414,7 @@
     "staking": {
       "bond_denom": "el1",
       "bonded_ratio_staking_pool_percent": "93.20366478",
-      "bonded_ratio_total_supply_percent": "53.37273275",
+      "bonded_ratio_total_supply_percent": "53.37268672",
       "bonded_validator_records": 27,
       "bonded_validator_tokens_atomic": "24954378935037821727818689",
       "display_decimals": 18,
@@ -1429,8 +1429,8 @@
       "pool_total_tokens_atomic": "26774031895262691569274400",
       "pool_total_tokens_l1": "26774031.895263",
       "registered_validator_records": 105,
-      "total_supply_atomic": "46754920817430828710744551",
-      "total_supply_l1": "46754920.817431",
+      "total_supply_atomic": "46754961143862919412505577",
+      "total_supply_l1": "46754961.143863",
       "unbonded_validator_records": 78,
       "unbonded_validator_tokens_atomic": "1269167258694319841455715",
       "unbonding_validator_records": 0,

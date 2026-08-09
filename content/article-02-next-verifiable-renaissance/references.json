@@ -5,12 +5,12 @@
   "molnft_repository_url": "https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft",
   "molnft_snapshot_directory": "block-13412747-20260806T122902Z",
   "molnft_workflow_url": "https://github.com/GenesisL1/insights/actions/workflows/publish-article-02.yml",
-  "network_state_block": 13431705,
-  "network_state_block_hash": "468D9995659870F007565CB912E0496DDF56FEA68768B6621EC9109BA7873D73",
-  "network_state_captured_at_utc": "2026-08-09T21:12:11Z",
+  "network_state_block": 13431722,
+  "network_state_block_hash": "DB6953F971F56420374FAF84FEE98A1BFB280A723462F0D05774C76BCDD6535A",
+  "network_state_captured_at_utc": "2026-08-09T21:16:14Z",
   "repository_url": "https://github.com/GenesisL1/insights",
   "validator_commit": "feab89fb8083132c3db45d8e899c5d066ab99e6b",
-  "validator_immutable_url": "https://github.com/GenesisL1/insights/tree/main/evidence/article-02/network-state/block-13431705",
+  "validator_immutable_url": "https://github.com/GenesisL1/insights/tree/main/evidence/article-02/network-state/block-13431722",
   "validator_repository_url": "https://github.com/GenesisL1/insights/tree/main/evidence/article-02/consensus",
-  "validator_snapshot_directory": "block-13431705"
+  "validator_snapshot_directory": "block-13431722"
 }

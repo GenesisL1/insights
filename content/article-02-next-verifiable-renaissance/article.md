@@ -78,9 +78,9 @@ William Nordhaus estimated that innovators retained roughly 2.2% of the social s
 
 Decentralization is most persuasive when it is timestamped, reproducible and open to correction.
 
-The GenesisL1 comparison below uses the July 2026 whitepaper reference at block **13,313,640** and a preserved current network-state snapshot at block **13,431,705**. Publication values are rounded consistently to two decimal places; exact integer voting power and higher-precision calculations remain available in the machine-readable evidence. <sup><a href="#source-1">1</a></sup><sup><a href="#source-2">2</a></sup>
+The GenesisL1 comparison below uses the July 2026 whitepaper reference at block **13,313,640** and a preserved current network-state snapshot at block **13,431,722**. Publication values are rounded consistently to two decimal places; exact integer voting power and higher-precision calculations remain available in the machine-readable evidence. <sup><a href="#source-1">1</a></sup><sup><a href="#source-2">2</a></sup>
 
-| Measure | Whitepaper reference | Block 13,431,705 | Change |
+| Measure | Whitepaper reference | Block 13,431,722 | Change |
 |---|---:|---:|---:|
 | Active validators | 20 | 27 | +7 |
 | Largest validator | 13.09% | 9.03% | −4.06 points |
@@ -188,7 +188,7 @@ No. On-chain verification establishes the computational record: which object, mo
 ## Sources and verification
 
 1. **GenesisL1 Technical Whitepaper, Version 1.0, July 2026.** Public genesis and distribution, validator reference state, institution-operated nodes and indexers, community-pool governance, L1 coin utility and consensus model. [Whitepaper ↗](https://genesisl1.com/whitepaper.pdf)
-2. **GenesisL1 reproducible network-state snapshot at block 13,431,705.** Raw CometBFT and Cosmos JSON, complete validator and delegation CSVs, bonded-stake metrics, manifest and SHA-256 checksums. [Immutable snapshot ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/network-state/block-13431705)
+2. **GenesisL1 reproducible network-state snapshot at block 13,431,722.** Raw CometBFT and Cosmos JSON, complete validator and delegation CSVs, bonded-stake metrics, manifest and SHA-256 checksums. [Immutable snapshot ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/network-state/block-13431722)
 3. **CometBFT consensus specification, v0.38.** More-than-two-thirds commit threshold and voting-power model. [Specification ↗](https://docs.cometbft.com/v0.38/spec/consensus/consensus)
 4. **The Royal Society — History.** Institutional origins and *Nullius in verba*. [History ↗](https://royalsociety.org/about-us/who-we-are/history/)
 5. **The Royal Society — History of Philosophical Transactions.** The scientific periodical from 1665. [Journal history ↗](https://royalsociety.org/journals/publishing-activities/publishing350/history-philosophical-transactions/)
@@ -202,6 +202,6 @@ No. On-chain verification establishes the computational record: which object, mo
 13. **GenesisL1 pinned MOLNFT evidence at block 13,412,747.** Contract counters, raw JSON-RPC responses, runtime-code hashes, reconstructed BinaryCIF objects and SHA-256 manifests. [Evidence repository ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13412747)
 14. **GenesisL1 CIPNFT source repository.** Client-side encryption, fully on-chain ciphertext and recipient-bound delivery workflow. [Source ↗](https://github.com/GenesisL1/cipnft)
 
-Measurement note: Current validator, delegator and stake figures are pinned to block 13,431,705. Publication comparisons are rounded consistently to two decimal places; exact integer state and higher-precision calculations remain in the machine-readable snapshot. MOLNFT reconstruction claims remain pinned separately to block 13,412,747 and refer only to the predeclared sample published in that evidence package.
+Measurement note: Current validator, delegator and stake figures are pinned to block 13,431,722. Publication comparisons are rounded consistently to two decimal places; exact integer state and higher-precision calculations remain in the machine-readable snapshot. MOLNFT reconstruction claims remain pinned separately to block 13,412,747 and refer only to the predeclared sample published in that evidence package.
 
 This article is informational and published by GenesisL1 about GenesisL1. L1 coin is the native utility and security asset of the network; nothing here is an offer, promise of return or investment advice.

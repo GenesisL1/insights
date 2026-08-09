@@ -1,9 +1,9 @@
 # GenesisL1 current network-state snapshot
 
-**Pinned block:** `13431705`  
-**Block time:** `2026-08-09T21:09:57.580118257Z`  
-**Captured:** `2026-08-09T21:12:10Z`  
-**Block hash:** `468D9995659870F007565CB912E0496DDF56FEA68768B6621EC9109BA7873D73`  
+**Pinned block:** `13431722`  
+**Block time:** `2026-08-09T21:14:01.357862732Z`  
+**Captured:** `2026-08-09T21:16:14Z`  
+**Block hash:** `DB6953F971F56420374FAF84FEE98A1BFB280A723462F0D05774C76BCDD6535A`  
 **Provider:** `ANODE.TEAM`
 
 This package measures the observable on-chain distribution of active consensus power, registered validator state, delegation relationships and bonded L1 at one block height.
@@ -35,8 +35,8 @@ This package measures the observable on-chain distribution of active consensus p
 | Bonded / unbonding / unbonded validators | **27 / 0 / 78** |
 | Bonded stake | **24954378.935038 L1** |
 | Not-bonded staking-pool tokens | **1819652.960225 L1** |
-| Native supply | **46754920.817431 L1** |
-| Bonded / native supply | **53.37273275%** |
+| Native supply | **46754961.143863 L1** |
+| Bonded / native supply | **53.37268672%** |
 | Unique delegators to active validators | **1298** |
 | Active delegation relationships | **1943** |
 | Delegators using more than one active validator | **195** |
