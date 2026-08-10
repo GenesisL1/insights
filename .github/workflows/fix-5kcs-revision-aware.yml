@@ -1,0 +1,127 @@
+name: Correct 5KCS revision-aware structural fidelity
+
+on:
+  push:
+    branches: [fix-5kcs-rcsb-atom-name-revision-20260811]
+    paths:
+      - "migration/START_5KCS_REVISION_FIX"
+
+permissions:
+  contents: write
+
+jobs:
+  correct:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out correction branch
+        uses: actions/checkout@v4
+        with:
+          ref: fix-5kcs-rcsb-atom-name-revision-20260811
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned evidence environment
+        run: |
+          python -m pip install --disable-pip-version-check --upgrade pip
+          python -m pip install --disable-pip-version-check -r requirements.lock
+
+      - name: Apply verified source overlay
+        run: |
+          cat migration/5kcs-fix-part-*.b64 > /tmp/5kcs-overlay.b64
+          base64 --decode /tmp/5kcs-overlay.b64 > /tmp/5kcs-overlay.zip
+          echo "6766e63f297ced64864ddd1badfc7ef4bd7717f86115d293c9a170b6927119e3  /tmp/5kcs-overlay.zip" | sha256sum -c -
+          unzip -o /tmp/5kcs-overlay.zip -d .
+          python -m py_compile \
+            tools/evidence/molnft_structural_compare.py \
+            tools/evidence/capture_molnft_randomized_sample.py \
+            tools/evidence/finalize_molnft_structural_evidence.py \
+            tools/publication/apply_molnft_targeted_requery.py \
+            tools/publication/apply_ws1_ws2_direct_article.py \
+            tools/qa/validate_ws1_ws2_structural.py
+
+      - name: Recompute MOLNFT evidence and publication
+        run: |
+          MOLNFT=evidence/article-02/molnft/block-13436937
+          python tools/evidence/finalize_molnft_structural_evidence.py \
+            --evidence "$MOLNFT"
+          python tools/publication/apply_molnft_targeted_requery.py \
+            --molnft-evidence "$MOLNFT"
+          python tools/evidence/finalize_molnft_structural_evidence.py \
+            --evidence "$MOLNFT" \
+            --verify-deterministic
+
+      - name: Verify exact 5KCS correction
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+
+          root = 'evidence/article-02/molnft/block-13436937'
+          with open(f'{root}/results.csv', newline='', encoding='utf-8') as handle:
+              rows = list(csv.DictReader(handle))
+          row = next(item for item in rows if item['pdb_id'] == '5KCS' and item['token_id'] == '124713')
+          summary = json.load(open(f'{root}/summary.json', encoding='utf-8'))
+
+          assert row['outcome'] == 'SUCCESS'
+          assert row['fidelity_pass'].lower() == 'true'
+          assert row['atom_count_equal'].lower() == 'true'
+          assert row['chain_ids_equal'].lower() == 'true'
+          assert row['entity_ids_equal'].lower() == 'true'
+          assert row['atom_keys_equal'].lower() == 'false'
+          assert row['atom_identity_agreement'].lower() == 'true'
+          assert row['atom_identity_comparison_method'] == 'stable_atom_site_id_with_documented_rcsb_atom_name_revision'
+          assert row['stable_atom_site_id_sets_equal'].lower() == 'true'
+          assert row['stable_identity_field_mismatch_count'] == '0'
+          assert row['atom_name_change_count'] == '4'
+          assert row['max_coordinate_deviation_angstrom'] == '0'
+          assert row['coordinate_agreement'].lower() == 'true'
+          assert row['coordinate_hash_equal'].lower() == 'true'
+          assert row['canonical_atom_name_revision_date'] == '2026-07-01'
+          changes = json.loads(row['atom_name_changes'])
+          assert changes == [
+              {'component_id': '6MZ', 'from': 'O1P', 'to': 'OP2', 'count': 2},
+              {'component_id': '6MZ', 'from': 'O2P', 'to': 'OP1', 'count': 2},
+          ]
+          assert summary['N'] == 100
+          assert summary['successes'] == 100
+          assert summary['failures'] == 0
+          assert summary['fidelity_passes'] == 100
+          assert summary['strict_atom_key_matches'] == 99
+          assert summary['revision_aware_atom_identity_passes'] == 1
+          assert summary['coordinate_hash_matches'] == 99
+          print(json.dumps(row, indent=2, sort_keys=True))
+          print(json.dumps(summary, indent=2, sort_keys=True))
+          PY
+
+      - name: Validate complete evidence and publication
+        run: |
+          MOLNFT=evidence/article-02/molnft/block-13436937
+          NETWORK=evidence/article-02/network-state/block-13431722
+          (cd "$MOLNFT" && sha256sum -c SHA256SUMS.txt)
+          (cd "$NETWORK" && sha256sum -c SHA256SUMS.txt)
+          python tools/evidence/upgrade_ws2_metrics_direct.py \
+            --snapshot "$NETWORK/snapshot.json" \
+            --validators "$NETWORK/validators.csv" \
+            --delegators "$NETWORK/delegators.csv" \
+            --verify-only
+          python tools/qa/validate_ws1_ws2_structural.py \
+            --molnft "$MOLNFT" \
+            --network "$NETWORK"
+          if [ -f tools/qa/validate_svg_layout.py ]; then
+            python tools/qa/validate_svg_layout.py
+          fi
+
+      - name: Commit corrected evidence and publication
+        run: |
+          rm -f migration/5kcs-fix-part-*.b64
+          rm -f migration/START_5KCS_REVISION_FIX
+          git config user.name "GenesisL1 Evidence Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "evidence: correct 5KCS for documented RCSB atom-name revision"
+          git push origin HEAD:fix-5kcs-rcsb-atom-name-revision-20260811
