@@ -61,7 +61,7 @@ jobs:
           output = (root / 'release-artifacts').resolve()
           molnft = (root / 'evidence/article-02/molnft/block-13436937').resolve()
           network = (root / 'evidence/article-02/network-state/block-13431722').resolve()
-          excluded_parts = {'.git', 'release-artifacts', '.tmp', '__pycache__', '.pytest_cache'}
+          excluded_parts = {'.git', 'release-artifacts', '.tmp', '__pycache__', '.pytest_cache', 'migration'}
 
           def allowed(path: pathlib.Path) -> bool:
               relative = path.resolve().relative_to(root)
