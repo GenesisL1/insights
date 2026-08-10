@@ -12,7 +12,7 @@ Deploy:
 
 Expected evidence-dependent Article 02 values:
 
-- MOLNFT: 98 of 100 canonical structural-fidelity passes; 2 preserved RPC out-of-gas failures; 97 of 98 exact normalized coordinate-hash matches; no off-chain token index
+- MOLNFT: 99 of 100 canonical structural-fidelity passes after a targeted same-ID RPCA requery of 5KCS/NFT 124713 and 6QFB/NFT 162649; both payloads recovered; 6QFB passed; 5KCS retained one atom-identity mismatch; no replacement draw; 98 exact normalized coordinate-hash matches among passing records; no off-chain token index
 - Validator HHI: 547.05
 - Effective validator count: 18.28
 - Bonded/native-supply ratio: 53.37%

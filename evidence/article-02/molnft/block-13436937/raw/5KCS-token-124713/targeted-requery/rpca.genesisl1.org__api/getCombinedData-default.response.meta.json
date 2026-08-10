@@ -1,0 +1,18 @@
+{
+  "bytes": 19,
+  "headers": {
+    "connection": "keep-alive",
+    "content-length": "19",
+    "content-type": "text/plain; charset=utf-8",
+    "date": "Mon, 10 Aug 2026 22:07:46 GMT",
+    "server": "nginx",
+    "vary": "Origin",
+    "x-content-type-options": "nosniff"
+  },
+  "http_status": 404,
+  "json_decoded": false,
+  "response_preview": "404 page not found\n",
+  "sha256": "b16e15764b8bc06c5c3f9f19bc8b99fa48e7894aa5a6ccdad65da49bbf564793",
+  "transport_error": null,
+  "url": "https://rpca.genesisl1.org/api"
+}

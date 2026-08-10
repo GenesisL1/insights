@@ -3,7 +3,7 @@ name: Verify Article 02 evidence
 on:
   workflow_dispatch:
   push:
-    branches: [main, evidence-ws1-ws2-upgrade-20260810]
+    branches: [main, molnft-rpca-failed-only-20260811]
     paths:
       - "README.md"
       - "content/article-02-next-verifiable-renaissance/**"
@@ -54,7 +54,7 @@ jobs:
             --validators "$NETWORK/validators.csv" \
             --delegators "$NETWORK/delegators.csv" \
             --verify-only
-          python tools/qa/validate_ws1_ws2_final.py \
+          python tools/qa/validate_ws1_ws2_structural.py \
             --molnft "$MOLNFT" \
             --network "$NETWORK"
 

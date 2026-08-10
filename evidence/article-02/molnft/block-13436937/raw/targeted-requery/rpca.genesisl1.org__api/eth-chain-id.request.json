@@ -1,0 +1,9 @@
+{
+  "request": {
+    "id": 2,
+    "jsonrpc": "2.0",
+    "method": "eth_chainId",
+    "params": []
+  },
+  "url": "https://rpca.genesisl1.org/api"
+}

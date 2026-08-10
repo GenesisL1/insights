@@ -39,7 +39,7 @@ jobs:
             --validators "$NETWORK/validators.csv" \
             --delegators "$NETWORK/delegators.csv" \
             --verify-only
-          python tools/qa/validate_ws1_ws2_final.py \
+          python tools/qa/validate_ws1_ws2_structural.py \
             --molnft "$MOLNFT" \
             --network "$NETWORK"
           if [ -f tools/qa/validate_svg_layout.py ]; then
@@ -88,7 +88,7 @@ jobs:
               add_tree(archive, root / 'deployment', 'deployment')
           archives.append(deploy)
 
-          ws1 = output / 'GenesisL1_MOLNFT_Direct_Randomized_Fidelity_Evidence_block-13436937.zip'
+          ws1 = output / 'GenesisL1_MOLNFT_Direct_Randomized_Structural_Evidence_block-13436937.zip'
           with zipfile.ZipFile(ws1, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
               add_tree(archive, molnft, 'molnft-direct-randomized-block-13436937')
           archives.append(ws1)
@@ -124,8 +124,8 @@ jobs:
       - name: Upload MOLNFT evidence package
         uses: actions/upload-artifact@v4
         with:
-          name: genesisl1-molnft-direct-randomized-evidence-13436937
-          path: release-artifacts/GenesisL1_MOLNFT_Direct_Randomized_Fidelity_Evidence_block-13436937.zip
+          name: genesisl1-molnft-direct-randomized-structural-evidence-13436937
+          path: release-artifacts/GenesisL1_MOLNFT_Direct_Randomized_Structural_Evidence_block-13436937.zip
           if-no-files-found: error
           compression-level: 0
           retention-days: 90

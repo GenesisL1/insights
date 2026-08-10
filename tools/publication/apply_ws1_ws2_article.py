@@ -44,7 +44,6 @@ def ws1_markdown(summary: dict[str, Any], seed: dict[str, Any], evidence_rel: st
     n = int(summary["N"])
     successes = int(summary["successes"])
     fidelity = int(summary["fidelity_passes"])
-    identical = int(summary.get("byte_identical_records", 0))
     enumerated = int(summary["enumerated_parent_count"])
     tolerance = Decimal(str(summary["coordinate_tolerance_angstrom"]))
     return (
@@ -55,9 +54,9 @@ def ws1_markdown(summary: dict[str, Any], seed: dict[str, Any], evidence_rel: st
         f"The pipeline reconstructed **{successes} of {n}** selected records and published {failure_phrase(summary)} with raw RPC "
         f"responses for every draw. <sup><a href=\"#source-15\">15</a></sup>\n\n"
         f"Canonical fidelity was tested record by record against RCSB BinaryCIF objects after deterministic atom-order normalization. "
-        f"**{fidelity} records passed** the declared atom-count, chain/entity-ID, atom-identity, coordinate-hash and coordinate-agreement "
-        f"checks at a maximum permitted deviation of **{tolerance:.6f} Å**; **{identical}** were also byte-identical to the retrieved "
-        f"canonical BinaryCIF. The sample specification, future-block seed derivation, enumeration, complete success/failure table, "
+        f"**{fidelity} records passed** the declared atom-count, chain/entity-ID, atom-identity and coordinate-agreement checks at a "
+        f"maximum permitted deviation of **{tolerance:.6f} Å**. Serialized BinaryCIF equality is neither calculated nor used as a "
+        f"fidelity criterion. The sample specification, future-block seed derivation, enumeration, complete success/failure table, "
         f"reconstructed and canonical objects, environment fingerprint and SHA-256 manifest are all preserved in the evidence package."
     )
 
@@ -263,7 +262,6 @@ def update_facts(ws2: dict[str, Any], summary: dict[str, Any], seed: dict[str, A
         "successes": summary["successes"],
         "failures": summary["failures"],
         "fidelity_passes": summary["fidelity_passes"],
-        "byte_identical_records": summary.get("byte_identical_records", 0),
         "precommit_sha": seed["sample_spec_precommit_sha"],
         "evidence_relative_path": summary["evidence_relative_path"],
     }

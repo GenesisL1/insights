@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-"""Finalize the direct-ID MOLNFT sample from preserved evidence.
+"""Finalize the direct-ID MOLNFT sample from preserved local evidence.
 
-The capture stage preserves every selected token's raw RPC response, reconstructed
-BinaryCIF and retrieved RCSB BinaryCIF. This deterministic stage performs the
-publication-facing comparison without any network access:
+A fidelity pass is structural. It requires equal atom counts, chain/entity sets,
+canonical atom identities, and paired coordinates within the precommitted
+tolerance. Serialized BinaryCIF equality is neither evaluated nor reported.
+Individual SHA-256 values remain as integrity identifiers for each preserved
+object, without turning equality between those values into a criterion.
 
-* atom count, chain/entity IDs and atom identities must agree;
-* maximum paired coordinate deviation must not exceed the precommitted tolerance;
-* exact normalized coordinate hashes are recorded for both objects and reported
-  separately, but are not substituted for the declared tolerance test;
-* capture-layer failures are recovered from the preserved raw RPC response rather
-  than being relabeled as generic missing files.
+The finalizer also incorporates a preserved targeted requery, when present. A
+provider-level failure may be retried only for the same predetermined NFT ID;
+replacement draws are never permitted.
 """
 from __future__ import annotations
 
@@ -36,12 +35,7 @@ SPEC.loader.exec_module(base)
 
 
 def normalized_coordinate_hash(rows: list[tuple[tuple[str, ...], tuple[float, float, float]]]) -> str:
-    """Hash the coordinate array in canonical atom-key order.
-
-    IEEE-754 signed zero is normalized because +0.0 and -0.0 are geometrically
-    identical yet have different byte encodings. The hash intentionally excludes
-    metadata and atom-key text; atom-key equality is tested independently.
-    """
+    """Hash coordinates in canonical atom-key order, normalizing signed zero."""
     stream = bytearray()
     for _, coordinate in rows:
         for value in coordinate:
@@ -130,16 +124,79 @@ def classify_preserved_failure(directory: pathlib.Path, token_id: int, pdb_id: s
     reconstructed = directory / "reconstructed" / f"{pdb_id}-token-{token_id}.bcif"
     canonical = directory / "canonical" / f"{pdb_id}.bcif"
     if reconstructed.is_file() and not canonical.is_file():
-        return "CANONICAL_UNAVAILABLE", "canonical RCSB BinaryCIF was unavailable during the pinned capture"
+        return "CANONICAL_UNAVAILABLE", "canonical RCSB BinaryCIF was unavailable"
     if not reconstructed.is_file():
         return "PARSE_FAIL", "reconstructed BinaryCIF is absent despite the preserved draw"
     return "MISSING_FILE", "required comparison object is absent"
+
+
+def targeted_summary(report: dict[str, Any]) -> dict[str, Any]:
+    records = []
+    for item in report.get("record_results") or []:
+        structure = item.get("structure") or {}
+        endpoint_calls = item.get("endpoint_calls") or {}
+        root = endpoint_calls.get("https://rpca.genesisl1.org") or {}
+        api = endpoint_calls.get("https://rpca.genesisl1.org/api") or {}
+        records.append(
+            {
+                "draw_order": item.get("draw_order"),
+                "token_id": item.get("token_id"),
+                "pdb_id": item.get("pdb_id"),
+                "compound": structure.get("compound"),
+                "experiment_type": structure.get("experiment_type"),
+                "resolution": structure.get("resolution"),
+                "original_reason_code": (item.get("original_failure") or {}).get("reason_code"),
+                "root_default_error": (root.get("combined_default") or {}).get("error_message"),
+                "root_explicit_gas_success": bool(
+                    (root.get("combined_explicit_gas") or {}).get("result_hex_characters")
+                ),
+                "api_http_status": (api.get("combined_default") or {}).get("http_status"),
+                "replacement_draw": bool(item.get("replacement_draw")),
+            }
+        )
+    return {
+        "schema": report.get("schema"),
+        "performed_at_utc": report.get("performed_at_utc"),
+        "requested_endpoints": report.get("requested_endpoints") or [],
+        "gas_override": report.get("gas_override"),
+        "initial_successes": report.get("initial_successes"),
+        "initial_failures": report.get("initial_failures"),
+        "initial_failures_by_reason": report.get("initial_failures_by_reason") or {},
+        "queried_token_ids": report.get("queried_token_ids") or [],
+        "queried_failed_record_count": len(report.get("queried_token_ids") or []),
+        "successful_requeries": report.get("successful_requeries"),
+        "replacement_draws": report.get("replacement_draws"),
+        "records": records,
+    }
 
 
 def write_report(directory: pathlib.Path, summary: dict[str, Any]) -> None:
     failure_lines = summary.get("failures_by_reason") or {}
     failures = ", ".join(f"{value} {key}" for key, value in sorted(failure_lines.items())) or "none"
     enum = summary["enumeration_method"]
+    targeted = summary.get("targeted_requery") or {}
+    targeted_records = targeted.get("records") or []
+    targeted_text = ""
+    if targeted_records:
+        rows = []
+        for record in targeted_records:
+            rows.append(
+                f"| {record['pdb_id']} | {record['token_id']} | {record.get('compound') or '—'} | "
+                f"{record.get('original_reason_code') or '—'} | "
+                f"{'reconstructed' if record.get('root_explicit_gas_success') else 'not reconstructed'} |"
+            )
+        targeted_text = (
+            "\n## Targeted same-ID requery\n\n"
+            "Only the failed predetermined draws were queried again; no successful sample row was queried and no replacement ID was drawn. "
+            "The root `https://rpca.genesisl1.org` URL reported GenesisL1 EVM chain ID 29. Its default calls reproduced the provider-level "
+            "out-of-gas response, while the same calls at the same pinned block succeeded with the preserved explicit gas allowance. "
+            "The exact `https://rpca.genesisl1.org/api` path returned HTTP 404 and is not a JSON-RPC route.\n\n"
+            "| PDB | NFT ID | Structure | Initial result | Same-ID RPCA result |\n"
+            "|---|---:|---|---|---|\n"
+            + "\n".join(rows)
+            + "\n"
+        )
+
     text = f"""# MOLNFT direct NFT-ID randomized fidelity evidence
 
 **Pinned GenesisL1 block:** `{summary['B_pin']}`  
@@ -152,28 +209,27 @@ def write_report(directory: pathlib.Path, summary: dict[str, Any]) -> None:
 
 The sample specification fixed `N = {summary['N']}` before the seed block existed. The seed is `keccak256(blockhash(B_seed))`. The draw was made without replacement over the direct parent NFT-ID range `{enum['parent_id_start']}..{enum['parent_id_end']}`, defined by pinned `nextNFTId() = {enum['parent_counter_value']}`. No GLAST or other off-chain token index was used.
 
-## Results
+## Final results
 
 | Measure | Result |
 |---|---:|
 | Selected records | **{summary['N']}** |
-| Canonical-fidelity passes | **{summary['fidelity_passes']}** |
-| Published failures | **{summary['failures']}** |
+| Canonical structural-fidelity passes | **{summary['fidelity_passes']}** |
+| Final failures | **{summary['failures']}** |
 | Exact normalized coordinate-hash matches | **{summary['coordinate_hash_matches']}** |
-| Byte-identical current RCSB BinaryCIF files | **{summary['byte_identical_records']}** |
 | Coordinate tolerance | **{summary['coordinate_tolerance_angstrom']} Å** |
 
-Failure accounting: **{failures}**.
+Final failure accounting: **{failures}**.
 
-A fidelity pass requires equal atom counts, chain/entity sets, canonical atom identities and maximum paired coordinate deviation within the precommitted tolerance. Exact coordinate hashes and complete-file hashes are reported separately; they are not used to replace the tolerance test. BinaryCIF serialization and non-coordinate metadata may differ between the historical on-chain object and the current RCSB response even when the canonicalized structure agrees.
-
+A fidelity pass requires equal atom counts, chain/entity sets, canonical atom identities and maximum paired coordinate deviation within the precommitted tolerance. Serialized-object equality is not calculated or reported. The separately recorded SHA-256 value for each object is an integrity identifier only.
+{targeted_text}
 ## Verify
 
 ```bash
 sha256sum -c SHA256SUMS.txt
-python tools/evidence/finalize_molnft_direct_evidence.py \
+python tools/evidence/finalize_molnft_structural_evidence.py \
   --evidence evidence/article-02/molnft/block-{summary['B_pin']} \
-  --verify-byte-for-byte
+  --verify-deterministic
 ```
 """
     (directory / "README.md").write_text(text, encoding="utf-8")
@@ -182,6 +238,8 @@ python tools/evidence/finalize_molnft_direct_evidence.py \
 def finalize(directory: pathlib.Path) -> None:
     spec = json.loads((directory / "sample-spec.json").read_text(encoding="utf-8"))
     old_summary = json.loads((directory / "summary.json").read_text(encoding="utf-8"))
+    targeted_path = directory / "targeted-requery.json"
+    targeted_report = json.loads(targeted_path.read_text(encoding="utf-8")) if targeted_path.is_file() else None
     tolerance = float(spec["fidelity"]["coordinate_tolerance_angstrom"])
     rows: list[dict[str, Any]] = []
 
@@ -209,7 +267,6 @@ def finalize(directory: pathlib.Path) -> None:
                         "canonical_bytes": canonical.stat().st_size,
                         "reconstructed_sha256": base.sha256_file(reconstructed),
                         "canonical_sha256": base.sha256_file(canonical),
-                        "byte_identical": reconstructed.read_bytes() == canonical.read_bytes(),
                     }
                 )
                 if comparison["fidelity_pass"]:
@@ -240,6 +297,8 @@ def finalize(directory: pathlib.Path) -> None:
     base.write_results(directory / "results.csv", rows)
     reasons = Counter(str(row["reason_code"]) for row in rows)
     summary = dict(old_summary)
+    for obsolete in ["byte_identical_records", "complete_file_hash_role"]:
+        summary.pop(obsolete, None)
     summary.update(
         {
             "N": len(rows),
@@ -250,7 +309,6 @@ def finalize(directory: pathlib.Path) -> None:
             "canonical_comparisons": sum(bool(row.get("canonical_sha256")) for row in rows),
             "coordinate_tolerance_passes": sum(bool(row.get("coordinate_agreement")) for row in rows),
             "coordinate_hash_matches": sum(bool(row.get("coordinate_hash_equal")) for row in rows),
-            "byte_identical_records": sum(bool(row.get("byte_identical")) for row in rows),
             "fidelity_pass_definition": [
                 "atom_count_equal",
                 "chain_ids_equal",
@@ -258,12 +316,14 @@ def finalize(directory: pathlib.Path) -> None:
                 "atom_keys_equal",
                 "coordinate_agreement_within_precommitted_tolerance",
             ],
-            "coordinate_hash_role": "exact normalized coordinate hashes are recorded and compared separately; equality is not required when the declared coordinate tolerance passes",
+            "coordinate_hash_role": "exact normalized coordinate hashes are recorded separately; equality is not required when the declared coordinate tolerance passes",
             "coordinate_hash_algorithm": "SHA-256 over big-endian float64 XYZ triples in canonical atom-key order with signed zero normalized",
-            "complete_file_hash_role": "informational comparison of serialized BinaryCIF objects; current RCSB encoding and metadata may differ from the historical on-chain object",
+            "serialized_object_hash_role": "reconstructed and canonical SHA-256 values are independent integrity identifiers only; equality is neither evaluated nor used for fidelity",
             "deterministic_finalization": True,
         }
     )
+    if targeted_report is not None:
+        summary["targeted_requery"] = targeted_summary(targeted_report)
     (directory / "summary.json").write_bytes(base.stable_json(summary))
     write_report(directory, summary)
     seed = json.loads((directory / "seed-derivation.json").read_text(encoding="utf-8"))
@@ -272,7 +332,7 @@ def finalize(directory: pathlib.Path) -> None:
         {
             "precommit_sha": seed["sample_spec_precommit_sha"],
             "seed_block_hash": seed["B_seed_block_hash"],
-            "finalization": "deterministic local evidence comparison v2",
+            "finalization": "deterministic local structural comparison v3",
         },
     )
 
@@ -280,13 +340,21 @@ def finalize(directory: pathlib.Path) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--evidence", required=True, type=pathlib.Path)
-    parser.add_argument("--verify-byte-for-byte", action="store_true")
+    parser.add_argument("--verify-deterministic", action="store_true")
     args = parser.parse_args()
     directory = args.evidence.resolve()
-    before = (directory / "results.csv").read_bytes() if args.verify_byte_for_byte else None
+    observed = {}
+    if args.verify_deterministic:
+        for name in ["results.csv", "summary.json", "README.md", "MANIFEST.json", "SHA256SUMS.txt"]:
+            path = directory / name
+            observed[name] = path.read_bytes() if path.is_file() else None
     finalize(directory)
-    if before is not None and before != (directory / "results.csv").read_bytes():
-        raise SystemExit("results.csv changed during byte-for-byte verification")
+    if args.verify_deterministic:
+        for name, before in observed.items():
+            path = directory / name
+            after = path.read_bytes() if path.is_file() else None
+            if before != after:
+                raise SystemExit(f"{name} changed during deterministic verification")
     summary = json.loads((directory / "summary.json").read_text(encoding="utf-8"))
     print(json.dumps(summary, indent=2, sort_keys=True))
     return 0

@@ -1,0 +1,273 @@
+{
+  "contract_address": "0xd58B01f6C18086e5202cdC5D7Ad3E41790360102",
+  "endpoint_observations": {
+    "https://rpca.genesisl1.org": {
+      "chain_id": 29,
+      "classification": "GenesisL1 EVM JSON-RPC",
+      "probe": {
+        "error_message": null,
+        "http_status": 200,
+        "json_response": true,
+        "response_bytes": 41,
+        "response_sha256": "0456c58817d25c2f4e24e8851e3ec427edb6bbc66c9800c73a58a96647974931",
+        "result_hex_characters": 4,
+        "transport_error": null,
+        "url": "https://rpca.genesisl1.org"
+      }
+    },
+    "https://rpca.genesisl1.org/api": {
+      "chain_id": null,
+      "classification": "not a working GenesisL1 EVM JSON-RPC route",
+      "probe": {
+        "error_message": null,
+        "http_status": 404,
+        "json_response": false,
+        "response_bytes": 19,
+        "response_sha256": "b16e15764b8bc06c5c3f9f19bc8b99fa48e7894aa5a6ccdad65da49bbf564793",
+        "transport_error": null,
+        "url": "https://rpca.genesisl1.org/api"
+      }
+    }
+  },
+  "gas_override": "0x7fffffffffffffff",
+  "initial_failures": 2,
+  "initial_failures_by_reason": {
+    "RPC_OUT_OF_GAS": 2
+  },
+  "initial_sample_size": 100,
+  "initial_successes": 98,
+  "performed_at_utc": "2026-08-10T22:07:42Z",
+  "pinned_height": 13436937,
+  "queried_failed_records": [
+    {
+      "draw_order": 71,
+      "original_reason_code": "RPC_OUT_OF_GAS",
+      "original_reason_detail": "rpc error: code = Internal desc = out of gas",
+      "pdb_id": "5KCS",
+      "structure": {
+        "accession_date": "06/06/16",
+        "authors": "Arenz, S., Juette, M.F., Graf, M., Nguyen, F., Huter, P., Polikanov, Y.S., Blanchard, S.C., Wilson, D.N.",
+        "compound": "Cryo-EM structure of the Escherichia coli 70S ribosome in complex with antibiotic Evernimycin, mRNA, TetM and P-site tRNA at 3.9A resolution",
+        "experiment_type": "ELECTRON MICROSCOPY",
+        "file_base64_characters": 0,
+        "header": "RIBOSOME",
+        "idcode": "5KCS",
+        "image_base64_characters": 17754,
+        "resolution": "3.9",
+        "sequence_length": 15078,
+        "source": "Enterococcus faecalis; Escherichia coli (strain K12); SYNTHETIC CONSTRUCT"
+      },
+      "token_id": 124713
+    },
+    {
+      "draw_order": 90,
+      "original_reason_code": "RPC_OUT_OF_GAS",
+      "original_reason_detail": "rpc error: code = Internal desc = out of gas",
+      "pdb_id": "6QFB",
+      "structure": {
+        "accession_date": "01/09/19",
+        "authors": "Verstraete, K., Verschueren, K.",
+        "compound": "Structure of the human ATP citrate lyase holoenzyme in complex with citrate, coenzyme A and Mg.ADP",
+        "experiment_type": "X-RAY DIFFRACTION",
+        "file_base64_characters": 0,
+        "header": "LYASE",
+        "idcode": "6QFB",
+        "image_base64_characters": 15776,
+        "resolution": "3.25",
+        "sequence_length": 4419,
+        "source": "Homo sapiens"
+      },
+      "token_id": 162649
+    }
+  ],
+  "queried_token_ids": [
+    124713,
+    162649
+  ],
+  "record_results": [
+    {
+      "draw_order": 71,
+      "endpoint_calls": {
+        "https://rpca.genesisl1.org": {
+          "combined_default": {
+            "error_message": "rpc error: code = Internal desc = out of gas",
+            "http_status": 200,
+            "json_response": true,
+            "response_bytes": 106,
+            "response_sha256": "7de6e5682b4deee8d77ab97464d09c255b93be16cf11f0ee156125d10132d884",
+            "transport_error": null,
+            "url": "https://rpca.genesisl1.org"
+          },
+          "combined_explicit_gas": {
+            "error_message": null,
+            "http_status": 200,
+            "json_response": true,
+            "response_bytes": 2860199,
+            "response_sha256": "ec75cfc7c4fc71e7c0a2dc537cd861e989134c7852d055ba10037d908e263083",
+            "result_hex_characters": 2860162,
+            "transport_error": null,
+            "url": "https://rpca.genesisl1.org"
+          },
+          "metadata": {
+            "error_message": null,
+            "http_status": 200,
+            "json_response": true,
+            "response_bytes": 68263,
+            "response_sha256": "17683e6f8b8244b415cd696530e40adbbbad8629ff1ba2e814651e27e7c26a8b",
+            "result_hex_characters": 68226,
+            "transport_error": null,
+            "url": "https://rpca.genesisl1.org"
+          }
+        },
+        "https://rpca.genesisl1.org/api": {
+          "combined_default": {
+            "error_message": null,
+            "http_status": 404,
+            "json_response": false,
+            "response_bytes": 19,
+            "response_sha256": "b16e15764b8bc06c5c3f9f19bc8b99fa48e7894aa5a6ccdad65da49bbf564793",
+            "transport_error": null,
+            "url": "https://rpca.genesisl1.org/api"
+          },
+          "metadata": {
+            "error_message": null,
+            "http_status": 404,
+            "json_response": false,
+            "response_bytes": 19,
+            "response_sha256": "b16e15764b8bc06c5c3f9f19bc8b99fa48e7894aa5a6ccdad65da49bbf564793",
+            "transport_error": null,
+            "url": "https://rpca.genesisl1.org/api"
+          }
+        }
+      },
+      "final_reconstruction": {
+        "block": 13436937,
+        "canonical_bytes": 7394470,
+        "canonical_path": "canonical/5KCS.bcif",
+        "canonical_sha256": "95dd3e97dd7558df98f91a03d66e7458110e3cd50aa8919531f31e0d263fd94d",
+        "endpoint": "https://rpca.genesisl1.org",
+        "gas_override": "0x7fffffffffffffff",
+        "reconstructed_bytes": 2023188,
+        "reconstructed_path": "reconstructed/5KCS-token-124713.bcif",
+        "reconstructed_sha256": "29a6b057affdeea4a3edd33cb84feaf3bf167acf24657549f0bd0a6611f7c3f1",
+        "serialized_hashes_are_integrity_identifiers_only": true
+      },
+      "original_failure": {
+        "reason_code": "RPC_OUT_OF_GAS",
+        "reason_detail": "rpc error: code = Internal desc = out of gas"
+      },
+      "pdb_id": "5KCS",
+      "replacement_draw": false,
+      "structure": {
+        "accession_date": "06/06/16",
+        "authors": "Arenz, S., Juette, M.F., Graf, M., Nguyen, F., Huter, P., Polikanov, Y.S., Blanchard, S.C., Wilson, D.N.",
+        "compound": "Cryo-EM structure of the Escherichia coli 70S ribosome in complex with antibiotic Evernimycin, mRNA, TetM and P-site tRNA at 3.9A resolution",
+        "experiment_type": "ELECTRON MICROSCOPY",
+        "file_base64_characters": 0,
+        "header": "RIBOSOME",
+        "idcode": "5KCS",
+        "image_base64_characters": 17754,
+        "resolution": "3.9",
+        "sequence_length": 15078,
+        "source": "Enterococcus faecalis; Escherichia coli (strain K12); SYNTHETIC CONSTRUCT"
+      },
+      "token_id": 124713
+    },
+    {
+      "draw_order": 90,
+      "endpoint_calls": {
+        "https://rpca.genesisl1.org": {
+          "combined_default": {
+            "error_message": "rpc error: code = Internal desc = out of gas",
+            "http_status": 200,
+            "json_response": true,
+            "response_bytes": 106,
+            "response_sha256": "9e41f828494aec3beb96ea6d4c90f0b1183774ea44105d5869b612433f9187f3",
+            "transport_error": null,
+            "url": "https://rpca.genesisl1.org"
+          },
+          "combined_explicit_gas": {
+            "error_message": null,
+            "http_status": 200,
+            "json_response": true,
+            "response_bytes": 2239656,
+            "response_sha256": "089368aca19fc638064d9b5b3c659d67d3b8cf9e89c1607c088e782f8783679d",
+            "result_hex_characters": 2239618,
+            "transport_error": null,
+            "url": "https://rpca.genesisl1.org"
+          },
+          "metadata": {
+            "error_message": null,
+            "http_status": 200,
+            "json_response": true,
+            "response_bytes": 42599,
+            "response_sha256": "fea680dbecfb2453b8cef42ecd0dc900bd48f2a0a0d1987039d5432ae6748487",
+            "result_hex_characters": 42562,
+            "transport_error": null,
+            "url": "https://rpca.genesisl1.org"
+          }
+        },
+        "https://rpca.genesisl1.org/api": {
+          "combined_default": {
+            "error_message": null,
+            "http_status": 404,
+            "json_response": false,
+            "response_bytes": 19,
+            "response_sha256": "b16e15764b8bc06c5c3f9f19bc8b99fa48e7894aa5a6ccdad65da49bbf564793",
+            "transport_error": null,
+            "url": "https://rpca.genesisl1.org/api"
+          },
+          "metadata": {
+            "error_message": null,
+            "http_status": 404,
+            "json_response": false,
+            "response_bytes": 19,
+            "response_sha256": "b16e15764b8bc06c5c3f9f19bc8b99fa48e7894aa5a6ccdad65da49bbf564793",
+            "transport_error": null,
+            "url": "https://rpca.genesisl1.org/api"
+          }
+        }
+      },
+      "final_reconstruction": {
+        "block": 13436937,
+        "canonical_bytes": 3471898,
+        "canonical_path": "canonical/6QFB.bcif",
+        "canonical_sha256": "e9a4f54d1accddd2cd3f91ec707198951ec4736be06caddbc5ff22c665c9ca3c",
+        "endpoint": "https://rpca.genesisl1.org",
+        "gas_override": "0x7fffffffffffffff",
+        "reconstructed_bytes": 2437061,
+        "reconstructed_path": "reconstructed/6QFB-token-162649.bcif",
+        "reconstructed_sha256": "8d1b5dfb9f8b7319dfdb21978fb251e547ef583f27ea0ec4abb0d020fef022de",
+        "serialized_hashes_are_integrity_identifiers_only": true
+      },
+      "original_failure": {
+        "reason_code": "RPC_OUT_OF_GAS",
+        "reason_detail": "rpc error: code = Internal desc = out of gas"
+      },
+      "pdb_id": "6QFB",
+      "replacement_draw": false,
+      "structure": {
+        "accession_date": "01/09/19",
+        "authors": "Verstraete, K., Verschueren, K.",
+        "compound": "Structure of the human ATP citrate lyase holoenzyme in complex with citrate, coenzyme A and Mg.ADP",
+        "experiment_type": "X-RAY DIFFRACTION",
+        "file_base64_characters": 0,
+        "header": "LYASE",
+        "idcode": "6QFB",
+        "image_base64_characters": 15776,
+        "resolution": "3.25",
+        "sequence_length": 4419,
+        "source": "Homo sapiens"
+      },
+      "token_id": 162649
+    }
+  ],
+  "replacement_draws": 0,
+  "requested_endpoints": [
+    "https://rpca.genesisl1.org",
+    "https://rpca.genesisl1.org/api"
+  ],
+  "schema": "org.genesisl1.molnft_targeted_requery.v1",
+  "selection_source": "failed rows in the pre-existing randomized results.csv",
+  "successful_requeries": 2
+}

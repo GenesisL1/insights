@@ -90,11 +90,17 @@ Failures are not redrawn or removed. Each selected row receives an outcome and r
 - `FIDELITY_MISMATCH`
 - `SUCCESS`
 
+## Targeted requery of provider-level failures
+
+A provider-level retrieval failure does not authorize a replacement draw. The predetermined NFT ID remains part of the sample. A targeted requery may call only that same ID, at the same pinned block, while preserving the original request and response, the new endpoint, and any explicit call parameters such as a gas allowance. Successful sample rows are not queried again.
+
+For the realized sample, the original default calls that failed were PDB `5KCS` / NFT `124713` and PDB `6QFB` / NFT `162649`. Both were re-queried through `https://rpca.genesisl1.org`; default calls reproduced the out-of-gas result and explicit-gas calls returned the complete payloads. The exact `https://rpca.genesisl1.org/api` path was also probed and returned HTTP 404, so it is recorded as a non-RPC route. No replacement ID was drawn. After canonical structural comparison, 6QFB passed. 5KCS remained the one final mismatch: reconstructed and current RCSB objects had equal atom counts plus equal chain and entity sets, but their canonical atom-identity keys differed, so paired coordinate agreement could not be established.
+
 ## Canonical comparison and storage model
 
 The comparator is the RCSB BinaryCIF retrieved from `https://models.rcsb.org/<PDB_ID>.bcif`. Retrieval URL, time, response metadata and SHA-256 are preserved; the canonical bytes are stored under `canonical/`.
 
-The on-chain transformation—base64 plus gzip—is reversible and therefore lossless relative to the BinaryCIF object minted into the contract. A current RCSB BinaryCIF response may nevertheless have different serialization, compression-independent metadata or dictionary encoding from the historical object while representing the same atom identities and coordinates. For that reason, complete-file byte equality is reported but is not treated as the molecular-fidelity criterion.
+The on-chain transformation—base64 plus gzip—is reversible and therefore lossless relative to the BinaryCIF object minted into the contract. A current RCSB BinaryCIF response may nevertheless have different serialization, compression-independent metadata or dictionary encoding from the historical object while representing the same atom identities and coordinates. Serialized-object equality is therefore neither calculated nor used as a molecular-fidelity criterion. The reconstructed and canonical SHA-256 values are retained independently only to identify the preserved objects.
 
 For every comparable record the pipeline reports:
 
@@ -107,7 +113,7 @@ For every comparable record the pipeline reports:
 | Atom identities | equal canonical atom-key sequences after sorting |
 | Coordinates | maximum paired Euclidean deviation `≤ 1e-6 Å` |
 | Coordinate hashes | SHA-256 values recorded for both normalized coordinate arrays; exact equality reported separately |
-| Complete-file hashes | SHA-256 values recorded for both serialized BinaryCIF objects; exact equality reported separately |
+| Object integrity hashes | SHA-256 recorded independently for each preserved BinaryCIF object; no equality test is performed |
 
 A **fidelity pass** requires the first five structural comparisons and the precommitted coordinate-tolerance condition. Exact coordinate-hash equality is an additional reproducibility statistic, not a replacement for the declared tolerance. This matters because IEEE-754 representations can differ by signed zero or sub-tolerance rounding while the measured Cartesian deviation remains zero or far below `1e-6 Å`.
 
@@ -122,28 +128,28 @@ If a future contract deliberately quantizes coordinates or drops structural fiel
 - declared `N`;
 - direct parent NFT-ID population and counter;
 - successful fidelity comparisons;
-- failures by reason code;
+- final failures by reason code;
+- initial provider-level failures and any targeted same-ID requery;
 - coordinate-tolerance passes;
 - exact coordinate-hash matches;
-- byte-identical complete-file count;
 - wall-clock start and end;
 - Python and exact library versions;
 - RPC and canonical endpoints;
 - precommit SHA and seed-block hash.
 
-A result is accepted only when every preselected row remains visible. Provider-level failures are evidence about the measured retrieval path and are not silently replaced by another draw.
+A result is accepted only when every preselected row remains visible. Provider-level failures are evidence about the measured retrieval path and are not silently replaced by another draw. When a same-ID requery succeeds, both the original failure and the successful requery remain preserved.
 
 ## Deterministic local finalization
 
 Network capture depends on the archive RPC and RCSB being reachable. Once raw calls, reconstructed objects and canonical objects are preserved, the publication result is reproducible without network access:
 
 ```bash
-python tools/evidence/finalize_molnft_direct_evidence.py \
+python tools/evidence/finalize_molnft_structural_evidence.py \
   --evidence evidence/article-02/molnft/block-<B_pin> \
-  --verify-byte-for-byte
+  --verify-deterministic
 ```
 
-The command recomputes `results.csv`, `summary.json`, `README.md`, `MANIFEST.json` and `SHA256SUMS.txt` in deterministic order. The environment is pinned in `requirements.lock` and the realized versions are recorded in the summary.
+The command recomputes `results.csv`, `summary.json`, `README.md`, `MANIFEST.json` and `SHA256SUMS.txt` in deterministic order. It does not compare reconstructed and canonical serialized files for equality. The environment is pinned in `requirements.lock` and the realized versions are recorded in the summary.
 
 ## Scope
 

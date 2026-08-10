@@ -40,7 +40,6 @@ def ws1_markdown(summary: dict[str, Any], seed: dict[str, Any]) -> str:
     successes = int(summary["successes"])
     fidelity = int(summary["fidelity_passes"])
     exact_coordinates = int(summary.get("coordinate_hash_matches", 0))
-    identical = int(summary.get("byte_identical_records", 0))
     enumerated = int(summary["enumerated_parent_count"])
     tolerance = Decimal(str(summary["coordinate_tolerance_angstrom"]))
     enum = summary["enumeration_method"]
@@ -56,9 +55,9 @@ def ws1_markdown(summary: dict[str, Any], seed: dict[str, Any]) -> str:
         f"For each comparable record, the audit required equal atom counts, chain and entity sets, canonical atom identities, and a "
         f"maximum paired coordinate deviation no greater than the precommitted **{tolerance:.6f} Å** tolerance. All **{fidelity}** "
         f"successful comparisons passed those conditions. Exact normalized coordinate hashes additionally matched for "
-        f"**{exact_coordinates} of {fidelity}** records, while **{identical}** current RCSB BinaryCIF files were byte-identical to the "
-        f"historical on-chain serialization. The latter is reported separately because BinaryCIF metadata and encoding can change "
-        f"without changing the canonicalized atom identities or Cartesian structure. The future-block seed, complete numeric parent-ID "
+        f"**{exact_coordinates} of {fidelity}** records. Serialized BinaryCIF equality is neither calculated nor used as a pass "
+        f"condition; each object's SHA-256 is retained independently only as an integrity identifier. The future-block seed, complete "
+        f"numeric parent-ID "
         f"population, draw, failure table, reconstructed and canonical objects, environment fingerprint and SHA-256 manifest are "
         f"preserved in the evidence package."
     )
