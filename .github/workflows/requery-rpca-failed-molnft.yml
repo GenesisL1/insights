@@ -1,0 +1,83 @@
+name: Requery failed MOLNFT IDs through RPCA
+
+on:
+  push:
+    branches: [molnft-rpca-failed-only-20260811]
+    paths:
+      - "evidence/article-02/molnft/START_RPCA_REQUERY"
+
+permissions:
+  contents: write
+
+jobs:
+  requery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out requery branch
+        uses: actions/checkout@v4
+        with:
+          ref: molnft-rpca-failed-only-20260811
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned evidence environment
+        run: |
+          python -m pip install --disable-pip-version-check --upgrade pip
+          python -m pip install --disable-pip-version-check -r requirements.lock
+
+      - name: Apply structural-fidelity source policy
+        run: |
+          python tools/evidence/apply_molnft_structural_policy.py
+          python -m compileall -q tools
+
+      - name: Requery only failed predetermined MOLNFT IDs
+        run: |
+          MOLNFT=evidence/article-02/molnft/block-13436937
+          python tools/evidence/requery_molnft_failed_ids.py \
+            --evidence "$MOLNFT"
+
+      - name: Finalize and update Article 02
+        run: |
+          MOLNFT=evidence/article-02/molnft/block-13436937
+          python tools/evidence/finalize_molnft_structural_evidence.py \
+            --evidence "$MOLNFT"
+          python tools/publication/apply_molnft_targeted_requery.py \
+            --molnft-evidence "$MOLNFT"
+          python tools/evidence/finalize_molnft_structural_evidence.py \
+            --evidence "$MOLNFT" \
+            --verify-deterministic
+
+      - name: Validate complete evidence and publication
+        run: |
+          MOLNFT=evidence/article-02/molnft/block-13436937
+          NETWORK=evidence/article-02/network-state/block-13431722
+          (cd "$MOLNFT" && sha256sum -c SHA256SUMS.txt)
+          (cd "$NETWORK" && sha256sum -c SHA256SUMS.txt)
+          python tools/evidence/upgrade_ws2_metrics_direct.py \
+            --snapshot "$NETWORK/snapshot.json" \
+            --validators "$NETWORK/validators.csv" \
+            --delegators "$NETWORK/delegators.csv" \
+            --verify-only
+          python tools/qa/validate_ws1_ws2_structural.py \
+            --molnft "$MOLNFT" \
+            --network "$NETWORK"
+          if [ -f tools/qa/validate_svg_layout.py ]; then
+            python tools/qa/validate_svg_layout.py
+          fi
+
+      - name: Commit targeted requery evidence and publication
+        run: |
+          rm -f evidence/article-02/molnft/START_RPCA_PROBE
+          rm -f evidence/article-02/molnft/START_RPCA_REQUERY
+          rm -f .github/workflows/probe-rpca-failed-molnft.yml
+          rm -f .github/workflows/requery-rpca-failed-molnft.yml
+          git config user.name "GenesisL1 Evidence Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "evidence: recover failed MOLNFT IDs through targeted RPCA requery"
+          git push origin HEAD:molnft-rpca-failed-only-20260811
