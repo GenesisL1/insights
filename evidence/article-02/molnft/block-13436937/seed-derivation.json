@@ -1,0 +1,10 @@
+{
+  "B_pin": 13436937,
+  "B_pin_block_hash": "0xd1827056b63e4dd4ebf2e443a569f9a28ceb442a3f2943f8f30ce03908fcb896",
+  "B_seed": 13436979,
+  "B_seed_block_hash": "0x523c4b1c9ce0b3a581cff3901a10a32d01163026a43e1582d0d8c23c3dd88d02",
+  "derivation": "keccak256(bytes.fromhex(evm_block_hash(B_seed)))",
+  "derived_seed_hex": "0x6a5d0776d0ab1d346abb294bc439ea31bb8c1066900ec6fde0603730e0521aad",
+  "sample_spec_precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
+  "schema": "org.genesisl1.molnft_seed_derivation.v1"
+}

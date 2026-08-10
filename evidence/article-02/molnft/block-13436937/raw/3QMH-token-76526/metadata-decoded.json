@@ -1,0 +1,13 @@
+{
+  "accession_date": "02/04/11",
+  "authors": "Xu, C., Bian, C., MacKenzie, F., Bountra, C., Weigelt, J., Arrowsmith, C.H., Edwards, A.M., Min, J., Structural Genomics Consortium (SGC)",
+  "compound": "Structural Basis of Selective Binding of Non-Methylated CpG islands (DNA-TCGA) by the CXXC Domain of CFP1",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 61121,
+  "header": "DNA BINDING PROTEIN/DNA",
+  "idcode": "3QMH",
+  "image_base64_characters": 11092,
+  "resolution": "2.5",
+  "sequence_length": 298,
+  "source": "Homo sapiens; SYNTHETIC CONSTRUCT"
+}

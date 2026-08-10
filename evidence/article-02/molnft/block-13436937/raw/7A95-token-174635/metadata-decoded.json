@@ -1,0 +1,13 @@
+{
+  "accession_date": "09/01/20",
+  "authors": "Benton, D.J., Wrobel, A.G., Rosenthal, P.B., Gamblin, S.J.",
+  "compound": "SARS-CoV-2 Spike Glycoprotein with 1 ACE2 Bound and 1 RBD Erect in Clockwise Direction",
+  "experiment_type": "ELECTRON MICROSCOPY",
+  "file_base64_characters": 291015,
+  "header": "VIRAL PROTEIN",
+  "idcode": "7A95",
+  "image_base64_characters": 12498,
+  "resolution": "4.3",
+  "sequence_length": 4738,
+  "source": "Homo sapiens; Severe acute respiratory syndrome coronavirus 2"
+}

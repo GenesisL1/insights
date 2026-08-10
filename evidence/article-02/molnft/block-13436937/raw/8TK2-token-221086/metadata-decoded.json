@@ -1,0 +1,13 @@
+{
+  "accession_date": "07/25/23",
+  "authors": "Aleshin, A.E., Wu, J., Lambert, L.J., Cosford, N.D.P., Tautz, L.",
+  "compound": "HUMAN VH1-RELATED DUAL-SPECIFICITY PHOSPHATASE (VHR) complexed with 2-((2,4-difluorobenzyl)amino)-2-oxoacetic acid",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 61008,
+  "header": "HYDROLASE",
+  "idcode": "8TK2",
+  "image_base64_characters": 11541,
+  "resolution": "1.7",
+  "sequence_length": 509,
+  "source": "Homo sapiens"
+}

@@ -1,0 +1,13 @@
+{
+  "accession_date": "07/20/11",
+  "authors": "Span, I., Graewert, T., Bacher, A., Eisenreich, W., Groll, M.",
+  "compound": "IspH:HMBPP (substrate) structure of the E126D mutant",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 182627,
+  "header": "OXIDOREDUCTASE",
+  "idcode": "3T0F",
+  "image_base64_characters": 13576,
+  "resolution": "1.9",
+  "sequence_length": 823,
+  "source": "Escherichia coli"
+}

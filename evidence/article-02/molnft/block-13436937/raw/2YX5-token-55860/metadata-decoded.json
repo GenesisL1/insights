@@ -1,0 +1,13 @@
+{
+  "accession_date": "04/24/07",
+  "authors": "Kanagawa, M., Baba, S., Agari, Y., Chen, L.Q., Fu, Z.-Q., Chrzas, J., Wang, B.C., Kuramitsu, S., Yokoyama, S., Kawai, G., Sampei, G., RIKEN Structural Genomics/Proteomics Initiative (RSGI)",
+  "compound": "Crystal Structure of Methanocaldococcus jannaschii PurS, One of the Subunits of Formylglycinamide Ribonucleotide Amidotransferase in the Purine Biosynthetic Pathway",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 25458,
+  "header": "STRUCTURAL GENOMICS, UNKNOWN FUNCTION",
+  "idcode": "2YX5",
+  "image_base64_characters": 15148,
+  "resolution": "2.3",
+  "sequence_length": 137,
+  "source": "Methanocaldococcus jannaschii"
+}

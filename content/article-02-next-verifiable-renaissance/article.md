@@ -40,7 +40,9 @@ GenesisL1 brings those elements into one public state rather than leaving them s
 
 **MOLNFT** gives molecular records durable identity and contract-readable provenance. At GenesisL1 block **13,412,747**, the full-payload PDB v2 contract reported **229,271 parent records** and **265,786 total ERC-721 tokens**, including child chunks used to extend larger payloads. A separately reported legacy v1 subtotal comprised **191,600 PDB tokens** and **542,319 AlphaFold/Swiss-Prot tokens**. These storage generations are reported separately rather than combined into an ambiguous corpus total. <sup><a href="#source-13">13</a></sup>
 
-The same pinned evidence package directly reconstructed **8 predeclared PDB records** from contract state. Each returned payload was ABI-decoded, base64-decoded, decompressed where required, parsed as BinaryCIF and checked for nonzero `_atom_site` rows plus Cartesian coordinate columns. That is a direct reconstruction result for the declared sample—not an unsupported claim that every parent record was exhaustively downloaded in one run. <sup><a href="#source-13">13</a></sup>
+A later randomized evidence package fixed **N = 100** in an isolated repository commit before GenesisL1 seed block **13,436,979** existed. The resulting block hash was transformed by the declared Keccak-256 rule, and the draw was made without replacement over the PDB v2 contract's pinned parent NFT-ID range **1–229,271** (**229,271 IDs**), defined directly by `nextNFTId()` at block **13,436,937**. Each selected PDB identifier was read from `getMetadata(tokenId)` and its payload from `getCombinedData(tokenId)`; **no GLAST or other off-chain token index was used**. The audit produced **98 of 100 canonical structural-fidelity passes** and retained 2 published failures (2 RPC out-of-gas responses) with the raw RPC request and response for every draw. No failed ID was replaced. <sup><a href="#source-15">15</a></sup>
+
+For each comparable record, the audit required equal atom counts, chain and entity sets, canonical atom identities, and a maximum paired coordinate deviation no greater than the precommitted **0.000001 Å** tolerance. All **98** successful comparisons passed those conditions. Exact normalized coordinate hashes additionally matched for **97 of 98** records, while **0** current RCSB BinaryCIF files were byte-identical to the historical on-chain serialization. The latter is reported separately because BinaryCIF metadata and encoding can change without changing the canonicalized atom identities or Cartesian structure. The future-block seed, complete numeric parent-ID population, draw, failure table, reconstructed and canonical objects, environment fingerprint and SHA-256 manifest are preserved in the evidence package.
 
 **Model NFTs and GL1F** bind model identity, serialized parameters, access rules and deterministic inference. The same model bytes, input and execution rules can become a replayable scientific instrument across independent nodes.
 
@@ -88,8 +90,13 @@ The GenesisL1 comparison below uses the July 2026 whitepaper reference at block 
 | Top five | 51.07% | 37.44% | −13.63 points |
 | One-third coefficient | 3 | 5 | +2 validators |
 | Strict two-thirds coefficient | 8 | 11 | +3 validators |
+| Validator HHI (0–10,000) | — | 547.05 | — |
+| Effective validator count | — | 18.28 | — |
+| Bonded / native supply | — | 53.37% | — |
 
-The active set expanded by 35%. Five leading validators were required to reach one-third of voting power, while eleven were required to exceed the two-thirds commit threshold. At the same height, **24,954,378.94 L1** was bonded across **1,298 unique delegator addresses** and **1,943 active delegation relationships**. The largest-validator, top-three and top-five shares all declined relative to the whitepaper reference.
+The active set expanded by 35%. Five leading validators were required to reach one-third of voting power, while eleven were required to exceed the two-thirds commit threshold. At the same height, **24,954,378.94 L1**—**53.37%** of the **46,754,961.14 L1** native supply—was bonded; the staking pool also reported **1,819,652.96 L1** not bonded. Validator HHI was **547.05**, corresponding to an effective validator count of **18.28**. The largest-validator, top-three and top-five shares all declined relative to the whitepaper reference.
+
+Across addresses delegating to active validators, the largest address represented **5.71%**, the top five **18.09%**, the top ten **29.98%** and the top 50 **80.12%**. Address-level HHI was **177.74**, with an effective address count of **56.26**. These are address-level—not entity-level—measurements: custodians may aggregate many beneficiaries in one address, while one party may use many addresses, so address dispersion does not bound beneficial-owner dispersion.
 
 This does not mean “five validators control GenesisL1.” In CometBFT, more than two-thirds of voting power is required to commit a block. One-third is principally a liveness threshold: a coordinated cohort at or above it can prevent the remainder from exceeding two-thirds, but cannot alone finalize arbitrary state. <sup><a href="#source-3">3</a></sup>
 
@@ -167,7 +174,7 @@ L1 coin is the native protocol resource for network fees, smart-contract executi
 
 ### What does the pinned MOLNFT evidence prove?
 
-At block 13,412,747 it records the exact collection counters and directly reconstructs 8 predeclared PDB records from contract state into coordinate-bearing BinaryCIF objects. The sample is published with raw JSON-RPC responses and checksums; it is not presented as an exhaustive reconstruction of every parent record.
+The counters package at block 13,412,747 reports the collection state. A separately pre-committed randomized sample of 100 parent records at block 13,436,937 was drawn from an enumerated parent-ID set using a future block hash; 98 reconstructed successfully and 98 passed the declared canonical atom, chain/entity and coordinate-fidelity checks. Every draw and failure remains published.
 
 ### What are MOLNFT and CIPNFT?
 
@@ -201,6 +208,7 @@ No. On-chain verification establishes the computational record: which object, mo
 12. **Nobel Prize — Marie Curie, Biographical.** [Biography ↗](https://www.nobelprize.org/prizes/chemistry/1911/marie-curie/biographical/)
 13. **GenesisL1 pinned MOLNFT evidence at block 13,412,747.** Contract counters, raw JSON-RPC responses, runtime-code hashes, reconstructed BinaryCIF objects and SHA-256 manifests. [Evidence repository ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13412747)
 14. **GenesisL1 CIPNFT source repository.** Client-side encryption, fully on-chain ciphertext and recipient-bound delivery workflow. [Source ↗](https://github.com/GenesisL1/cipnft)
+15. **GenesisL1 randomized MOLNFT reconstruction and fidelity evidence at block 13,436,937.** Pre-committed sample specification, future-block seed, enumerated parent IDs, raw calls, reconstructed and canonical BinaryCIF objects, per-record outcomes and SHA-256 manifest. [Randomized evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13436937)
 
 Measurement note: Current validator, delegator and stake figures are pinned to block 13,431,722. Publication comparisons are rounded consistently to two decimal places; exact integer state and higher-precision calculations remain in the machine-readable snapshot. MOLNFT reconstruction claims remain pinned separately to block 13,412,747 and refer only to the predeclared sample published in that evidence package.
 

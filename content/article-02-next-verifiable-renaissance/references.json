@@ -2,6 +2,11 @@
   "molnft_artifact_sha256": "2ed0c6c190689528f2f98998682a3c3009d163950d8bce8c13ff6ba57c7c673f",
   "molnft_commit": "4ef060f194553bc2c330203fc62883ca3c6ec9b3",
   "molnft_immutable_url": "https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13412747",
+  "molnft_randomized_evidence": {
+    "block": 13436937,
+    "title": "GenesisL1 randomized MOLNFT reconstruction and canonical fidelity evidence",
+    "url": "https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13436937"
+  },
   "molnft_repository_url": "https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft",
   "molnft_snapshot_directory": "block-13412747-20260806T122902Z",
   "molnft_workflow_url": "https://github.com/GenesisL1/insights/actions/workflows/publish-article-02.yml",

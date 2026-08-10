@@ -1,0 +1,13 @@
+{
+  "accession_date": "12/21/16",
+  "authors": "Minasov, G., Shuvalova, L., Flores, K., Dubrovska, I., Grimshaw, S., Kwon, K., Anderson, W.F., Center for Structural Genomics of Infectious Diseases (CSGID)",
+  "compound": "2.75 Angstrom Resolution Crystal Structure of Acetamidase from Yersinia enterocolitica.",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 370900,
+  "header": "HYDROLASE",
+  "idcode": "5UBU",
+  "image_base64_characters": 16903,
+  "resolution": "2.75",
+  "sequence_length": 1591,
+  "source": "Yersinia enterocolitica subsp. palearctica serotype O:3"
+}

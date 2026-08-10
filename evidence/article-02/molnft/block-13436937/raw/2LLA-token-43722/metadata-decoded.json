@@ -1,0 +1,13 @@
+{
+  "accession_date": "11/05/11",
+  "authors": "Strickland, M., Crump, M.P., Williams, C., Rezgui, D., Ellis, R.Z., Hoppe, H., Frago, S., Prince, S.N., Zaccheo, O.J., Forbes, B.E., Jones, E., Hassan, A.Z., Wattana-Amorn, P.",
+  "compound": "NMR solution structure ensemble of domain 11 of the echidna M6P/IGF2R receptor",
+  "experiment_type": "SOLUTION NMR",
+  "file_base64_characters": 328919,
+  "header": "TRANSPORT PROTEIN",
+  "idcode": "2LLA",
+  "image_base64_characters": 9718,
+  "resolution": "NOT",
+  "sequence_length": 231,
+  "source": "Tachyglossus aculeatus"
+}

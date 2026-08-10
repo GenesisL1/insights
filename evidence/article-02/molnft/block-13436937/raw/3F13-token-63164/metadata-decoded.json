@@ -1,0 +1,13 @@
+{
+  "accession_date": "10/27/08",
+  "authors": "Bonanno, J.B., Freeman, J., Bain, K.T., Do, J., Romero, R., Wasserman, S., Sauder, J.M., Burley, S.K., Almo, S.C., New York SGX Research Center for Structural Genomics (NYSGXRC)",
+  "compound": "Crystal structure of putative nudix hydrolase family member from Chromobacterium violaceum",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 47950,
+  "header": "HYDROLASE",
+  "idcode": "3F13",
+  "image_base64_characters": 12555,
+  "resolution": "1.7",
+  "sequence_length": 469,
+  "source": "Chromobacterium violaceum"
+}

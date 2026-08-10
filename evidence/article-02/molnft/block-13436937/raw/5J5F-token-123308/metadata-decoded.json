@@ -1,0 +1,13 @@
+{
+  "accession_date": "04/02/16",
+  "authors": "Kaczanowska, K., Camacho Hernandez, G.A., Harel, M., Taylor, P.",
+  "compound": "X-Ray Crystal Structure of Acetylcholine Binding Protein (AChBP) in Complex with N4,N4-bis[(pyridin-2-yl)methyl]-6-(thiophen-3-yl)pyrimidine-2,4-diamine",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 222586,
+  "header": "ACETYLCHOLINE-BINDING PROTEIN",
+  "idcode": "5J5F",
+  "image_base64_characters": 14942,
+  "resolution": "2.04",
+  "sequence_length": 2809,
+  "source": "Lymnaea stagnalis"
+}

@@ -1,0 +1,13 @@
+{
+  "accession_date": "05/15/20",
+  "authors": "Fearon, D., Owen, C.D., Douangamath, A., Lukacik, P., Powell, A.J., Strain-Damerell, C.M., Resnick, E., Krojer, T., Gehrtz, P., Wild, C., Aimon, A., Brandao-Neto, J., Carbery, A., Dunnett, L., Skyner, R., Snee, M., London, N., Walsh, M.A., von Delft, F.",
+  "compound": "PanDDA analysis group deposition SARS-CoV-2 main protease fragment screen -- Crystal Structure of SARS-CoV-2 main protease in complex with Z4444622180 (Mpro-x2562)",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 113737,
+  "header": "HYDROLASE/HYDROLASE INHIBITOR",
+  "idcode": "5RGU",
+  "image_base64_characters": 14893,
+  "resolution": "2.108",
+  "sequence_length": 357,
+  "source": "Severe acute respiratory syndrome coronavirus 2"
+}

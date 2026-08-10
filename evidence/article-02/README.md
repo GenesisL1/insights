@@ -7,3 +7,5 @@ The current validator, delegator and bonded-stake package is pinned to GenesisL1
 - [`molnft/block-13412747/`](molnft/block-13412747/) — contract counters, raw JSON-RPC, runtime-code hashes, eight predeclared reconstructed BinaryCIF objects and SHA-256 checksums.
 
 These directories are immutable observations. Publication prose rounds percentages to two decimal places; the snapshots retain exact state.
+
+- [Randomized MOLNFT fidelity sample — block 13,436,937](molnft/block-13436937/) — N=100, 98 reconstructions, 98 fidelity passes.

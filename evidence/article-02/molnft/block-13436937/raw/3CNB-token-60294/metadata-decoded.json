@@ -1,0 +1,13 @@
+{
+  "accession_date": "03/25/08",
+  "authors": "Patskovsky, Y., Romero, R., Freeman, J., Hu, S., Groshong, C., Wasserman, S.R., Sauder, J.M., Burley, S.K., Almo, S.C., New York SGX Research Center for Structural Genomics (NYSGXRC)",
+  "compound": "Crystal structure of signal receiver domain of DNA binding response regulator protein (merR) from Colwellia psychrerythraea 34H",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 52684,
+  "header": "DNA BINDING PROTEIN",
+  "idcode": "3CNB",
+  "image_base64_characters": 10702,
+  "resolution": "2",
+  "sequence_length": 659,
+  "source": "Colwellia psychrerythraea"
+}

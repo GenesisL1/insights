@@ -1,0 +1,13 @@
+{
+  "accession_date": "11/28/22",
+  "authors": "Pelliciari, S., Bodet-Lefevre, S., Murray, H., Ilangovan, A.",
+  "compound": "Cryo-EM structure of the bacterial replication origin opening basal unwinding system",
+  "experiment_type": "ELECTRON MICROSCOPY",
+  "file_base64_characters": 195960,
+  "header": "REPLICATION",
+  "idcode": "8BTG",
+  "image_base64_characters": 14561,
+  "resolution": "3.2",
+  "sequence_length": 3901,
+  "source": "Bacillus subtilis; SYNTHETIC CONSTRUCT"
+}

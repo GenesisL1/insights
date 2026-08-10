@@ -1,59 +1,150 @@
-# MOLNFT evidence analysis — block 13,412,747
+# MOLNFT direct-ID randomized reconstruction and fidelity methodology
 
-The artifact separates collection counters from reconstruction evidence. It reports 229,271 PDB v2 parent records, 265,786 total PDB v2 ERC-721 tokens including 36,515 child chunks, and the two legacy v1 collection supplies separately. It does not add potentially overlapping storage generations into one headline number.
+This methodology governs the randomized PDB v2 reconstruction package used by Article 02. It keeps three claims separate:
 
-The direct evidence is a predeclared 8-record sample. All 8 samples were recovered from contract state, decoded into BinaryCIF and checked for nonzero `_atom_site` rows and Cartesian coordinates. This supports a bounded reconstruction claim. It does not support saying every parent record was exhaustively reconstructed in the run.
+1. contract counters describe the size of the on-chain collection;
+2. reconstruction proves that a selected contract payload can be recovered as a BinaryCIF object;
+3. fidelity testing compares the recovered molecular structure with the corresponding current RCSB BinaryCIF entry.
 
-Immutable artifact: https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13412747
+A randomized sample measures the selected population at one pinned height. It does not imply that every parent record was downloaded in the run.
 
+## Precommit and future-block seed
 
----
+Before the seed block existed, the repository committed only `evidence/article-02/molnft/sample-spec.json`. That specification fixed:
 
-# MOLNFT evidence snapshot
+- GenesisL1 and EVM chain IDs;
+- PDB v2 contract address;
+- reconstruction height `B_pin`;
+- future seed height `B_seed`;
+- sample size `N`;
+- direct parent NFT-ID population;
+- random-draw algorithm;
+- canonical source and coordinate tolerance.
 
-**Pinned GenesisL1 block:** `13412747`  
-**Block hash:** `0x19f42cd995e384e09d5cd4fb2751668e613d762dd1f22301d065ec84950f0f9a`  
-**Block time:** `2026-08-06T12:29:02Z`  
-**Captured:** `2026-08-06T23:12:56Z`  
-**RPC provider:** `GenesisL1 public`
+The isolated commit SHA is recorded in `seed-derivation.json` and `MANIFEST.json`.
 
-## Exact collection observations
+After `B_seed` was produced, the seed was derived as:
 
-| Observation | Result |
-|---|---:|
-| PDB v2 parent records | **229,271** |
-| PDB v2 total ERC-721 tokens, including child chunks | **265,786** |
-| PDB v2 child chunks | **36,515** |
-| Legacy PDB v1 tokens | **191,600** |
-| Legacy AlphaFold/Swiss-Prot v1 tokens | **542,319** |
-| Legacy v1 subtotal | **733,919** |
+```text
+seed = keccak256(bytes.fromhex(evm_block_hash(B_seed)))
+```
 
-The PDB v2 parent count and the legacy-v1 subtotal describe different storage generations and potentially overlapping scientific records. They are **not added together**. The legacy subtotal is the sum of two ERC-721 supplies; it is not a claim that those assets store complete coordinate payloads in contract state.
+The exact EVM block response and hash are preserved. A different seed or draw cannot be substituted without leaving a visible change in repository history.
 
-## Direct reconstruction audit
+## Direct parent NFT-ID population
 
-The following set was declared before capture and reconstructed with `getCombinedData(tokenId)` at the pinned block. The returned base64 was decoded, gunzipped when applicable, parsed as BinaryCIF MessagePack, and checked for `_atom_site.Cartn_x`, `_atom_site.Cartn_y` and `_atom_site.Cartn_z` columns.
+**No GLAST or other off-chain token index is used.**
 
-| PDB ID | Token | BinaryCIF bytes | Atom rows | Coordinates | SHA-256 |
-|---|---:|---:|---:|---|---|
-| 100D | 1 | 167,950 | 489 | yes | `a793f658cfd5a803…` |
-| 101D | 2 | 174,860 | 556 | yes | `1515c558fb8cfddc…` |
-| 1CRN | 3,429 | 154,573 | 327 | yes | `74e867532f637699…` |
-| 102M | 6 | 189,675 | 1,423 | yes | `a99060d2a95131c3…` |
-| 1AKE | 886 | 224,201 | 3,816 | yes | `1a7955697a230ec9…` |
-| 4HHB | 93,945 | 309,112 | 4,779 | yes | `1afa1f71d13b27be…` |
-| 1AON | 1,019 | 977,462 | 58,870 | yes | `c5539898baca2e20…` |
-| 1FNT | 6,808 | 1,153,429 | 70,622 | yes | `88334aecb3e3fa58…` |
+At `B_pin`, the capture calls the PDB v2 contract's `nextNFTId()` function. The contract allocates parent records sequentially from NFT ID `1`, so the announced draw population is:
+
+```text
+1..nextNFTId(B_pin)-1
+```
+
+The pinned counter, first and last IDs, population size and boundary metadata checks are fixed in `sample-spec.json`. The complete numeric range is saved as `parent-id-enumeration.csv.gz`; the exact `nextNFTId()` request and response are preserved under `raw/enumeration/`.
+
+Only the randomly drawn IDs are queried through `getMetadata(tokenId)` and `getCombinedData(tokenId)`. The PDB identifier used for canonical comparison comes directly from the selected token's on-chain metadata.
+
+This range rule is specific to the deployed PDB v2 contract. A future contract with non-sequential parent IDs would require a different enumeration method committed before its seed block.
+
+## Random draw
+
+The NFT IDs are ordered numerically and sampled without replacement. For draw counter `c = 0, 1, ...`:
+
+```text
+r_c = SHA-256(seed || uint64_be(c))
+```
+
+The 256-bit value is mapped to the current remaining-list length with rejection sampling, preventing modulo bias. The selected ID is removed before the next draw. `drawn-ids.csv` records draw order, NFT ID and the PDB ID read from contract metadata.
+
+## Reconstruction pipeline
+
+For every drawn NFT ID, the capture preserves the exact JSON-RPC request and response and applies:
+
+```text
+eth_call getMetadata(tokenId) at B_pin
+→ read PDB ID from contract metadata
+→ eth_call getCombinedData(tokenId) at B_pin
+→ ABI decode
+→ base64 decode
+→ gzip decompress when flagged or identified by magic bytes
+→ require one BinaryCIF MessagePack object with dataBlocks
+→ parse BinaryCIF
+```
+
+The reconstructed object is saved as `reconstructed/<PDB_ID>-token-<TOKEN_ID>.bcif`.
+
+Failures are not redrawn or removed. Each selected row receives an outcome and reason code, including:
+
+- `RPC_TIMEOUT`
+- `RPC_OUT_OF_GAS`
+- `RPC_ERROR`
+- `METADATA_MISSING`
+- `METADATA_ID_INVALID`
+- `ABI_DECODE_FAIL`
+- `BASE64_DECODE_FAIL`
+- `CHUNK_MISSING`
+- `DECOMPRESS_FAIL`
+- `PARSE_FAIL`
+- `CANONICAL_UNAVAILABLE`
+- `FIDELITY_MISMATCH`
+- `SUCCESS`
+
+## Canonical comparison and storage model
+
+The comparator is the RCSB BinaryCIF retrieved from `https://models.rcsb.org/<PDB_ID>.bcif`. Retrieval URL, time, response metadata and SHA-256 are preserved; the canonical bytes are stored under `canonical/`.
+
+The on-chain transformation—base64 plus gzip—is reversible and therefore lossless relative to the BinaryCIF object minted into the contract. A current RCSB BinaryCIF response may nevertheless have different serialization, compression-independent metadata or dictionary encoding from the historical object while representing the same atom identities and coordinates. For that reason, complete-file byte equality is reported but is not treated as the molecular-fidelity criterion.
+
+For every comparable record the pipeline reports:
+
+| Dimension | Fidelity condition |
+|---|---|
+| BinaryCIF parse | both objects parse and contain `_atom_site` |
+| Atom count | equal `_atom_site` row counts |
+| Chain IDs | equal normalized `label_asym_id` sets |
+| Entity IDs | equal normalized `label_entity_id` sets |
+| Atom identities | equal canonical atom-key sequences after sorting |
+| Coordinates | maximum paired Euclidean deviation `≤ 1e-6 Å` |
+| Coordinate hashes | SHA-256 values recorded for both normalized coordinate arrays; exact equality reported separately |
+| Complete-file hashes | SHA-256 values recorded for both serialized BinaryCIF objects; exact equality reported separately |
+
+A **fidelity pass** requires the first five structural comparisons and the precommitted coordinate-tolerance condition. Exact coordinate-hash equality is an additional reproducibility statistic, not a replacement for the declared tolerance. This matters because IEEE-754 representations can differ by signed zero or sub-tolerance rounding while the measured Cartesian deviation remains zero or far below `1e-6 Å`.
+
+The canonical atom key includes model number, entity ID, label and author chain IDs, residue identifiers, insertion code, atom name, alternate-location identifier and element where available. Missing CIF values (`.` and `?`) are normalized to an empty string. Coordinates are ordered by that key. For exact coordinate hashes, signed zero is normalized and XYZ values are serialized as big-endian IEEE-754 float64 triples.
+
+If a future contract deliberately quantizes coordinates or drops structural fields, the bounded loss model must be committed in a new sample specification before selection. The present run does not change its tolerance after observing results.
+
+## Failure accounting
+
+`summary.json` reports:
+
+- declared `N`;
+- direct parent NFT-ID population and counter;
+- successful fidelity comparisons;
+- failures by reason code;
+- coordinate-tolerance passes;
+- exact coordinate-hash matches;
+- byte-identical complete-file count;
+- wall-clock start and end;
+- Python and exact library versions;
+- RPC and canonical endpoints;
+- precommit SHA and seed-block hash.
+
+A result is accepted only when every preselected row remains visible. Provider-level failures are evidence about the measured retrieval path and are not silently replaced by another draw.
+
+## Deterministic local finalization
+
+Network capture depends on the archive RPC and RCSB being reachable. Once raw calls, reconstructed objects and canonical objects are preserved, the publication result is reproducible without network access:
+
+```bash
+python tools/evidence/finalize_molnft_direct_evidence.py \
+  --evidence evidence/article-02/molnft/block-<B_pin> \
+  --verify-byte-for-byte
+```
+
+The command recomputes `results.csv`, `summary.json`, `README.md`, `MANIFEST.json` and `SHA256SUMS.txt` in deterministic order. The environment is pinned in `requirements.lock` and the realized versions are recorded in the summary.
 
 ## Scope
 
-This snapshot proves two things at block 13,412,747: the contract counters and ERC-721 supplies shown above, and successful full-byte reconstruction for **8 predeclared sample records**. It does not claim that all PDB v2 parent records were exhaustively downloaded and decoded in this run.
-
-For each sample, the repository publishes the exact JSON-RPC request and response, the reconstructed `.bcif` bytes, parsed structural checks, CSV results and SHA-256 checksums. Anyone can rerun the capture against an archive-capable GenesisL1 RPC endpoint.
-
-## Verify
-
-```bash
-sha256sum -c SHA256SUMS.txt
-python ../scripts/capture_molnft_snapshot.py --block 13412747 --expected-block-hash 19F42CD995E384E09D5CD4FB2751668E613D762DD1F22301D065EC84950F0F9A
-```
+The package establishes reconstruction and canonical structural fidelity for the declared randomized sample at one pinned GenesisL1 height. It does not establish biological interpretation, experimental validity, clinical utility, completeness of external annotations or beneficial ownership of network participants. Those are separate questions requiring separate evidence.

@@ -1,0 +1,13 @@
+{
+  "accession_date": "09/19/13",
+  "authors": "Schiebel, J., Kapilashrami, K., Fekete, A., Bommineni, G.R., Schaefer, C.M., Mueller, M.J., Tonge, P.J., Kisker, C.",
+  "compound": "Crystal structure of M. tuberculosis C171Q KasA in complex with thiolactomycin (TLM)",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 242760,
+  "header": "TRANSFERASE",
+  "idcode": "4C6X",
+  "image_base64_characters": 19744,
+  "resolution": "1.95",
+  "sequence_length": 1031,
+  "source": "MYCOBACTERIUM TUBERCULOSIS H37RV"
+}

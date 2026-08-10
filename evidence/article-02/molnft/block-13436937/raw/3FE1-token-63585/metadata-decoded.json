@@ -1,0 +1,13 @@
+{
+  "accession_date": "11/27/08",
+  "authors": "Wisniewska, M., Lehtio, L., Arrowsmith, C.H., Berglund, H., Bountra, C., Collins, R., Dahlgren, L.G., Edwards, A.M., Flodin, S., Flores, A., Graslund, S., Hammarstrom, M., Johansson, A., Johansson, I., Karlberg, T., Kotenyova, T., Moche, M., Nilsson, M.E., Nordlund, P., Nyman, T., Persson, C., Sagemark, J., Siponen, M.I., Thorsell, A.G., Tresaugues, L., Van Den Berg, S., Weigelt, J., Welin, M., Wikstrom, M., Schueler, H., Structural Genomics Consortium (SGC)",
+  "compound": "Crystal structure of the human 70kDa heat shock protein 6 (Hsp70B') ATPase domain in complex with ADP and inorganic phosphate",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 123528,
+  "header": "CHAPERONE",
+  "idcode": "3FE1",
+  "image_base64_characters": 15245,
+  "resolution": "2.2",
+  "sequence_length": 1391,
+  "source": "Homo sapiens"
+}

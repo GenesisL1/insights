@@ -1,0 +1,13 @@
+{
+  "accession_date": "10/09/17",
+  "authors": "Seattle Structural Genomics Center for Infectious Disease (SSGCID)",
+  "compound": "Crystal Structure of Dihydroorotate Dehydrogenase from Helicobacter pylori with bound FMN",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 208787,
+  "header": "OXIDOREDUCTASE",
+  "idcode": "6B8S",
+  "image_base64_characters": 16417,
+  "resolution": "2.25",
+  "sequence_length": 861,
+  "source": "Helicobacter pylori (strain G27)"
+}

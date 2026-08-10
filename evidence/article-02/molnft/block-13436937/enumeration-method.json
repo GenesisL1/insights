@@ -1,0 +1,9 @@
+{
+  "enumerated_parent_count": 229271,
+  "method": "direct_contract_parent_nft_id_range",
+  "off_chain_index_used": false,
+  "parent_counter_function": "nextNFTId()",
+  "parent_counter_value": 229272,
+  "parent_id_end": 229271,
+  "parent_id_start": 1
+}

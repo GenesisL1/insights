@@ -1,0 +1,13 @@
+{
+  "accession_date": "07/16/18",
+  "authors": "O'Hare, H.M., Wallis, R., Lin, L.Y., Newland-Smith, Z.",
+  "compound": "GlnH bound to Glu, Mycobacterium tuberculosis",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 112857,
+  "header": "SIGNALING PROTEIN",
+  "idcode": "6H2T",
+  "image_base64_characters": 13811,
+  "resolution": "1.67",
+  "sequence_length": 372,
+  "source": "Mycobacterium tuberculosis H37Rv"
+}

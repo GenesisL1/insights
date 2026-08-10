@@ -2,9 +2,14 @@
   "algorithm": "SHA-256",
   "files": [
     {
-      "bytes": 7832,
+      "bytes": 8928,
       "path": "README.md",
-      "sha256": "afcdb1a88cf27a780c3f8b0c2cad6b58432b319baeba827b1d65c1a6fe16c319"
+      "sha256": "799bb695c6ea28c4bc60bcd1e092a22b659d5d90e101d7f4bec0e858d8815065"
+    },
+    {
+      "bytes": 3479,
+      "path": "WS2_METRICS.json",
+      "sha256": "2fdf5af103c73ed78cd7aa2d22591ebe3666fa61cfe8cd220a807a3185764bf0"
     },
     {
       "bytes": 1124627,
@@ -637,9 +642,9 @@
       "sha256": "3cb66783de5e68007364e2b35cb1511a78d3d88fb2c6173d6cfd4e1e5a9b86b4"
     },
     {
-      "bytes": 70884,
+      "bytes": 74477,
       "path": "snapshot.json",
-      "sha256": "1d6c1dd883773ff5e33f5fed39053f5a2e78fa020554d2dee44dfa7041b969af"
+      "sha256": "8f3b404d3d3c88bbf131612745846436e351cdd8c64fe8f79eaa153a0dd1b6f6"
     },
     {
       "bytes": 32503,

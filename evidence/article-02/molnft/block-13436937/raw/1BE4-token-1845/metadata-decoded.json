@@ -1,0 +1,13 @@
+{
+  "accession_date": "05/19/98",
+  "authors": "Ladner, J.E., Abdulaev, N.G., Kakuev, D.L., Karaschuk, G.N., Tordova, M., Eisenstein, E., Fujiwara, J.H., Ridge, K.D., Gilliland, G.L.",
+  "compound": "NUCLEOSIDE DIPHOSPHATE KINASE ISOFORM B FROM BOVINE RETINA",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 69000,
+  "header": "PHOSPHOTRANSFERASE",
+  "idcode": "1BE4",
+  "image_base64_characters": 16688,
+  "resolution": "2.4",
+  "sequence_length": 656,
+  "source": "Bos taurus"
+}

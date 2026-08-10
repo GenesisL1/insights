@@ -1,0 +1,13 @@
+{
+  "accession_date": "08/09/17",
+  "authors": "Jakob, R.P., Bauer, D., Meinhold, S., Stigler, J., Merkel, U., Maier, T., Rief, M., Zoldak, G.",
+  "compound": "Crystal structure of lobe II from the nucleotide binding domain of DnaK in complex with AMPPCP",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 216378,
+  "header": "CHAPERONE",
+  "idcode": "5OOW",
+  "image_base64_characters": 8279,
+  "resolution": "2.9",
+  "sequence_length": 525,
+  "source": "Escherichia coli (strain K12)"
+}

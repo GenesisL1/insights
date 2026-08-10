@@ -46,6 +46,27 @@ This package measures the observable on-chain distribution of active consensus p
 | Active-delegator strict two-thirds coefficient | **35** |
 | Effective active delegator count | **56.26** |
 
+## WS-2 concentration and security metrics
+
+| Metric | Exact result |
+|---|---:|
+| Validator HHI (0–10,000) | **547.05015882** |
+| Effective validator count | **18.27985942** |
+| Validator Gini coefficient | **0.39252556** |
+| Validator normalized entropy | **0.92150663** |
+| Native total supply | **46754961.143863 L1** |
+| Bonded stake / native supply | **53.37268672%** |
+| Not-bonded staking-pool tokens | **1819652.960225 L1** |
+| Largest active delegator-address share | **5.70586168%** |
+| Top-five active delegator-address share | **18.09424510%** |
+| Top-ten active delegator-address share | **29.98294172%** |
+| Top-50 active delegator-address share | **80.11695167%** |
+| Active delegator-address HHI | **177.73564300** |
+| Effective active delegator-address count | **56.26333487** |
+| Active delegator-address Gini coefficient | **0.95551450** |
+
+Address-level dispersion is not entity-level dispersion. Custodians can aggregate many beneficiaries in one address, and one party can operate many addresses; the address metric therefore does not bound beneficial-owner dispersion.
+
 ## Active validator set
 
 | Rank | Validator | Voting power | Share | Bonded stake | Delegators |
