@@ -94,7 +94,21 @@ Failures are not redrawn or removed. Each selected row receives an outcome and r
 
 A provider-level retrieval failure does not authorize a replacement draw. The predetermined NFT ID remains part of the sample. A targeted requery may call only that same ID, at the same pinned block, while preserving the original request and response, the new endpoint, and any explicit call parameters such as a gas allowance. Successful sample rows are not queried again.
 
-For the realized sample, the original default calls that failed were PDB `5KCS` / NFT `124713` and PDB `6QFB` / NFT `162649`. Both were re-queried through `https://rpca.genesisl1.org`; default calls reproduced the out-of-gas result and explicit-gas calls returned the complete payloads. The exact `https://rpca.genesisl1.org/api` path was also probed and returned HTTP 404, so it is recorded as a non-RPC route. No replacement ID was drawn. After canonical structural comparison, 6QFB passed. 5KCS remained the one final mismatch: reconstructed and current RCSB objects had equal atom counts plus equal chain and entity sets, but their canonical atom-identity keys differed, so paired coordinate agreement could not be established.
+For the realized sample, the original default calls that failed were PDB `5KCS` / NFT `124713` and PDB `6QFB` / NFT `162649`. Both were re-queried through `https://rpca.genesisl1.org`; default calls reproduced the out-of-gas result and explicit-gas calls returned the complete payloads. The exact `https://rpca.genesisl1.org/api` path was also probed and returned HTTP 404, so it is recorded as a non-RPC route. No replacement ID was drawn. Both recovered structures passed.
+
+For `5KCS`, raw atom-name keys initially differed because the current RCSB file contains a later structure-model revision dated `2026-07-01` that explicitly lists `_atom_site.label_atom_id` and `_atom_site.auth_atom_id` among the revised items. Four atom-name labels in component `6MZ` changed: `O1P→OP2` for two atoms and `O2P→OP1` for two atoms. The unique `_atom_site.id` values were unchanged; every non-name identity field matched; both objects contained `148945` atoms; and every paired Cartesian coordinate was exactly equal, with maximum deviation `0 Å`. This is a documented nomenclature remediation, not structural loss.
+
+## Documented RCSB atom-name revision reconciliation
+
+Raw atom-name equality remains the primary comparison path. A later RCSB nomenclature revision may not be counted as a molecular mismatch merely because the current archive uses different atom labels from the historical object. The revision-aware path is deliberately narrow and is applied uniformly to every sampled record. It is accepted only when all of the following hold:
+
+1. reconstructed and current RCSB atom counts are equal;
+2. `_atom_site.id` is present, unique and equal as a complete set in both objects;
+3. model, entity, label/auth chain, label/auth residue number, insertion code, label/auth component, alternate-location and element fields agree for every stable atom ID;
+4. the current RCSB audit history explicitly lists both `_atom_site.label_atom_id` and `_atom_site.auth_atom_id` in a structure-model revision later than the reconstructed object's latest recorded structure revision;
+5. coordinates paired by stable atom ID satisfy the original precommitted tolerance.
+
+No PDB-specific alias list is used. The old-to-current labels and counts are derived from the two preserved objects and published per record. Raw atom-key equality is retained as a separate diagnostic, so the nomenclature change remains visible rather than being erased.
 
 ## Canonical comparison and storage model
 
@@ -110,12 +124,12 @@ For every comparable record the pipeline reports:
 | Atom count | equal `_atom_site` row counts |
 | Chain IDs | equal normalized `label_asym_id` sets |
 | Entity IDs | equal normalized `label_entity_id` sets |
-| Atom identities | equal canonical atom-key sequences after sorting |
+| Atom identities | raw canonical atom-key equality, or stable `_atom_site.id` reconciliation under a documented later RCSB atom-name revision with all non-name identity fields equal |
 | Coordinates | maximum paired Euclidean deviation `≤ 1e-6 Å` |
 | Coordinate hashes | SHA-256 values recorded for both normalized coordinate arrays; exact equality reported separately |
 | Object integrity hashes | SHA-256 recorded independently for each preserved BinaryCIF object; no equality test is performed |
 
-A **fidelity pass** requires the first five structural comparisons and the precommitted coordinate-tolerance condition. Exact coordinate-hash equality is an additional reproducibility statistic, not a replacement for the declared tolerance. This matters because IEEE-754 representations can differ by signed zero or sub-tolerance rounding while the measured Cartesian deviation remains zero or far below `1e-6 Å`.
+A **fidelity pass** requires atom-count, chain/entity and atom-identity agreement plus the precommitted coordinate-tolerance condition. Atom identity agreement is established either by raw canonical-key equality or by the documented revision-aware rule above. Exact coordinate-hash equality is an additional reproducibility statistic, not a replacement for the declared tolerance. This matters because IEEE-754 representations can differ by signed zero or sub-tolerance rounding while the measured Cartesian deviation remains zero or far below `1e-6 Å`.
 
 The canonical atom key includes model number, entity ID, label and author chain IDs, residue identifiers, insertion code, atom name, alternate-location identifier and element where available. Missing CIF values (`.` and `?`) are normalized to an empty string. Coordinates are ordered by that key. For exact coordinate hashes, signed zero is normalized and XYZ values are serialized as big-endian IEEE-754 float64 triples.
 
@@ -131,7 +145,8 @@ If a future contract deliberately quantizes coordinates or drops structural fiel
 - final failures by reason code;
 - initial provider-level failures and any targeted same-ID requery;
 - coordinate-tolerance passes;
-- exact coordinate-hash matches;
+- exact coordinate-hash matches in the accepted atom-pairing order;
+- raw canonical atom-key matches and documented revision-aware reconciliations;
 - wall-clock start and end;
 - Python and exact library versions;
 - RPC and canonical endpoints;

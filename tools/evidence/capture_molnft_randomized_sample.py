@@ -33,6 +33,8 @@ from decimal import Decimal
 from typing import Any, Iterable
 
 import numpy as np
+
+import molnft_structural_compare as structural_compare
 import requests
 from Crypto.Hash import keccak
 from eth_abi import decode as abi_decode, encode as abi_encode
@@ -757,45 +759,7 @@ def atom_table(path: pathlib.Path) -> dict[str, Any]:
 
 
 def compare_bcif(reconstructed: pathlib.Path, canonical: pathlib.Path, tolerance: float) -> dict[str, Any]:
-    rec = atom_table(reconstructed)
-    can = atom_table(canonical)
-    rec_keys = [row[0] for row in rec["rows"]]
-    can_keys = [row[0] for row in can["rows"]]
-    max_deviation: float | None = None
-    coordinate_equal = False
-    if rec_keys == can_keys:
-        deviations = []
-        for (_, left), (_, right) in zip(rec["rows"], can["rows"]):
-            deviations.append(math.sqrt(sum((a - b) ** 2 for a, b in zip(left, right))))
-        max_deviation = max(deviations, default=0.0)
-        coordinate_equal = max_deviation <= tolerance
-    return {
-        "reconstructed_atom_count": rec["count"],
-        "canonical_atom_count": can["count"],
-        "atom_count_equal": rec["count"] == can["count"],
-        "reconstructed_chain_ids": rec["chains"],
-        "canonical_chain_ids": can["chains"],
-        "chain_ids_equal": rec["chains"] == can["chains"],
-        "reconstructed_entity_ids": rec["entities"],
-        "canonical_entity_ids": can["entities"],
-        "entity_ids_equal": rec["entities"] == can["entities"],
-        "atom_keys_equal": rec_keys == can_keys,
-        "reconstructed_coordinate_sha256": rec["coordinate_hash"],
-        "canonical_coordinate_sha256": can["coordinate_hash"],
-        "coordinate_hash_equal": rec["coordinate_hash"] == can["coordinate_hash"],
-        "max_coordinate_deviation_angstrom": max_deviation,
-        "coordinate_tolerance_angstrom": tolerance,
-        "coordinate_agreement": coordinate_equal,
-        "fidelity_pass": all(
-            [
-                rec["count"] == can["count"],
-                rec["chains"] == can["chains"],
-                rec["entities"] == can["entities"],
-                rec_keys == can_keys,
-                coordinate_equal,
-            ]
-        ),
-    }
+    return structural_compare.compare_bcif(reconstructed, canonical, tolerance)
 
 
 def save_rpc(raw_dir: pathlib.Path, label: str, raw: RawRpc) -> None:
@@ -925,9 +889,21 @@ RESULT_FIELDS = [
     "canonical_entity_ids",
     "entity_ids_equal",
     "atom_keys_equal",
+    "atom_identity_agreement",
+    "atom_identity_comparison_method",
+    "stable_atom_site_id_sets_equal",
+    "stable_identity_field_mismatch_count",
+    "rcsb_atom_name_revision_documented",
+    "rcsb_atom_name_revision_date",
+    "reconstructed_latest_structure_revision_date",
+    "canonical_latest_structure_revision_date",
+    "atom_name_change_count",
+    "atom_name_changes",
     "reconstructed_coordinate_sha256",
     "canonical_coordinate_sha256",
     "coordinate_hash_equal",
+    "strict_atom_key_coordinate_hash_equal",
+    "coordinate_hash_ordering_method",
     "max_coordinate_deviation_angstrom",
     "coordinate_tolerance_angstrom",
     "coordinate_agreement",
@@ -1042,6 +1018,37 @@ def recompute(directory: pathlib.Path) -> None:
             "failures": sum(row["outcome"] != "SUCCESS" for row in results),
             "failures_by_reason": dict(sorted((key, value) for key, value in reason_counts.items() if key != "SUCCESS")),
             "fidelity_passes": sum(bool(row.get("fidelity_pass")) for row in results),
+            "coordinate_tolerance_passes": sum(bool(row.get("coordinate_agreement")) for row in results),
+            "coordinate_hash_matches": sum(bool(row.get("coordinate_hash_equal")) for row in results),
+            "strict_atom_key_matches": sum(bool(row.get("atom_keys_equal")) for row in results),
+            "revision_aware_atom_identity_passes": sum(
+                bool(row.get("fidelity_pass")) and bool(row.get("rcsb_atom_name_revision_documented"))
+                for row in results
+            ),
+            "revision_aware_records": [
+                {
+                    "draw_order": row.get("draw_order"),
+                    "token_id": row.get("token_id"),
+                    "pdb_id": row.get("pdb_id"),
+                    "rcsb_atom_name_revision_date": row.get("rcsb_atom_name_revision_date"),
+                    "reconstructed_latest_structure_revision_date": row.get("reconstructed_latest_structure_revision_date"),
+                    "canonical_latest_structure_revision_date": row.get("canonical_latest_structure_revision_date"),
+                    "atom_name_change_count": row.get("atom_name_change_count"),
+                    "atom_name_changes": row.get("atom_name_changes") or [],
+                    "max_coordinate_deviation_angstrom": row.get("max_coordinate_deviation_angstrom"),
+                }
+                for row in results
+                if row.get("rcsb_atom_name_revision_documented")
+            ],
+            "fidelity_pass_definition": [
+                "atom_count_equal",
+                "chain_ids_equal",
+                "entity_ids_equal",
+                "atom_identity_agreement_by_raw_key_or_documented_rcsb_atom_name_revision",
+                "coordinate_agreement_within_precommitted_tolerance",
+            ],
+            "coordinate_hash_role": "exact normalized coordinate hashes are recorded separately in the accepted atom-pairing order; equality is not required when the declared coordinate tolerance passes",
+            "coordinate_hash_algorithm": "SHA-256 over big-endian float64 XYZ triples in accepted atom-pairing order with signed zero normalized",
             "deterministic_recompute_at_utc": old_summary.get("deterministic_recompute_at_utc"),
         }
     )
@@ -1234,6 +1241,37 @@ def run_capture(repo: pathlib.Path, spec_path: pathlib.Path, precommit_sha: str,
         "failures": sum(row["outcome"] != "SUCCESS" for row in results),
         "failures_by_reason": dict(sorted((key, value) for key, value in reason_counts.items() if key != "SUCCESS")),
         "fidelity_passes": sum(bool(row.get("fidelity_pass")) for row in results),
+        "coordinate_tolerance_passes": sum(bool(row.get("coordinate_agreement")) for row in results),
+        "coordinate_hash_matches": sum(bool(row.get("coordinate_hash_equal")) for row in results),
+        "strict_atom_key_matches": sum(bool(row.get("atom_keys_equal")) for row in results),
+        "revision_aware_atom_identity_passes": sum(
+            bool(row.get("fidelity_pass")) and bool(row.get("rcsb_atom_name_revision_documented"))
+            for row in results
+        ),
+        "revision_aware_records": [
+            {
+                "draw_order": row.get("draw_order"),
+                "token_id": row.get("token_id"),
+                "pdb_id": row.get("pdb_id"),
+                "rcsb_atom_name_revision_date": row.get("rcsb_atom_name_revision_date"),
+                "reconstructed_latest_structure_revision_date": row.get("reconstructed_latest_structure_revision_date"),
+                "canonical_latest_structure_revision_date": row.get("canonical_latest_structure_revision_date"),
+                "atom_name_change_count": row.get("atom_name_change_count"),
+                "atom_name_changes": row.get("atom_name_changes") or [],
+                "max_coordinate_deviation_angstrom": row.get("max_coordinate_deviation_angstrom"),
+            }
+            for row in results
+            if row.get("rcsb_atom_name_revision_documented")
+        ],
+        "fidelity_pass_definition": [
+            "atom_count_equal",
+            "chain_ids_equal",
+            "entity_ids_equal",
+            "atom_identity_agreement_by_raw_key_or_documented_rcsb_atom_name_revision",
+            "coordinate_agreement_within_precommitted_tolerance",
+        ],
+        "coordinate_hash_role": "exact normalized coordinate hashes are recorded separately in the accepted atom-pairing order; equality is not required when the declared coordinate tolerance passes",
+        "coordinate_hash_algorithm": "SHA-256 over big-endian float64 XYZ triples in accepted atom-pairing order with signed zero normalized",
         "coordinate_tolerance_angstrom": spec["fidelity"]["coordinate_tolerance_angstrom"],
         "loss_model": spec["fidelity"]["loss_model"],
         "rpc_endpoint": client.active_url,

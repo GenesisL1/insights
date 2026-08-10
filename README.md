@@ -30,17 +30,17 @@ The initial retrieval completed 98 comparisons. Only the two failed predetermine
 
 At `https://rpca.genesisl1.org`, default `getCombinedData` calls reproduced the provider-level out-of-gas errors. Explicit-gas calls for those same IDs at the same pinned block returned both payloads. The exact `https://rpca.genesisl1.org/api` path returned HTTP 404 and is not a JSON-RPC route. No successful row was requeried and no replacement ID was drawn.
 
-After payload recovery, **6QFB passed** the canonical structural comparator. **5KCS remained the one final mismatch**: reconstructed and current RCSB objects each contained 148,945 atoms and had equal chain and entity sets, but their canonical atom-identity keys differed, so paired coordinate agreement could not be established.
+Both recovered structures pass. **5KCS is not a structural mismatch.** Its current RCSB comparator documents a `2026-07-01` revision to `_atom_site.label_atom_id` and `_atom_site.auth_atom_id`. Four component-6MZ labels changed (`O1P→OP2` twice and `O2P→OP1` twice), while unique `_atom_site.id` values, every non-name identity field, all 148,945 atoms and all coordinates remained aligned at a maximum deviation of `0 Å`.
 
 The finalized audit reports:
 
-- **99 of 100 canonical structural-fidelity passes**;
-- **1 published final structural mismatch: 5KCS / NFT 124713**;
-- **98 of 99 exact normalized coordinate-hash matches among passing records**;
+- **100 of 100 canonical structural-fidelity passes**;
+- **99 raw canonical atom-key matches plus one documented RCSB atom-name revision reconciliation**;
+- **99 of 100 exact normalized coordinate-hash matches**;
 - complete raw requests and responses for the original calls and targeted same-ID requery;
-- reconstructed and current RCSB BinaryCIF objects, per-record outcomes, environment versions, manifest, and SHA-256 checksums.
+- reconstructed and current RCSB BinaryCIF objects, per-record outcomes, revision evidence, environment versions, manifest, and SHA-256 checksums.
 
-A fidelity pass requires equal atom counts, chain/entity sets, canonical atom identities, and paired Cartesian coordinates within the precommitted `1e-6 Å` tolerance. Serialized-object equality is not calculated. Each object's SHA-256 is retained independently as an integrity identifier only.
+The revision-aware path is accepted only when the current RCSB audit history explicitly lists both atom-name fields, stable atom-site IDs are unique and unchanged, every non-name identity field agrees and paired coordinates remain within the original `1e-6 Å` tolerance. It uses no PDB-specific alias table. Serialized-object equality is not calculated; each object's SHA-256 is retained independently as an integrity identifier only.
 
 ## Repository boundaries
 
@@ -71,7 +71,7 @@ python tools/evidence/upgrade_ws2_metrics_direct.py \
   --delegators "$NETWORK/delegators.csv" \
   --verify-only
 
-python tools/qa/validate_ws1_ws2_final.py \
+python tools/qa/validate_ws1_ws2_structural.py \
   --molnft "$MOLNFT" \
   --network "$NETWORK"
 ```

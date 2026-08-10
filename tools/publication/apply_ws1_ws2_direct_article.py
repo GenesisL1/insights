@@ -40,9 +40,27 @@ def ws1_markdown(summary: dict[str, Any], seed: dict[str, Any]) -> str:
     successes = int(summary["successes"])
     fidelity = int(summary["fidelity_passes"])
     exact_coordinates = int(summary.get("coordinate_hash_matches", 0))
+    strict_keys = int(summary.get("strict_atom_key_matches", fidelity))
     enumerated = int(summary["enumerated_parent_count"])
     tolerance = Decimal(str(summary["coordinate_tolerance_angstrom"]))
     enum = summary["enumeration_method"]
+    revisions = summary.get("revision_aware_records") or []
+    revision_text = ""
+    if revisions:
+        rendered = []
+        for record in revisions:
+            changes = "; ".join(
+                f"{item.get('label_comp_id') or item.get('auth_comp_id')}: "
+                f"{item.get('from_label_atom_id')}→{item.get('to_label_atom_id')} ×{item.get('count')}"
+                for item in record.get("atom_name_changes") or []
+            )
+            rendered.append(
+                f"PDB **{record['pdb_id']}** / NFT **{record['token_id']}** reconciled a documented current-RCSB "
+                f"atom-name revision dated **{record['rcsb_atom_name_revision_date']}** ({changes}); stable `_atom_site.id` "
+                f"values and every non-name identity field agreed, with maximum coordinate deviation "
+                f"**{Decimal(str(record['max_coordinate_deviation_angstrom'])):.6f} Å**"
+            )
+        revision_text = " " + "; ".join(rendered) + ". No PDB-specific alias table was used."
     return (
         f"A later randomized evidence package fixed **N = {n}** in an isolated repository commit before GenesisL1 seed block "
         f"**{int(seed['B_seed']):,}** existed. The resulting block hash was transformed by the declared Keccak-256 rule, and "
@@ -51,15 +69,17 @@ def ws1_markdown(summary: dict[str, Any], seed: dict[str, Any]) -> str:
         f"`nextNFTId()` at block **{int(summary['B_pin']):,}**. Each selected PDB identifier was read from "
         f"`getMetadata(tokenId)` and its payload from `getCombinedData(tokenId)`; **no GLAST or other off-chain token index was used**. "
         f"The audit produced **{successes} of {n} canonical structural-fidelity passes** and retained {failure_phrase(summary)} with "
-        f"the raw RPC request and response for every draw. No failed ID was replaced. <sup><a href=\"#source-15\">15</a></sup>\n\n"
-        f"For each comparable record, the audit required equal atom counts, chain and entity sets, canonical atom identities, and a "
-        f"maximum paired coordinate deviation no greater than the precommitted **{tolerance:.6f} Å** tolerance. All **{fidelity}** "
-        f"successful comparisons passed those conditions. Exact normalized coordinate hashes additionally matched for "
+        f"the raw RPC request and response for every draw. No failed ID was replaced.{revision_text} "
+        f"<sup><a href=\"#source-15\">15</a></sup>\n\n"
+        f"For each comparable record, the audit required equal atom counts, chain and entity sets, atom-identity agreement, and a "
+        f"maximum paired coordinate deviation no greater than the precommitted **{tolerance:.6f} Å** tolerance. Raw canonical atom "
+        f"keys agreed for **{strict_keys} of {fidelity}** records; any revision-aware identity path required unique unchanged "
+        f"`_atom_site.id`, equality of every non-name identity field and explicit current-RCSB audit metadata naming both atom-name "
+        f"fields. All **{fidelity}** comparisons passed. Exact normalized coordinate hashes additionally matched for "
         f"**{exact_coordinates} of {fidelity}** records. Serialized BinaryCIF equality is neither calculated nor used as a pass "
         f"condition; each object's SHA-256 is retained independently only as an integrity identifier. The future-block seed, complete "
-        f"numeric parent-ID "
-        f"population, draw, failure table, reconstructed and canonical objects, environment fingerprint and SHA-256 manifest are "
-        f"preserved in the evidence package."
+        f"numeric parent-ID population, draw, failure table, reconstructed and canonical objects, environment fingerprint and SHA-256 "
+        f"manifest are preserved in the evidence package."
     )
 
 

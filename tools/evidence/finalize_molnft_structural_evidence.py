@@ -2,8 +2,8 @@
 """Finalize the direct-ID MOLNFT sample from preserved local evidence.
 
 A fidelity pass is structural. It requires equal atom counts, chain/entity sets,
-canonical atom identities, and paired coordinates within the precommitted
-tolerance. Serialized BinaryCIF equality is neither evaluated nor reported.
+canonical atom identity agreement, including narrowly documented post-deposition
+RCSB atom-name revisions, and paired coordinates within the precommitted tolerance. Serialized BinaryCIF equality is neither evaluated nor reported.
 Individual SHA-256 values remain as integrity identifiers for each preserved
 object, without turning equality between those values into a criterion.
 
@@ -15,15 +15,14 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import importlib.util
 import json
-import math
 import pathlib
-import struct
 import sys
 from collections import Counter
 from typing import Any
+
+import molnft_structural_compare as structural_compare
 
 BASE_PATH = pathlib.Path(__file__).with_name("capture_molnft_randomized_sample.py")
 SPEC = importlib.util.spec_from_file_location("genesisl1_ws1_finalize_base", BASE_PATH)
@@ -34,64 +33,8 @@ sys.modules[SPEC.name] = base
 SPEC.loader.exec_module(base)
 
 
-def normalized_coordinate_hash(rows: list[tuple[tuple[str, ...], tuple[float, float, float]]]) -> str:
-    """Hash coordinates in canonical atom-key order, normalizing signed zero."""
-    stream = bytearray()
-    for _, coordinate in rows:
-        for value in coordinate:
-            normalized = 0.0 if value == 0.0 else float(value)
-            stream.extend(struct.pack(">d", normalized))
-    return hashlib.sha256(bytes(stream)).hexdigest()
-
-
 def compare_bcif(reconstructed: pathlib.Path, canonical: pathlib.Path, tolerance: float) -> dict[str, Any]:
-    rec = base.atom_table(reconstructed)
-    can = base.atom_table(canonical)
-    rec_keys = [row[0] for row in rec["rows"]]
-    can_keys = [row[0] for row in can["rows"]]
-    max_deviation: float | None = None
-    coordinate_agreement = False
-    if rec_keys == can_keys:
-        deviations: list[float] = []
-        for (_, left), (_, right) in zip(rec["rows"], can["rows"]):
-            deviations.append(math.sqrt(sum((float(a) - float(b)) ** 2 for a, b in zip(left, right))))
-        max_deviation = max(deviations, default=0.0)
-        coordinate_agreement = max_deviation <= tolerance
-
-    rec_coordinate_hash = normalized_coordinate_hash(rec["rows"])
-    can_coordinate_hash = normalized_coordinate_hash(can["rows"])
-    atom_count_equal = rec["count"] == can["count"]
-    chain_ids_equal = rec["chains"] == can["chains"]
-    entity_ids_equal = rec["entities"] == can["entities"]
-    atom_keys_equal = rec_keys == can_keys
-    fidelity_pass = all(
-        [
-            atom_count_equal,
-            chain_ids_equal,
-            entity_ids_equal,
-            atom_keys_equal,
-            coordinate_agreement,
-        ]
-    )
-    return {
-        "reconstructed_atom_count": rec["count"],
-        "canonical_atom_count": can["count"],
-        "atom_count_equal": atom_count_equal,
-        "reconstructed_chain_ids": rec["chains"],
-        "canonical_chain_ids": can["chains"],
-        "chain_ids_equal": chain_ids_equal,
-        "reconstructed_entity_ids": rec["entities"],
-        "canonical_entity_ids": can["entities"],
-        "entity_ids_equal": entity_ids_equal,
-        "atom_keys_equal": atom_keys_equal,
-        "reconstructed_coordinate_sha256": rec_coordinate_hash,
-        "canonical_coordinate_sha256": can_coordinate_hash,
-        "coordinate_hash_equal": rec_coordinate_hash == can_coordinate_hash,
-        "max_coordinate_deviation_angstrom": max_deviation,
-        "coordinate_tolerance_angstrom": tolerance,
-        "coordinate_agreement": coordinate_agreement,
-        "fidelity_pass": fidelity_pass,
-    }
+    return structural_compare.compare_bcif(reconstructed, canonical, tolerance)
 
 
 def read_draw(path: pathlib.Path) -> list[dict[str, str]]:
@@ -197,6 +140,31 @@ def write_report(directory: pathlib.Path, summary: dict[str, Any]) -> None:
             + "\n"
         )
 
+    revision_rows = summary.get("revision_aware_records") or []
+    revision_text = ""
+    if revision_rows:
+        lines = []
+        for record in revision_rows:
+            changes = "; ".join(
+                f"{item.get('label_comp_id') or item.get('auth_comp_id')}: "
+                f"{item.get('from_label_atom_id')}→{item.get('to_label_atom_id')} ×{item.get('count')}"
+                for item in record.get("atom_name_changes") or []
+            )
+            lines.append(
+                f"- **{record['pdb_id']} / NFT {record['token_id']}** — current RCSB revision "
+                f"{record.get('rcsb_atom_name_revision_date') or 'unknown date'} changed "
+                f"{record.get('atom_name_change_count', 0)} atom-name labels ({changes}); all non-name identity fields "
+                f"matched by `_atom_site.id`, with maximum coordinate deviation "
+                f"{float(record.get('max_coordinate_deviation_angstrom') or 0):.6g} Å."
+            )
+        revision_text = (
+            "\n## Documented RCSB atom-name revisions\n\n"
+            "A later RCSB atom-name revision is not a structural mismatch. The revision-aware path is accepted only when "
+            "the current RCSB audit history explicitly lists both atom-name fields, `_atom_site.id` remains unique and "
+            "unchanged, every non-name identity field agrees, and paired coordinates meet the original tolerance. "
+            "No PDB-specific alias table is used.\n\n" + "\n".join(lines) + "\n"
+        )
+
     text = f"""# MOLNFT direct NFT-ID randomized fidelity evidence
 
 **Pinned GenesisL1 block:** `{summary['B_pin']}`  
@@ -221,14 +189,14 @@ The sample specification fixed `N = {summary['N']}` before the seed block existe
 
 Final failure accounting: **{failures}**.
 
-A fidelity pass requires equal atom counts, chain/entity sets, canonical atom identities and maximum paired coordinate deviation within the precommitted tolerance. Serialized-object equality is not calculated or reported. The separately recorded SHA-256 value for each object is an integrity identifier only.
-{targeted_text}
+A fidelity pass requires equal atom counts, chain/entity sets, atom identity agreement and maximum paired coordinate deviation within the precommitted tolerance. Atom identity agreement is either raw canonical-key equality or the narrowly documented RCSB revision-aware path described below. Serialized-object equality is not calculated or reported. The separately recorded SHA-256 value for each object is an integrity identifier only.
+{targeted_text}{revision_text}
 ## Verify
 
 ```bash
 sha256sum -c SHA256SUMS.txt
-python tools/evidence/finalize_molnft_structural_evidence.py \
-  --evidence evidence/article-02/molnft/block-{summary['B_pin']} \
+python tools/evidence/finalize_molnft_structural_evidence.py \\
+  --evidence evidence/article-02/molnft/block-{summary['B_pin']} \\
   --verify-deterministic
 ```
 """
@@ -280,7 +248,7 @@ def finalize(directory: pathlib.Path) -> None:
                             "atom_count_equal",
                             "chain_ids_equal",
                             "entity_ids_equal",
-                            "atom_keys_equal",
+                            "atom_identity_agreement",
                             "coordinate_agreement",
                         ]
                         if not comparison[key]
@@ -309,15 +277,34 @@ def finalize(directory: pathlib.Path) -> None:
             "canonical_comparisons": sum(bool(row.get("canonical_sha256")) for row in rows),
             "coordinate_tolerance_passes": sum(bool(row.get("coordinate_agreement")) for row in rows),
             "coordinate_hash_matches": sum(bool(row.get("coordinate_hash_equal")) for row in rows),
+            "strict_atom_key_matches": sum(bool(row.get("atom_keys_equal")) for row in rows),
+            "revision_aware_atom_identity_passes": sum(
+                bool(row.get("fidelity_pass")) and bool(row.get("rcsb_atom_name_revision_documented")) for row in rows
+            ),
+            "revision_aware_records": [
+                {
+                    "draw_order": row.get("draw_order"),
+                    "token_id": row.get("token_id"),
+                    "pdb_id": row.get("pdb_id"),
+                    "rcsb_atom_name_revision_date": row.get("rcsb_atom_name_revision_date"),
+                    "reconstructed_latest_structure_revision_date": row.get("reconstructed_latest_structure_revision_date"),
+                    "canonical_latest_structure_revision_date": row.get("canonical_latest_structure_revision_date"),
+                    "atom_name_change_count": row.get("atom_name_change_count"),
+                    "atom_name_changes": row.get("atom_name_changes") or [],
+                    "max_coordinate_deviation_angstrom": row.get("max_coordinate_deviation_angstrom"),
+                }
+                for row in rows
+                if row.get("rcsb_atom_name_revision_documented")
+            ],
             "fidelity_pass_definition": [
                 "atom_count_equal",
                 "chain_ids_equal",
                 "entity_ids_equal",
-                "atom_keys_equal",
+                "atom_identity_agreement_by_raw_key_or_documented_rcsb_atom_name_revision",
                 "coordinate_agreement_within_precommitted_tolerance",
             ],
-            "coordinate_hash_role": "exact normalized coordinate hashes are recorded separately; equality is not required when the declared coordinate tolerance passes",
-            "coordinate_hash_algorithm": "SHA-256 over big-endian float64 XYZ triples in canonical atom-key order with signed zero normalized",
+            "coordinate_hash_role": "exact normalized coordinate hashes are recorded separately in the accepted atom-pairing order; equality is not required when the declared coordinate tolerance passes",
+            "coordinate_hash_algorithm": "SHA-256 over big-endian float64 XYZ triples in accepted atom-pairing order with signed zero normalized",
             "serialized_object_hash_role": "reconstructed and canonical SHA-256 values are independent integrity identifiers only; equality is neither evaluated nor used for fidelity",
             "deterministic_finalization": True,
         }
@@ -332,7 +319,7 @@ def finalize(directory: pathlib.Path) -> None:
         {
             "precommit_sha": seed["sample_spec_precommit_sha"],
             "seed_block_hash": seed["B_seed_block_hash"],
-            "finalization": "deterministic local structural comparison v3",
+            "finalization": "deterministic local structural comparison v4 with documented RCSB atom-name revision reconciliation",
         },
     )
 

@@ -18,7 +18,7 @@ from Crypto.Hash import keccak
 ROOT_RPC = "https://rpca.genesisl1.org"
 API_PATH = "https://rpca.genesisl1.org/api"
 EXPECTED_REQUERY = {(124713, "5KCS"), (162649, "6QFB")}
-EXPECTED_FINAL_FAILURE = (124713, "5KCS")
+REVISION_AWARE_RECORD = (124713, "5KCS")
 
 
 def sha256(path: pathlib.Path) -> str:
@@ -74,11 +74,14 @@ def main() -> int:
     assert int(spec["N"]) == 100
     assert len(results) == len(drawn) == int(spec["N"]) == int(summary["N"])
     assert int(summary["successes"]) + int(summary["failures"]) == int(summary["N"])
-    assert int(summary["successes"]) == int(summary["fidelity_passes"]) == 99
-    assert int(summary["failures"]) == 1
-    assert summary["failures_by_reason"] == {"FIDELITY_MISMATCH": 1}
-    assert int(summary["coordinate_tolerance_passes"]) == 99
-    assert int(summary["coordinate_hash_matches"]) == 98
+    assert int(summary["successes"]) == int(summary["fidelity_passes"]) == 100
+    assert int(summary["failures"]) == 0
+    assert summary["failures_by_reason"] == {}
+    assert int(summary["coordinate_tolerance_passes"]) == 100
+    assert int(summary["coordinate_hash_matches"]) == 99
+    assert int(summary["strict_atom_key_matches"]) == 99
+    assert int(summary["revision_aware_atom_identity_passes"]) == 1
+    assert len(summary["revision_aware_records"]) == 1
     assert summary["direct_nft_id_queries"] is True
     assert summary["off_chain_index_used"] is False
     assert summary["deterministic_finalization"] is True
@@ -109,21 +112,36 @@ def main() -> int:
 
     assert "byte_identical" not in results[0], "results.csv must not contain serialized equality"
     final_failures = [row for row in results if row["outcome"] != "SUCCESS"]
-    assert len(final_failures) == 1
-    failure = final_failures[0]
-    assert (int(failure["token_id"]), failure["pdb_id"]) == EXPECTED_FINAL_FAILURE
-    assert int(failure["draw_order"]) == 71
-    assert failure["reason_code"] == "FIDELITY_MISMATCH"
-    assert failure["reason_detail"] == "failed checks: atom_keys_equal, coordinate_agreement"
-    assert int(failure["reconstructed_atom_count"]) == 148945
-    assert int(failure["canonical_atom_count"]) == 148945
-    assert is_true(failure["atom_count_equal"])
-    assert is_true(failure["chain_ids_equal"])
-    assert is_true(failure["entity_ids_equal"])
-    assert not is_true(failure["atom_keys_equal"])
-    assert not is_true(failure["coordinate_agreement"])
-    assert failure["max_coordinate_deviation_angstrom"] == ""
-    assert not is_true(failure["fidelity_pass"])
+    assert final_failures == []
+    revision_row = next(row for row in results if (int(row["token_id"]), row["pdb_id"]) == REVISION_AWARE_RECORD)
+    assert int(revision_row["draw_order"]) == 71
+    assert revision_row["outcome"] == "SUCCESS"
+    assert revision_row["reason_code"] == "SUCCESS"
+    assert int(revision_row["reconstructed_atom_count"]) == 148945
+    assert int(revision_row["canonical_atom_count"]) == 148945
+    assert is_true(revision_row["atom_count_equal"])
+    assert is_true(revision_row["chain_ids_equal"])
+    assert is_true(revision_row["entity_ids_equal"])
+    assert not is_true(revision_row["atom_keys_equal"])
+    assert is_true(revision_row["atom_identity_agreement"])
+    assert revision_row["atom_identity_comparison_method"] == "stable_atom_site_id_with_documented_rcsb_atom_name_revision"
+    assert is_true(revision_row["stable_atom_site_id_sets_equal"])
+    assert int(revision_row["stable_identity_field_mismatch_count"]) == 0
+    assert is_true(revision_row["rcsb_atom_name_revision_documented"])
+    assert revision_row["rcsb_atom_name_revision_date"] == "2026-07-01"
+    assert revision_row["reconstructed_latest_structure_revision_date"] == "2024-11-06"
+    assert revision_row["canonical_latest_structure_revision_date"] == "2026-07-01"
+    assert int(revision_row["atom_name_change_count"]) == 4
+    changes = json.loads(revision_row["atom_name_changes"])
+    assert {(item["from_label_atom_id"], item["to_label_atom_id"], int(item["count"])) for item in changes} == {
+        ("O1P", "OP2", 2),
+        ("O2P", "OP1", 2),
+    }
+    assert is_true(revision_row["coordinate_agreement"])
+    assert float(revision_row["max_coordinate_deviation_angstrom"]) == 0.0
+    assert is_true(revision_row["coordinate_hash_equal"])
+    assert not is_true(revision_row["strict_atom_key_coordinate_hash_equal"])
+    assert is_true(revision_row["fidelity_pass"])
 
     coordinate_hash_matches = 0
     for row in results:
@@ -139,24 +157,25 @@ def main() -> int:
         assert (mol / "reconstructed" / f"{pdb_id}-token-{token_id}.bcif").is_file()
         assert (mol / "canonical" / f"{pdb_id}.bcif").is_file()
 
-        if (int(token_id), pdb_id) == EXPECTED_FINAL_FAILURE:
-            assert row["outcome"] == "FAILURE"
-            assert row["reason_code"] == "FIDELITY_MISMATCH"
+        assert row["outcome"] == "SUCCESS"
+        assert row["reason_code"] == "SUCCESS"
+        assert is_true(row["fidelity_pass"])
+        for key in [
+            "atom_count_equal",
+            "chain_ids_equal",
+            "entity_ids_equal",
+            "atom_identity_agreement",
+            "coordinate_agreement",
+        ]:
+            assert is_true(row[key]), f"{key} failed for token {token_id}"
+        assert float(row["max_coordinate_deviation_angstrom"]) <= float(row["coordinate_tolerance_angstrom"])
+        if (int(token_id), pdb_id) == REVISION_AWARE_RECORD:
+            assert not is_true(row["atom_keys_equal"])
         else:
-            assert row["outcome"] == "SUCCESS"
-            assert row["reason_code"] == "SUCCESS"
-            assert is_true(row["fidelity_pass"])
-            for key in [
-                "atom_count_equal",
-                "chain_ids_equal",
-                "entity_ids_equal",
-                "atom_keys_equal",
-                "coordinate_agreement",
-            ]:
-                assert is_true(row[key]), f"{key} failed for token {token_id}"
-            assert float(row["max_coordinate_deviation_angstrom"]) <= float(row["coordinate_tolerance_angstrom"])
+            assert is_true(row["atom_keys_equal"])
+            assert row["atom_identity_comparison_method"] == "canonical_atom_key"
         coordinate_hash_matches += is_true(row["coordinate_hash_equal"])
-    assert coordinate_hash_matches == int(summary["coordinate_hash_matches"]) == 98
+    assert coordinate_hash_matches == int(summary["coordinate_hash_matches"]) == 99
 
     six_qfb = next(row for row in results if int(row["token_id"]) == 162649)
     assert six_qfb["pdb_id"] == "6QFB"
@@ -247,17 +266,19 @@ def main() -> int:
 
     for text in [article, html]:
         assert "no GLAST or other off-chain token index was used" in text
-        assert "99 of 100 canonical structural-fidelity passes" in text
-        assert "one published final mismatch" in text
+        assert "100 of 100 canonical structural-fidelity passes" in text
+        assert "one published final mismatch" not in text
         assert "5KCS" in text and "124713" in text
         assert "6QFB" in text and "162649" in text
         assert "148,945 atoms" in text
-        assert "canonical atom-identity keys did not" in text
+        assert "2026-07-01" in text
+        assert "4 labels" in text or "four 6MZ atom-name labels" in text
+        assert "maximum deviation was" in text or "all coordinates were unchanged" in text
         assert ROOT_RPC in text and API_PATH in text
         assert "HTTP 404" in text
         assert "no replacement id was drawn" in text.lower()
         assert f"{int(summary['B_pin']):,}" in text
-        assert "98 of 99" in text
+        assert "99 of 100" in text
         assert f"{float(ws2['validator_concentration']['hhi_10000']):.2f}" in text
         assert f"{float(ws2['validator_concentration']['effective_count']):.2f}" in text
         assert f"{float(ws2['stake']['bonded_ratio_percent']):.2f}%" in text
@@ -265,27 +286,30 @@ def main() -> int:
 
     randomized_facts = facts["molnft_randomized"]
     assert "byte_identical_records" not in randomized_facts
-    assert int(randomized_facts["successes"]) == 99
-    assert int(randomized_facts["failures"]) == 1
-    assert randomized_facts["failures_by_reason"] == {"FIDELITY_MISMATCH": 1}
+    assert int(randomized_facts["successes"]) == 100
+    assert int(randomized_facts["failures"]) == 0
+    assert randomized_facts["failures_by_reason"] == {}
+    assert int(randomized_facts["strict_atom_key_matches"]) == 99
+    assert int(randomized_facts["revision_aware_atom_identity_passes"]) == 1
     assert int(randomized_facts["successful_same_id_payload_requeries"]) == 2
     assert set(randomized_facts["targeted_requery_token_ids"]) == {124713, 162649}
     assert int(randomized_facts["requested_api_path_http_status"]) == 404
     assert int(randomized_facts["replacement_draws"]) == 0
-    fact_failures = randomized_facts["final_failure_records"]
-    assert len(fact_failures) == 1
-    assert (int(fact_failures[0]["token_id"]), fact_failures[0]["pdb_id"]) == EXPECTED_FINAL_FAILURE
-    assert fact_failures[0]["atom_count_equal"] is True
-    assert fact_failures[0]["chain_ids_equal"] is True
-    assert fact_failures[0]["entity_ids_equal"] is True
-    assert fact_failures[0]["atom_keys_equal"] is False
-    assert fact_failures[0]["coordinate_agreement"] is False
+    assert randomized_facts["final_failure_records"] == []
+    fact_revisions = randomized_facts["revision_aware_records"]
+    assert len(fact_revisions) == 1
+    assert (int(fact_revisions[0]["token_id"]), fact_revisions[0]["pdb_id"]) == REVISION_AWARE_RECORD
+    assert fact_revisions[0]["rcsb_atom_name_revision_date"] == "2026-07-01"
+    assert int(fact_revisions[0]["atom_name_change_count"]) == 4
+    assert float(fact_revisions[0]["max_coordinate_deviation_angstrom"]) == 0.0
 
     assert "Targeted requery of provider-level failures" in methodology
     assert "5KCS" in methodology and "124713" in methodology
     assert "6QFB" in methodology and "162649" in methodology
-    assert "6QFB passed" in methodology
-    assert "5KCS remained" in methodology
+    assert "Both recovered structures passed" in methodology
+    assert "Documented RCSB atom-name revision reconciliation" in methodology
+    assert "O1P→OP2" in methodology and "O2P→OP1" in methodology
+    assert "No PDB-specific alias list is used" in methodology
     assert "--verify-deterministic" in methodology
     assert "1..nextNFTId(B_pin)-1" in methodology
     assert "Exact coordinate-hash equality is an additional reproducibility statistic" in methodology
@@ -295,9 +319,9 @@ def main() -> int:
     assert caveat in consensus_methodology
 
     print(
-        "Final WS-1/WS-2 acceptance passed: 99/100 structural-fidelity passes; "
-        "6QFB recovered and passed; 5KCS recovered but retained one atom-identity mismatch; "
-        "98 exact coordinate hashes; two same-ID RPCA payload recoveries; no replacement draw"
+        "Final WS-1/WS-2 acceptance passed: 100/100 structural-fidelity passes; "
+        "5KCS reconciled through documented 2026-07-01 RCSB atom-name revision metadata with zero coordinate deviation; "
+        "99 exact coordinate hashes; two same-ID RPCA payload recoveries; no replacement draw"
     )
     return 0
 

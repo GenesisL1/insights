@@ -2,9 +2,9 @@
   "algorithm": "SHA-256",
   "files": [
     {
-      "bytes": 2439,
+      "bytes": 3178,
       "path": "README.md",
-      "sha256": "2d1eb453112718c9576e0313f52bc2cd4f8aa7035760c0390ea2e93effaaa8ae"
+      "sha256": "0214c14446853953ac8090f5cc68ed838e7877ae00fddd759a8c15e14beb68f5"
     },
     {
       "bytes": 234579,
@@ -4242,9 +4242,9 @@
       "sha256": "8431551a849cc5b9922c1a613162da505d2bee4024e17caa37448944c4e6e21f"
     },
     {
-      "bytes": 57738,
+      "bytes": 67417,
       "path": "results.csv",
-      "sha256": "cc0bb806ae18f101013b0829990d191bdcd5fb9c51ae6f025229e77fa95625bd"
+      "sha256": "70ecc2fce14924f36fd83ccfdfd2a3d11b24ef8dac61d4ced347c3b195550d72"
     },
     {
       "bytes": 2124,
@@ -4257,9 +4257,9 @@
       "sha256": "5c6a392f4774e67fc611b40c21bec7e3300e0e88f56285dc750083dd9891593a"
     },
     {
-      "bytes": 4454,
+      "bytes": 5541,
       "path": "summary.json",
-      "sha256": "33a5f85799318a7e2b57bf07dfda5bf74af6806217062c2a132f433f8c825ab2"
+      "sha256": "75218e0b09d9431fab88eaed48958dfedbe7ed954e024df573aa14a2389d8078"
     },
     {
       "bytes": 10556,
@@ -4267,7 +4267,7 @@
       "sha256": "7e0cec64cebc747708f2294899c404fcad7f1adb2d3dd3a49e12f1e4f4a7d2d5"
     }
   ],
-  "finalization": "deterministic local structural comparison v3",
+  "finalization": "deterministic local structural comparison v4 with documented RCSB atom-name revision reconciliation",
   "precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
   "seed_block_hash": "0x523c4b1c9ce0b3a581cff3901a10a32d01163026a43e1582d0d8c23c3dd88d02"
 }
