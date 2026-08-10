@@ -5,9 +5,16 @@
   "B_seed_block_hash": "0x523c4b1c9ce0b3a581cff3901a10a32d01163026a43e1582d0d8c23c3dd88d02",
   "N": 100,
   "byte_identical_records": 0,
+  "canonical_comparisons": 98,
   "canonical_endpoint": "https://models.rcsb.org/{pdb_id}.bcif",
+  "complete_file_hash_role": "informational comparison of serialized BinaryCIF objects; current RCSB encoding and metadata may differ from the historical on-chain object",
   "contract_address": "0xd58B01f6C18086e5202cdC5D7Ad3E41790360102",
+  "coordinate_hash_algorithm": "SHA-256 over big-endian float64 XYZ triples in canonical atom-key order with signed zero normalized",
+  "coordinate_hash_matches": 97,
+  "coordinate_hash_role": "exact normalized coordinate hashes are recorded and compared separately; equality is not required when the declared coordinate tolerance passes",
   "coordinate_tolerance_angstrom": 1e-06,
+  "coordinate_tolerance_passes": 98,
+  "deterministic_finalization": true,
   "deterministic_recompute_at_utc": null,
   "direct_nft_id_queries": true,
   "enumerated_parent_count": 229271,
@@ -36,12 +43,18 @@
   },
   "evidence_relative_path": "evidence/article-02/molnft/block-13436937",
   "evm_chain_id": 29,
-  "failures": 10,
+  "failures": 2,
   "failures_by_reason": {
-    "FIDELITY_MISMATCH": 8,
-    "MISSING_FILE": 2
+    "RPC_OUT_OF_GAS": 2
   },
-  "fidelity_passes": 90,
+  "fidelity_pass_definition": [
+    "atom_count_equal",
+    "chain_ids_equal",
+    "entity_ids_equal",
+    "atom_keys_equal",
+    "coordinate_agreement_within_precommitted_tolerance"
+  ],
+  "fidelity_passes": 98,
   "loss_model": "lossless BinaryCIF payload",
   "off_chain_index_used": false,
   "requirements_lock_sha256": "cc0cb134a882b399d30be574ddf6811abc80d5199ee2f411a683873d6303bd7e",
@@ -49,7 +62,7 @@
   "rpc_provider": "public GenesisL1 EVM JSON-RPC",
   "sample_spec_precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
   "schema": "org.genesisl1.molnft_direct_randomized_fidelity.v1",
-  "successes": 90,
+  "successes": 98,
   "wall_clock_end_utc": "2026-08-10T20:01:09Z",
   "wall_clock_start_utc": "2026-08-10T19:58:11Z"
 }

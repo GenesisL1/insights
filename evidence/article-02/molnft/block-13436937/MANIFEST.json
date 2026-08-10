@@ -2,6 +2,11 @@
   "algorithm": "SHA-256",
   "files": [
     {
+      "bytes": 1690,
+      "path": "README.md",
+      "sha256": "029d4249d33c9c4a6c8abe1e6e6f40a6bba5fe2d5ce0292ae2cb824dfc2a3e42"
+    },
+    {
       "bytes": 234579,
       "path": "canonical/1AUN.bcif",
       "sha256": "a962a80ce73383bb608314ba5768c451a8faa5e2c048a3a9d9f6e7f6f1dfd003"
@@ -4017,9 +4022,9 @@
       "sha256": "8431551a849cc5b9922c1a613162da505d2bee4024e17caa37448944c4e6e21f"
     },
     {
-      "bytes": 55821,
+      "bytes": 55818,
       "path": "results.csv",
-      "sha256": "a360a0882db2bfcfa0cd4fb12700dc68b61ad676d8feecad8cd8b027a86d6d6a"
+      "sha256": "6cdcc636197b001eb19fd319d7501eac689371dc37561e68961787d666b7835e"
     },
     {
       "bytes": 2124,
@@ -4032,11 +4037,12 @@
       "sha256": "5c6a392f4774e67fc611b40c21bec7e3300e0e88f56285dc750083dd9891593a"
     },
     {
-      "bytes": 2008,
+      "bytes": 2787,
       "path": "summary.json",
-      "sha256": "26e77459ac1046fe1c0765dba04f128379649605f55ec4c9708a2db50821b349"
+      "sha256": "40945e457a1143eaae3807008c4f5cf877504cdaf056f3441a157dc01ff26772"
     }
   ],
+  "finalization": "deterministic local evidence comparison v2",
   "precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
   "seed_block_hash": "0x523c4b1c9ce0b3a581cff3901a10a32d01163026a43e1582d0d8c23c3dd88d02"
 }

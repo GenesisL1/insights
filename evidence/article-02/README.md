@@ -8,4 +8,4 @@ The current validator, delegator and bonded-stake package is pinned to GenesisL1
 
 These directories are immutable observations. Publication prose rounds percentages to two decimal places; the snapshots retain exact state.
 
-- [Randomized MOLNFT fidelity sample — block 13,436,937](molnft/block-13436937/) — N=100, 90 reconstructions, 90 fidelity passes.
+- [Randomized MOLNFT fidelity sample — block 13,436,937](molnft/block-13436937/) — N=100, 98 reconstructions, 98 fidelity passes.
