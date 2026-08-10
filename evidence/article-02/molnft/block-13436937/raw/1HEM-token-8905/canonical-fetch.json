@@ -7,14 +7,14 @@
     "content-disposition": "inline; filename=\"1hem.bcif\"",
     "content-encoding": "gzip",
     "content-type": "application/octet-stream",
-    "date": "Mon, 10 Aug 2026 19:48:00 GMT",
+    "date": "Mon, 10 Aug 2026 20:00:22 GMT",
     "keep-alive": "timeout=5",
     "strict-transport-security": "max-age=16000000; includeSubDomains; preload;",
     "transfer-encoding": "chunked",
     "vary": "Accept-Encoding",
     "x-powered-by": "Express"
   },
-  "retrieved_at_utc": "2026-08-10T19:48:00Z",
+  "retrieved_at_utc": "2026-08-10T20:00:21Z",
   "sha256": "bddcb475d41c66e4ec7eca5bacc13497f08d77da3d4e023f492b4db910fc368c",
   "status_code": 200,
   "url": "https://models.rcsb.org/1hem.bcif"

@@ -7,14 +7,14 @@
     "content-disposition": "inline; filename=\"5j5f.bcif\"",
     "content-encoding": "gzip",
     "content-type": "application/octet-stream",
-    "date": "Mon, 10 Aug 2026 19:46:47 GMT",
+    "date": "Mon, 10 Aug 2026 19:58:58 GMT",
     "keep-alive": "timeout=5",
     "strict-transport-security": "max-age=16000000; includeSubDomains; preload;",
     "transfer-encoding": "chunked",
     "vary": "Accept-Encoding",
     "x-powered-by": "Express"
   },
-  "retrieved_at_utc": "2026-08-10T19:46:47Z",
+  "retrieved_at_utc": "2026-08-10T19:58:58Z",
   "sha256": "c62ab4dd23e37102eacd8c9495d4b83fdd967276d8a3432dea33d0ed144b8ef6",
   "status_code": 200,
   "url": "https://models.rcsb.org/5j5f.bcif"

@@ -7,14 +7,14 @@
     "content-disposition": "inline; filename=\"8btg.bcif\"",
     "content-encoding": "gzip",
     "content-type": "application/octet-stream",
-    "date": "Mon, 10 Aug 2026 19:48:39 GMT",
+    "date": "Mon, 10 Aug 2026 20:01:08 GMT",
     "keep-alive": "timeout=5",
     "strict-transport-security": "max-age=16000000; includeSubDomains; preload;",
     "transfer-encoding": "chunked",
     "vary": "Accept-Encoding",
     "x-powered-by": "Express"
   },
-  "retrieved_at_utc": "2026-08-10T19:48:39Z",
+  "retrieved_at_utc": "2026-08-10T20:01:08Z",
   "sha256": "3e152d92672f8e072741b8afec437b54712362b3ec294e7bff23c138fbf578a8",
   "status_code": 200,
   "url": "https://models.rcsb.org/8btg.bcif"

@@ -7,14 +7,14 @@
     "content-disposition": "inline; filename=\"4zv7.bcif\"",
     "content-encoding": "gzip",
     "content-type": "application/octet-stream",
-    "date": "Mon, 10 Aug 2026 19:48:07 GMT",
+    "date": "Mon, 10 Aug 2026 20:00:29 GMT",
     "keep-alive": "timeout=5",
     "strict-transport-security": "max-age=16000000; includeSubDomains; preload;",
     "transfer-encoding": "chunked",
     "vary": "Accept-Encoding",
     "x-powered-by": "Express"
   },
-  "retrieved_at_utc": "2026-08-10T19:48:07Z",
+  "retrieved_at_utc": "2026-08-10T20:00:28Z",
   "sha256": "bb83449226abc1dd7cd2ef8e976c9470b2dc58f8769e6c7ae976bc79574165c7",
   "status_code": 200,
   "url": "https://models.rcsb.org/4zv7.bcif"

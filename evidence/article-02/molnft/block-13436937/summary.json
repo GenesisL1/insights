@@ -36,12 +36,12 @@
   },
   "evidence_relative_path": "evidence/article-02/molnft/block-13436937",
   "evm_chain_id": 29,
-  "failures": 100,
+  "failures": 10,
   "failures_by_reason": {
-    "MISSING_FILE": 2,
-    "PARSE_FAIL": 98
+    "FIDELITY_MISMATCH": 8,
+    "MISSING_FILE": 2
   },
-  "fidelity_passes": 0,
+  "fidelity_passes": 90,
   "loss_model": "lossless BinaryCIF payload",
   "off_chain_index_used": false,
   "requirements_lock_sha256": "cc0cb134a882b399d30be574ddf6811abc80d5199ee2f411a683873d6303bd7e",
@@ -49,7 +49,7 @@
   "rpc_provider": "public GenesisL1 EVM JSON-RPC",
   "sample_spec_precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
   "schema": "org.genesisl1.molnft_direct_randomized_fidelity.v1",
-  "successes": 0,
-  "wall_clock_end_utc": "2026-08-10T19:48:39Z",
-  "wall_clock_start_utc": "2026-08-10T19:45:57Z"
+  "successes": 90,
+  "wall_clock_end_utc": "2026-08-10T20:01:09Z",
+  "wall_clock_start_utc": "2026-08-10T19:58:11Z"
 }

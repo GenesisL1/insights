@@ -37,10 +37,10 @@
     "N": 100,
     "byte_identical_records": 0,
     "evidence_relative_path": "evidence/article-02/molnft/block-13436937",
-    "failures": 100,
-    "fidelity_passes": 0,
+    "failures": 10,
+    "fidelity_passes": 90,
     "precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
-    "successes": 0
+    "successes": 90
   },
   "multi_validator_delegators": 195,
   "not_bonded_stake_display": "1,819,652.96",
