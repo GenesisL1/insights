@@ -1,0 +1,206 @@
+name: Finalize and package Article 02 WS-1 and WS-2
+
+on:
+  push:
+    branches:
+      - evidence-ws1-ws2-upgrade-20260810
+    paths:
+      - evidence/article-02/molnft/FINALIZE_WS1_WS2
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: article02-ws1-ws2-finalize
+  cancel-in-progress: false
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out evidence branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: evidence-ws1-ws2-upgrade-20260810
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned evidence environment
+        run: |
+          python -m pip install --disable-pip-version-check --upgrade pip
+          python -m pip install --disable-pip-version-check -r requirements.lock
+
+      - name: Verify the immutable sample specification
+        run: |
+          PRECOMMIT_SHA=$(git log -1 --format=%H -- evidence/article-02/molnft/sample-spec.json)
+          test "$PRECOMMIT_SHA" = "3cdd075f86a7ed1230d654cc8d0586bd56555c2a"
+          mapfile -t CHANGED < <(git diff-tree --no-commit-id --name-only -r "$PRECOMMIT_SHA")
+          test "${#CHANGED[@]}" -eq 1
+          test "${CHANGED[0]}" = "evidence/article-02/molnft/sample-spec.json"
+
+      - name: Restore unchanged article baseline and pinned network evidence
+        run: |
+          git checkout origin/main -- \
+            content/article-02-next-verifiable-renaissance/article.md \
+            content/article-02-next-verifiable-renaissance/network-state.json \
+            content/article-02-next-verifiable-renaissance/references.json \
+            site/insights/genesisl1-decentralization-scientific-renaissance.html \
+            evidence/article-02/README.md \
+            evidence/article-02/network-state/block-13431722
+
+      - name: Deterministically finalize the preserved MOLNFT sample
+        run: |
+          MOLNFT_DIR=evidence/article-02/molnft/block-13436937
+          python tools/evidence/finalize_molnft_direct_evidence.py --evidence "$MOLNFT_DIR"
+          echo "MOLNFT_DIR=$MOLNFT_DIR" >> "$GITHUB_ENV"
+          echo "MOLNFT_B_PIN=13436937" >> "$GITHUB_ENV"
+
+      - name: Recompute WS-2 from the published CSVs
+        run: |
+          NETWORK_DIR=evidence/article-02/network-state/block-13431722
+          python tools/evidence/upgrade_ws2_metrics_direct.py \
+            --snapshot "$NETWORK_DIR/snapshot.json" \
+            --validators "$NETWORK_DIR/validators.csv" \
+            --delegators "$NETWORK_DIR/delegators.csv"
+          echo "NETWORK_DIR=$NETWORK_DIR" >> "$GITHUB_ENV"
+
+      - name: Apply only evidence-dependent Article 02 changes
+        run: |
+          python tools/publication/apply_ws1_ws2_direct_article.py \
+            --molnft-evidence "$MOLNFT_DIR" \
+            --ws2 "$NETWORK_DIR/WS2_METRICS.json"
+          python tools/evidence/finalize_molnft_direct_evidence.py --evidence "$MOLNFT_DIR"
+
+      - name: Run final acceptance and layout validation
+        run: |
+          python -m py_compile \
+            tools/evidence/finalize_molnft_direct_evidence.py \
+            tools/evidence/upgrade_ws2_metrics.py \
+            tools/evidence/upgrade_ws2_metrics_direct.py \
+            tools/publication/apply_ws1_ws2_article.py \
+            tools/publication/apply_ws1_ws2_direct_article.py \
+            tools/qa/validate_ws1_ws2_final.py
+          python tools/evidence/upgrade_ws2_metrics_direct.py \
+            --snapshot "$NETWORK_DIR/snapshot.json" \
+            --validators "$NETWORK_DIR/validators.csv" \
+            --delegators "$NETWORK_DIR/delegators.csv" \
+            --verify-only
+          python tools/qa/validate_ws1_ws2_final.py \
+            --molnft "$MOLNFT_DIR" \
+            --network "$NETWORK_DIR"
+          if [ -f tools/qa/validate_svg_layout.py ]; then
+            python tools/qa/validate_svg_layout.py
+          fi
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
+
+      - name: Commit validated evidence and article
+        run: |
+          rm -f evidence/article-02/molnft/FINALIZE_WS1_WS2
+          git config user.name "GenesisL1 Evidence Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "evidence: finalize direct-ID MOLNFT audit and WS-2 Article 02 metrics"
+          git push origin HEAD:evidence-ws1-ws2-upgrade-20260810
+          echo "FINAL_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Build verified release bundles
+        run: |
+          rm -rf release-artifacts
+          mkdir -p release-artifacts
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib, os, pathlib, zipfile
+          root = pathlib.Path('.').resolve()
+          output = root / 'release-artifacts'
+          mol = (root / os.environ['MOLNFT_DIR']).resolve()
+          network = (root / os.environ['NETWORK_DIR']).resolve()
+          excluded = {'.git', 'release-artifacts', '.tmp', '__pycache__'}
+
+          def allowed(path: pathlib.Path) -> bool:
+              relative = path.resolve().relative_to(root)
+              return not any(part in excluded for part in relative.parts) and path.suffix not in {'.pyc', '.pyo'}
+
+          def add_tree(zf, source, prefix=''):
+              source = source.resolve()
+              for candidate in sorted(source.rglob('*')):
+                  path = candidate.resolve()
+                  if path.is_file() and allowed(path):
+                      zf.write(path, (pathlib.Path(prefix) / path.relative_to(source)).as_posix())
+
+          files = []
+          full = output / 'GenesisL1_Insights_Article_02_WS1_WS2_FULL_block-13436937.zip'
+          with zipfile.ZipFile(full, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+              add_tree(archive, root, 'GenesisL1-insights')
+          files.append(full)
+
+          deploy = output / 'GenesisL1_Insights_Article_02_WS1_WS2_DEPLOY_block-13436937.zip'
+          with zipfile.ZipFile(deploy, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+              add_tree(archive, root / 'site', 'site')
+              add_tree(archive, root / 'deployment', 'deployment')
+          files.append(deploy)
+
+          ws1 = output / 'GenesisL1_MOLNFT_Direct_Randomized_Fidelity_Evidence_block-13436937.zip'
+          with zipfile.ZipFile(ws1, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+              add_tree(archive, mol, 'molnft-direct-randomized-block-13436937')
+          files.append(ws1)
+
+          ws2 = output / 'GenesisL1_WS2_Concentration_Evidence_block-13431722.zip'
+          with zipfile.ZipFile(ws2, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+              add_tree(archive, network, 'network-state-block-13431722')
+          files.append(ws2)
+
+          lines = []
+          for path in files:
+              with zipfile.ZipFile(path) as archive:
+                  bad = archive.testzip()
+                  if bad is not None:
+                      raise SystemExit(f'corrupt member {bad} in {path}')
+              lines.append(f'{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}')
+          (output / 'SHA256SUMS.txt').write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          PY
+          ls -lh release-artifacts
+
+      - name: Upload deploy bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: genesisl1-article02-ws1-ws2-deploy
+          path: release-artifacts/GenesisL1_Insights_Article_02_WS1_WS2_DEPLOY_block-13436937.zip
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload WS-1 evidence bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: genesisl1-molnft-direct-randomized-evidence-13436937
+          path: release-artifacts/GenesisL1_MOLNFT_Direct_Randomized_Fidelity_Evidence_block-13436937.zip
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload WS-2 evidence and checksums
+        uses: actions/upload-artifact@v4
+        with:
+          name: genesisl1-ws2-network-evidence-13431722
+          path: |
+            release-artifacts/GenesisL1_WS2_Concentration_Evidence_block-13431722.zip
+            release-artifacts/SHA256SUMS.txt
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload full source bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: genesisl1-insights-article02-ws1-ws2-full
+          path: release-artifacts/GenesisL1_Insights_Article_02_WS1_WS2_FULL_block-13436937.zip
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
