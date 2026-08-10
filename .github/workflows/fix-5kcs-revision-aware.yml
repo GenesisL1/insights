@@ -81,11 +81,26 @@ jobs:
           assert row['max_coordinate_deviation_angstrom'] == '0'
           assert row['coordinate_agreement'].lower() == 'true'
           assert row['coordinate_hash_equal'].lower() == 'true'
-          assert row['canonical_atom_name_revision_date'] == '2026-07-01'
+          assert row['strict_atom_key_coordinate_hash_equal'].lower() == 'false'
+          assert row['reconstructed_latest_structure_revision_date'] == '2024-11-06'
+          assert row['canonical_latest_structure_revision_date'] == '2026-07-01'
+          assert row['rcsb_atom_name_revision_date'] == '2026-07-01'
+          assert row['rcsb_atom_name_revision_documented'].lower() == 'true'
           changes = json.loads(row['atom_name_changes'])
-          assert changes == [
-              {'component_id': '6MZ', 'from': 'O1P', 'to': 'OP2', 'count': 2},
-              {'component_id': '6MZ', 'from': 'O2P', 'to': 'OP1', 'count': 2},
+          assert [
+              (
+                  item['label_comp_id'],
+                  item['auth_comp_id'],
+                  item['from_label_atom_id'],
+                  item['to_label_atom_id'],
+                  item['from_auth_atom_id'],
+                  item['to_auth_atom_id'],
+                  item['count'],
+              )
+              for item in changes
+          ] == [
+              ('6MZ', '6MZ', 'O1P', 'OP2', 'O1P', 'OP2', 2),
+              ('6MZ', '6MZ', 'O2P', 'OP1', 'O2P', 'OP1', 2),
           ]
           assert summary['N'] == 100
           assert summary['successes'] == 100
@@ -93,6 +108,7 @@ jobs:
           assert summary['fidelity_passes'] == 100
           assert summary['strict_atom_key_matches'] == 99
           assert summary['revision_aware_atom_identity_passes'] == 1
+          assert summary['coordinate_tolerance_passes'] == 100
           assert summary['coordinate_hash_matches'] == 99
           print(json.dumps(row, indent=2, sort_keys=True))
           print(json.dumps(summary, indent=2, sort_keys=True))
