@@ -61,6 +61,16 @@ jobs:
             --evidence "$MOLNFT" \
             --verify-deterministic
 
+      - name: Print final structural failures
+        run: |
+          python - <<'PY'
+          import csv, json
+          path = 'evidence/article-02/molnft/block-13436937/results.csv'
+          with open(path, newline='', encoding='utf-8') as handle:
+              failures = [row for row in csv.DictReader(handle) if row['outcome'] != 'SUCCESS']
+          print(json.dumps(failures, indent=2, sort_keys=True))
+          PY
+
       - name: Validate complete evidence and publication
         run: |
           MOLNFT=evidence/article-02/molnft/block-13436937
