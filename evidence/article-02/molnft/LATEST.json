@@ -1,0 +1,12 @@
+{
+  "schema": "org.genesisl1.molnft_evidence_pointer.v1",
+  "evidence_block": 13436937,
+  "path": "block-13436937",
+  "sample_size": 100,
+  "fidelity_passes": 98,
+  "failures": 2,
+  "failure_reason": "RPC_OUT_OF_GAS",
+  "selection": "future-block-seeded direct NFT-ID sample without replacement",
+  "off_chain_token_index_used": false,
+  "sample_spec_precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a"
+}
