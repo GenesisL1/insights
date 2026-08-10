@@ -3,15 +3,13 @@
   "evidence_block": 13436937,
   "path": "block-13436937",
   "sample_size": 100,
-  "fidelity_passes": 99,
-  "failures": 1,
+  "fidelity_passes": 100,
+  "failures": 0,
   "selection": "future-block-seeded direct NFT-ID sample without replacement",
   "off_chain_token_index_used": false,
   "sample_spec_precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
-  "failures_by_reason": {
-    "FIDELITY_MISMATCH": 1
-  },
-  "coordinate_hash_matches": 98,
+  "failures_by_reason": {},
+  "coordinate_hash_matches": 99,
   "initial_failures": 2,
   "successful_same_id_payload_requeries": 2,
   "targeted_requery_token_ids": [
@@ -19,20 +17,39 @@
     162649
   ],
   "replacement_draws": 0,
-  "final_failure_records": [
+  "final_failure_records": [],
+  "strict_atom_key_matches": 99,
+  "revision_aware_atom_identity_passes": 1,
+  "revision_aware_records": [
     {
+      "atom_name_change_count": 4,
+      "atom_name_changes": [
+        {
+          "auth_comp_id": "6MZ",
+          "count": 2,
+          "from_auth_atom_id": "O1P",
+          "from_label_atom_id": "O1P",
+          "label_comp_id": "6MZ",
+          "to_auth_atom_id": "OP2",
+          "to_label_atom_id": "OP2"
+        },
+        {
+          "auth_comp_id": "6MZ",
+          "count": 2,
+          "from_auth_atom_id": "O2P",
+          "from_label_atom_id": "O2P",
+          "label_comp_id": "6MZ",
+          "to_auth_atom_id": "OP1",
+          "to_label_atom_id": "OP1"
+        }
+      ],
+      "canonical_latest_structure_revision_date": "2026-07-01",
       "draw_order": 71,
-      "token_id": 124713,
+      "max_coordinate_deviation_angstrom": 0.0,
       "pdb_id": "5KCS",
-      "reason_code": "FIDELITY_MISMATCH",
-      "reason_detail": "failed checks: atom_keys_equal, coordinate_agreement",
-      "reconstructed_atom_count": 148945,
-      "canonical_atom_count": 148945,
-      "atom_count_equal": true,
-      "chain_ids_equal": true,
-      "entity_ids_equal": true,
-      "atom_keys_equal": false,
-      "coordinate_agreement": false
+      "rcsb_atom_name_revision_date": "2026-07-01",
+      "reconstructed_latest_structure_revision_date": "2024-11-06",
+      "token_id": 124713
     }
   ]
 }

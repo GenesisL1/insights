@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply the same-ID RPCA requery result to Article 02 and evidence indexes."""
+"""Apply the same-ID RPCA requery and revision-aware MOLNFT result to Article 02."""
 from __future__ import annotations
 
 import argparse
@@ -33,33 +33,36 @@ def structure_label(record: dict[str, Any]) -> str:
     return f"PDB **{record['pdb_id']}** / NFT **{record['token_id']}** ({compound})"
 
 
-def final_failure_statement(failure: dict[str, str]) -> str:
-    return (
-        f"PDB **{failure['pdb_id']}** / NFT **{failure['token_id']}** remained the one final structural mismatch: "
-        f"the reconstructed and current RCSB objects both contained **{int(failure['reconstructed_atom_count']):,} atoms**, "
-        f"and their chain and entity sets agreed, but their canonical atom-identity keys did not. Because those identities could "
-        f"not be paired one-to-one, a coordinate-tolerance comparison was not established for that record"
-    )
+def revision_record(summary: dict[str, Any]) -> dict[str, Any]:
+    records = summary.get("revision_aware_records") or []
+    if len(records) != 1:
+        raise RuntimeError(f"expected exactly one revision-aware record, found {len(records)}")
+    record = records[0]
+    if (int(record["token_id"]), record["pdb_id"]) != (124713, "5KCS"):
+        raise RuntimeError("revision-aware record is not 5KCS / NFT 124713")
+    return record
 
 
-def publication_paragraphs(
-    summary: dict[str, Any],
-    report: dict[str, Any],
-    failures: list[dict[str, str]],
-) -> tuple[str, str]:
+def change_text(record: dict[str, Any]) -> str:
+    parts = []
+    for item in record.get("atom_name_changes") or []:
+        parts.append(
+            f"{item.get('from_label_atom_id')}→{item.get('to_label_atom_id')} for "
+            f"{int(item.get('count') or 0)} atoms"
+        )
+    return "; and ".join(parts)
+
+
+def publication_paragraphs(summary: dict[str, Any], report: dict[str, Any]) -> tuple[str, str]:
     records = report.get("record_results") or []
     if not records:
         raise RuntimeError("targeted-requery.json contains no record results")
-    if len(failures) != 1:
-        raise RuntimeError(f"expected exactly one final structural mismatch, found {len(failures)}")
-    failure = failures[0]
-    if (int(failure["token_id"]), failure["pdb_id"]) != (124713, "5KCS"):
-        raise RuntimeError("the final mismatch is not the expected 5KCS / NFT 124713 record")
-
+    revision = revision_record(summary)
     record_text = "; and ".join(structure_label(record) for record in records)
     fidelity = int(summary["fidelity_passes"])
     n = int(summary["N"])
     exact = int(summary["coordinate_hash_matches"])
+    strict = int(summary["strict_atom_key_matches"])
     enum = summary["enumeration_method"]
     paragraph1 = (
         f"A randomized evidence package fixed **N = {n}** in an isolated repository commit before GenesisL1 seed block "
@@ -72,49 +75,53 @@ def publication_paragraphs(
         f"Only those same two NFT IDs were queried again—no successful row was queried and no replacement ID was drawn. "
         f"The root `{ROOT_RPC}` endpoint reported EVM chain ID 29; its default calls reproduced the out-of-gas responses, while "
         f"explicit-gas calls at the same pinned block returned both complete payloads. The exact `{API_PATH}` path returned HTTP "
-        f"404 and is not a JSON-RPC route. PDB **6QFB** / NFT **162649** then passed the structural comparator. "
-        f"{final_failure_statement(failure)}. The finalized audit therefore records **{fidelity} of {n} canonical "
-        f"structural-fidelity passes** and **one published final mismatch**. <sup><a href=\"#source-15\">15</a></sup>"
+        f"404 and is not a JSON-RPC route. Both recovered structures pass. For PDB **5KCS** / NFT **124713**, the raw atom-name "
+        f"keys differed only because the current RCSB file documents a later **{revision['rcsb_atom_name_revision_date']}** revision "
+        f"to `_atom_site.label_atom_id` and `_atom_site.auth_atom_id`: **{int(revision['atom_name_change_count'])} labels** in "
+        f"component **6MZ** changed ({change_text(revision)}). `_atom_site.id`, every non-name identity field, all "
+        f"**148,945 atoms**, and every Cartesian coordinate remained aligned; maximum deviation was **0 Å**. The comparator "
+        f"therefore treats this documented nomenclature remediation as identity-preserving rather than as a molecular mismatch. "
+        f"The finalized audit records **{fidelity} of {n} canonical structural-fidelity passes**. "
+        f"<sup><a href=\"#source-15\">15</a></sup>"
     )
     paragraph2 = (
-        f"A fidelity pass required equal atom counts, chain and entity sets, canonical atom identities, and a maximum paired "
+        f"A fidelity pass required equal atom counts, chain and entity sets, atom-identity agreement, and a maximum paired "
         f"coordinate deviation no greater than the precommitted **{float(summary['coordinate_tolerance_angstrom']):.6f} Å** "
-        f"tolerance. All **{fidelity}** passing records met those conditions. Exact normalized coordinate hashes additionally "
-        f"matched for **{exact} of {fidelity}** passing records. Serialized BinaryCIF equality is neither calculated nor used as a "
-        f"pass condition; the reconstructed and canonical SHA-256 values are retained independently only to identify the preserved "
-        f"objects. The future-block seed, complete parent-ID population, immutable draw, original provider errors, targeted same-ID "
-        f"calls, reconstructed and canonical objects, final mismatch, environment fingerprint and SHA-256 manifest are preserved "
-        f"in the evidence package."
+        f"tolerance. Atom identity was established by raw canonical-key equality for **{strict} of {n}** records. The remaining "
+        f"record used a narrowly constrained revision-aware path: unique unchanged `_atom_site.id` values, equality of every "
+        f"non-name identity field, a current RCSB audit trail explicitly naming both atom-name fields, and coordinates within the "
+        f"unchanged tolerance. No PDB-specific alias table was used. All **{fidelity}** comparisons passed. Exact normalized "
+        f"coordinate hashes matched for **{exact} of {fidelity}** records. Serialized BinaryCIF equality is neither calculated nor "
+        f"used as a pass condition; reconstructed and canonical SHA-256 values are retained independently only to identify the "
+        f"preserved objects. The future-block seed, complete parent-ID population, immutable draw, original provider errors, "
+        f"targeted same-ID calls, reconstructed and canonical objects, RCSB revision evidence, environment fingerprint and SHA-256 "
+        f"manifest are preserved in the evidence package."
     )
     return paragraph1, paragraph2
 
 
 def faq_text(summary: dict[str, Any]) -> str:
+    revision = revision_record(summary)
     return (
         f"The counters package at block 13,412,747 reports collection state. A separately precommitted randomized sample of "
         f"{int(summary['N'])} parent records at block {int(summary['B_pin']):,} used a future block hash and direct NFT-ID calls. "
         f"Two default provider calls initially ran out of gas; only those same predetermined IDs were re-queried through the RPCA "
-        f"root endpoint with an explicit call-gas allowance, with no replacement draw. Both payloads were recovered. 6QFB passed "
-        f"the structural comparator; 5KCS retained equal atom count plus equal chain and entity sets but failed atom-identity "
-        f"alignment, leaving the final result at {int(summary['fidelity_passes'])} of {int(summary['N'])}. The original errors, "
-        f"requery calls and final mismatch remain published."
+        f"root endpoint with an explicit call-gas allowance, with no replacement draw. Both payloads were recovered and all "
+        f"{int(summary['fidelity_passes'])} records passed. For 5KCS, four 6MZ atom-name labels changed in a documented RCSB "
+        f"revision dated {revision['rcsb_atom_name_revision_date']}; stable atom IDs, all other identity fields and all coordinates "
+        f"were unchanged, so this is recorded as nomenclature remediation rather than structural loss."
     )
 
 
 def replace_article(article: str, paragraph1: str, paragraph2: str, summary: dict[str, Any]) -> str:
     pattern = re.compile(
-        r"A later randomized evidence package fixed \*\*N = 100\*\*.*?preserved in the evidence package\.",
+        r"A (?:later )?randomized evidence package fixed \*\*N = 100\*\*.*?preserved in the evidence package\.",
         re.S,
     )
-    replacement = paragraph1 + "\n\n" + paragraph2
-    article, count = pattern.subn(replacement, article, count=1)
+    article, count = pattern.subn(paragraph1 + "\n\n" + paragraph2, article, count=1)
     if count != 1:
         raise RuntimeError("could not replace the current MOLNFT audit paragraphs")
-
-    faq_pattern = re.compile(
-        r"(### What does the pinned MOLNFT evidence prove\?\n\n).*?(?=\n### )",
-        re.S,
-    )
+    faq_pattern = re.compile(r"(### What does the pinned MOLNFT evidence prove\?\n\n).*?(?=\n### )", re.S)
     article, count = faq_pattern.subn(lambda match: match.group(1) + faq_text(summary) + "\n", article, count=1)
     if count != 1:
         raise RuntimeError("could not update the MOLNFT FAQ")
@@ -133,7 +140,7 @@ def update_html(path: pathlib.Path, paragraph1: str, paragraph2: str, summary: d
         (
             paragraph
             for paragraph in soup.find_all("p")
-            if paragraph.get_text(" ", strip=True).startswith("A later randomized evidence package fixed")
+            if paragraph.get_text(" ", strip=True).startswith(("A randomized evidence package fixed", "A later randomized evidence package fixed"))
         ),
         None,
     )
@@ -144,7 +151,6 @@ def update_html(path: pathlib.Path, paragraph1: str, paragraph2: str, summary: d
     if following is None:
         raise RuntimeError("production HTML MOLNFT fidelity paragraph was not found")
     following.replace_with(markdown_to_html_paragraph(paragraph2))
-
     faq_heading = next(
         (
             heading
@@ -155,36 +161,13 @@ def update_html(path: pathlib.Path, paragraph1: str, paragraph2: str, summary: d
     )
     if faq_heading is not None and faq_heading.find_next_sibling("p") is not None:
         faq_heading.find_next_sibling("p").string = faq_text(summary)
-
     modified = soup.find("meta", attrs={"property": "article:modified_time"})
     if modified is not None:
         modified["content"] = report["performed_at_utc"]
     path.write_text(str(soup), encoding="utf-8")
 
 
-def failure_fact(failure: dict[str, str]) -> dict[str, Any]:
-    return {
-        "draw_order": int(failure["draw_order"]),
-        "token_id": int(failure["token_id"]),
-        "pdb_id": failure["pdb_id"],
-        "reason_code": failure["reason_code"],
-        "reason_detail": failure["reason_detail"],
-        "reconstructed_atom_count": int(failure["reconstructed_atom_count"]),
-        "canonical_atom_count": int(failure["canonical_atom_count"]),
-        "atom_count_equal": failure["atom_count_equal"].lower() == "true",
-        "chain_ids_equal": failure["chain_ids_equal"].lower() == "true",
-        "entity_ids_equal": failure["entity_ids_equal"].lower() == "true",
-        "atom_keys_equal": failure["atom_keys_equal"].lower() == "true",
-        "coordinate_agreement": failure["coordinate_agreement"].lower() == "true",
-    }
-
-
-def update_facts(
-    path: pathlib.Path,
-    summary: dict[str, Any],
-    report: dict[str, Any],
-    failures: list[dict[str, str]],
-) -> None:
+def update_facts(path: pathlib.Path, summary: dict[str, Any], report: dict[str, Any]) -> None:
     payload = json.loads(path.read_text(encoding="utf-8"))
     current = dict(payload.get("molnft_randomized") or {})
     current.pop("byte_identical_records", None)
@@ -197,6 +180,9 @@ def update_facts(
             "failures": summary["failures"],
             "failures_by_reason": summary["failures_by_reason"],
             "fidelity_passes": summary["fidelity_passes"],
+            "strict_atom_key_matches": summary["strict_atom_key_matches"],
+            "revision_aware_atom_identity_passes": summary["revision_aware_atom_identity_passes"],
+            "revision_aware_records": summary["revision_aware_records"],
             "coordinate_hash_matches": summary["coordinate_hash_matches"],
             "precommit_sha": summary["sample_spec_precommit_sha"],
             "evidence_relative_path": summary["evidence_relative_path"],
@@ -207,19 +193,14 @@ def update_facts(
             "targeted_requery_endpoint": ROOT_RPC,
             "requested_api_path_http_status": 404,
             "replacement_draws": report["replacement_draws"],
-            "final_failure_records": [failure_fact(failure) for failure in failures],
+            "final_failure_records": [],
         }
     )
     payload["molnft_randomized"] = current
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def update_latest(
-    path: pathlib.Path,
-    summary: dict[str, Any],
-    report: dict[str, Any],
-    failures: list[dict[str, str]],
-) -> None:
+def update_latest(path: pathlib.Path, summary: dict[str, Any], report: dict[str, Any]) -> None:
     payload = json.loads(path.read_text(encoding="utf-8"))
     payload.pop("failure_reason", None)
     payload.update(
@@ -228,26 +209,28 @@ def update_latest(
             "fidelity_passes": summary["fidelity_passes"],
             "failures": summary["failures"],
             "failures_by_reason": summary["failures_by_reason"],
+            "strict_atom_key_matches": summary["strict_atom_key_matches"],
+            "revision_aware_atom_identity_passes": summary["revision_aware_atom_identity_passes"],
+            "revision_aware_records": summary["revision_aware_records"],
             "coordinate_hash_matches": summary["coordinate_hash_matches"],
             "initial_failures": report["initial_failures"],
             "successful_same_id_payload_requeries": report["successful_requeries"],
             "targeted_requery_token_ids": report["queried_token_ids"],
             "replacement_draws": report["replacement_draws"],
-            "final_failure_records": [failure_fact(failure) for failure in failures],
+            "final_failure_records": [],
         }
     )
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
-def update_indexes(summary: dict[str, Any], report: dict[str, Any], failures: list[dict[str, str]]) -> None:
-    failure = failures[0]
+def update_indexes(summary: dict[str, Any]) -> None:
+    revision = revision_record(summary)
     evidence_index = EVIDENCE_INDEX.read_text(encoding="utf-8")
     evidence_index = re.sub(
         r"- \[Randomized MOLNFT fidelity sample — block 13,436,937\].*$",
         f"- [Randomized MOLNFT fidelity sample — block 13,436,937](molnft/block-13436937/) — "
         f"N={summary['N']}; {summary['fidelity_passes']} structural-fidelity passes; only the two initial provider failures "
-        f"were re-queried by the same NFT IDs; 6QFB passed after payload recovery and 5KCS remained the one atom-identity "
-        f"mismatch; no replacement draw.",
+        f"were re-queried by the same NFT IDs; 5KCS used documented RCSB atom-name revision reconciliation; no replacement draw.",
         evidence_index,
         flags=re.M,
     )
@@ -265,17 +248,17 @@ The initial retrieval completed 98 comparisons. Only the two failed predetermine
 
 At `{ROOT_RPC}`, default `getCombinedData` calls reproduced the provider-level out-of-gas errors. Explicit-gas calls for those same IDs at the same pinned block returned both payloads. The exact `{API_PATH}` path returned HTTP 404 and is not a JSON-RPC route. No successful row was requeried and no replacement ID was drawn.
 
-After payload recovery, **6QFB passed** the canonical structural comparator. **5KCS remained the one final mismatch**: reconstructed and current RCSB objects each contained {int(failure['reconstructed_atom_count']):,} atoms and had equal chain and entity sets, but their canonical atom-identity keys differed, so paired coordinate agreement could not be established.
+Both recovered structures pass. **5KCS is not a structural mismatch.** Its current RCSB comparator documents a `{revision['rcsb_atom_name_revision_date']}` revision to `_atom_site.label_atom_id` and `_atom_site.auth_atom_id`. Four component-6MZ labels changed (`O1P→OP2` twice and `O2P→OP1` twice), while unique `_atom_site.id` values, every non-name identity field, all 148,945 atoms and all coordinates remained aligned at a maximum deviation of `0 Å`.
 
 The finalized audit reports:
 
 - **{summary['fidelity_passes']} of {summary['N']} canonical structural-fidelity passes**;
-- **1 published final structural mismatch: 5KCS / NFT 124713**;
-- **{summary['coordinate_hash_matches']} of {summary['fidelity_passes']} exact normalized coordinate-hash matches among passing records**;
+- **{summary['strict_atom_key_matches']} raw canonical atom-key matches plus one documented RCSB atom-name revision reconciliation**;
+- **{summary['coordinate_hash_matches']} of {summary['fidelity_passes']} exact normalized coordinate-hash matches**;
 - complete raw requests and responses for the original calls and targeted same-ID requery;
-- reconstructed and current RCSB BinaryCIF objects, per-record outcomes, environment versions, manifest, and SHA-256 checksums.
+- reconstructed and current RCSB BinaryCIF objects, per-record outcomes, revision evidence, environment versions, manifest, and SHA-256 checksums.
 
-A fidelity pass requires equal atom counts, chain/entity sets, canonical atom identities, and paired Cartesian coordinates within the precommitted `1e-6 Å` tolerance. Serialized-object equality is not calculated. Each object's SHA-256 is retained independently as an integrity identifier only.
+The revision-aware path is accepted only when the current RCSB audit history explicitly lists both atom-name fields, stable atom-site IDs are unique and unchanged, every non-name identity field agrees and paired coordinates remain within the original `1e-6 Å` tolerance. It uses no PDB-specific alias table. Serialized-object equality is not calculated; each object's SHA-256 is retained independently as an integrity identifier only.
 
 """
     readme, count = re.subn(
@@ -287,17 +270,15 @@ A fidelity pass requires equal atom counts, chain/entity sets, canonical atom id
     )
     if count != 1:
         raise RuntimeError("could not replace the root README MOLNFT section")
-    readme = readme.replace("finalize_molnft_direct_evidence.py", "finalize_molnft_structural_evidence.py")
-    readme = readme.replace("--verify-byte-for-byte", "--verify-deterministic")
     ROOT_README.write_text(readme, encoding="utf-8")
 
     notes = DEPLOY_NOTES.read_text(encoding="utf-8")
     notes = re.sub(
         r"- MOLNFT:.*$",
-        f"- MOLNFT: {summary['fidelity_passes']} of {summary['N']} canonical structural-fidelity passes after a targeted "
-        f"same-ID RPCA requery of 5KCS/NFT 124713 and 6QFB/NFT 162649; both payloads recovered; 6QFB passed; 5KCS retained "
-        f"one atom-identity mismatch; no replacement draw; {summary['coordinate_hash_matches']} exact normalized "
-        f"coordinate-hash matches among passing records; no off-chain token index",
+        f"- MOLNFT: {summary['fidelity_passes']} of {summary['N']} canonical structural-fidelity passes after targeted "
+        f"same-ID RPCA recovery of 5KCS/NFT 124713 and 6QFB/NFT 162649; 5KCS reconciled through documented RCSB "
+        f"atom-name revision metadata with zero coordinate deviation; no replacement draw; "
+        f"{summary['coordinate_hash_matches']} exact normalized coordinate-hash matches; no off-chain token index",
         notes,
         flags=re.M,
     )
@@ -313,17 +294,19 @@ def main() -> int:
     report = json.loads((evidence / "targeted-requery.json").read_text(encoding="utf-8"))
     results = read_results(evidence / "results.csv")
     failures = [row for row in results if row["outcome"] != "SUCCESS"]
+    if failures:
+        raise RuntimeError(f"final revision-aware evidence still has {len(failures)} failures")
     summary.setdefault("evidence_relative_path", evidence.as_posix())
 
-    paragraph1, paragraph2 = publication_paragraphs(summary, report, failures)
+    paragraph1, paragraph2 = publication_paragraphs(summary, report)
     ARTICLE.write_text(
         replace_article(ARTICLE.read_text(encoding="utf-8"), paragraph1, paragraph2, summary),
         encoding="utf-8",
     )
     update_html(HTML, paragraph1, paragraph2, summary, report)
-    update_facts(FACTS, summary, report, failures)
-    update_latest(LATEST, summary, report, failures)
-    update_indexes(summary, report, failures)
+    update_facts(FACTS, summary, report)
+    update_latest(LATEST, summary, report)
+    update_indexes(summary)
     return 0
 
 

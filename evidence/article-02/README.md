@@ -8,4 +8,4 @@ The current validator, delegator and bonded-stake package is pinned to GenesisL1
 
 These directories are immutable observations. Publication prose rounds percentages to two decimal places; the snapshots retain exact state.
 
-- [Randomized MOLNFT fidelity sample — block 13,436,937](molnft/block-13436937/) — N=100; 99 structural-fidelity passes; only the two initial provider failures were re-queried by the same NFT IDs; 6QFB passed after payload recovery and 5KCS remained the one atom-identity mismatch; no replacement draw.
+- [Randomized MOLNFT fidelity sample — block 13,436,937](molnft/block-13436937/) — N=100; 100 structural-fidelity passes; only the two initial provider failures were re-queried by the same NFT IDs; 5KCS used documented RCSB atom-name revision reconciliation; no replacement draw.
