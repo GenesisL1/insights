@@ -4,8 +4,7 @@ on:
   push:
     branches: [evidence-ws1-ws2-upgrade-20260810]
     paths:
-      - ".github/workflows/apply-ws1-ws2-overlay.yml"
-      - "migration/ws1ws2-overlay.zip"
+      - "migration/READY"
 
 permissions:
   contents: write
@@ -24,23 +23,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Record staged overlay digest
+      - name: Reconstruct, verify and apply the reviewed overlay
         run: |
-          sha256sum migration/ws1ws2-overlay.zip
-          wc -c migration/ws1ws2-overlay.zip
-
-      - name: Upload staged overlay for byte comparison
-        uses: actions/upload-artifact@v4
-        with:
-          name: staged-ws1-ws2-overlay
-          path: migration/ws1ws2-overlay.zip
-          if-no-files-found: error
-          retention-days: 1
-
-      - name: Verify and apply the reviewed overlay
-        run: |
-          unzip -tq migration/ws1ws2-overlay.zip
-          unzip -q -o migration/ws1ws2-overlay.zip -d .
+          cat migration/part-*.b64 > /tmp/ws1ws2-overlay.b64
+          test "$(wc -c < /tmp/ws1ws2-overlay.b64)" -eq 175084
+          echo "a14fdbd58b816e6d830cc379af49f1512fbb2d4998131f47733a6f0cdfeeeba4  /tmp/ws1ws2-overlay.b64" | sha256sum -c -
+          base64 --decode /tmp/ws1ws2-overlay.b64 > /tmp/ws1ws2-overlay.zip
+          echo "e6f127bb32392d12e8493ce90efac09cd820d354a33269f241f57cf3ed950c40  /tmp/ws1ws2-overlay.zip" | sha256sum -c -
+          unzip -tq /tmp/ws1ws2-overlay.zip
+          unzip -q -o /tmp/ws1ws2-overlay.zip -d .
           rm -rf migration
           rm -f .github/workflows/apply-ws1-ws2-overlay.yml
           python -m py_compile tools/evidence/*.py tools/publication/*.py tools/qa/*.py tools/release/*.py
