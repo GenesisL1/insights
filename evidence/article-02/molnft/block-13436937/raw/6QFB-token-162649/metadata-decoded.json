@@ -1,0 +1,13 @@
+{
+  "accession_date": "01/09/19",
+  "authors": "Verstraete, K., Verschueren, K.",
+  "compound": "Structure of the human ATP citrate lyase holoenzyme in complex with citrate, coenzyme A and Mg.ADP",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 0,
+  "header": "LYASE",
+  "idcode": "6QFB",
+  "image_base64_characters": 15776,
+  "resolution": "3.25",
+  "sequence_length": 4419,
+  "source": "Homo sapiens"
+}

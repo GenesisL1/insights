@@ -1,0 +1,13 @@
+{
+  "accession_date": "11/19/91",
+  "authors": "Wigley, D.B., Gamblin, S.J., Turkenburg, J.P., Dodson, E.J., Piontek, K., Muirhead, H., Holbrook, J.J.",
+  "compound": "STRUCTURE OF A TERNARY COMPLEX OF AN ALLOSTERIC LACTATE DEHYDROGENASE FROM BACILLUS STEAROTHERMOPHILUS AT 2.5 ANGSTROMS RESOLUTION",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 237549,
+  "header": "OXIDOREDUCTASE(CHOH(D)-NAD(A))",
+  "idcode": "1LDN",
+  "image_base64_characters": 19780,
+  "resolution": "2.5",
+  "sequence_length": 2983,
+  "source": "Geobacillus stearothermophilus"
+}

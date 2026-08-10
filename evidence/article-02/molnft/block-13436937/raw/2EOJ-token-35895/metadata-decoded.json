@@ -1,0 +1,13 @@
+{
+  "accession_date": "03/29/07",
+  "authors": "Tochio, N., Tomizawa, T., Abe, H., Saito, K., Li, H., Sato, M., Koshiba, S., Kobayashi, N., Kigawa, T., Yokoyama, S., RIKEN Structural Genomics/Proteomics Initiative (RSGI)",
+  "compound": "Solution structure of the C2H2 type zinc finger (region 355-385) of human Zinc finger protein 268",
+  "experiment_type": "SOLUTION NMR",
+  "file_base64_characters": 102519,
+  "header": "TRANSCRIPTION",
+  "idcode": "2EOJ",
+  "image_base64_characters": 4486,
+  "resolution": "NOT",
+  "sequence_length": 99,
+  "source": "Homo sapiens"
+}

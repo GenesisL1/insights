@@ -1,0 +1,13 @@
+{
+  "accession_date": "08/30/19",
+  "authors": "Taylor, A.B., Bhattacharya, A., Wang, Z., Ivanov, D.N.",
+  "compound": "Human SAMHD1 bound to ribo(CGCCU)-oligonucleotide",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 0,
+  "header": "HYDROLASE",
+  "idcode": "6U6Y",
+  "image_base64_characters": 15497,
+  "resolution": "2.47",
+  "sequence_length": 2651,
+  "source": "Homo sapiens; SYNTHETIC CONSTRUCT"
+}

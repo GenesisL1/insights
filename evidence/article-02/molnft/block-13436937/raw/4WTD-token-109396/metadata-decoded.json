@@ -1,0 +1,13 @@
+{
+  "accession_date": "10/29/14",
+  "authors": "Edwards, T.E., Fox III, D., Appleby, T.C.",
+  "compound": "CRYSTAL STRUCTURE OF HCV NS5B GENOTYPE 2A JFH-1 ISOLATE WITH S15G E86Q E87Q C223H V321I MUTATIONS AND DELTA8 BETA HAIRPIN LOOP DELETION IN COMPLEX WITH ADP, MN2+ AND SYMMETRICAL PRIMER TEMPLATE 5'-AUAAAUUU",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 84165,
+  "header": "Transferase/RNA",
+  "idcode": "4WTD",
+  "image_base64_characters": 15943,
+  "resolution": "2.7",
+  "sequence_length": 758,
+  "source": "Hepatitis C virus JFH-1; SYNTHETIC CONSTRUCT"
+}

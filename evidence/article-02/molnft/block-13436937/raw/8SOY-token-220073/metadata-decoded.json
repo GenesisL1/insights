@@ -1,0 +1,13 @@
+{
+  "accession_date": "04/30/23",
+  "authors": "Shek, R., Quispe, J., Staker, B., Seattle Structural Genomics Center for Infectious Disease (SSGCID)",
+  "compound": "Cryo-EM structure of Enoyl-CoA hydratase from Mycobacterium smegmatis",
+  "experiment_type": "ELECTRON MICROSCOPY",
+  "file_base64_characters": 116975,
+  "header": "HYDROLASE",
+  "idcode": "8SOY",
+  "image_base64_characters": 20494,
+  "resolution": "2.85",
+  "sequence_length": 1871,
+  "source": "Mycolicibacterium smegmatis"
+}

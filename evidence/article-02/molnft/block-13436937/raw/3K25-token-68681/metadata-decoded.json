@@ -1,0 +1,13 @@
+{
+  "accession_date": "09/29/09",
+  "authors": "Kuzin, A., Su, M., Seetharaman, J., Sahdev, S., Xiao, R., Ciccosanti, C., Belote, R.L., Everett, J.K., Nair, R., Acton, T.B., Rost, B., Montelione, G.T., Tong, L., Hunt, J.F., Northeast Structural Genomics Consortium (NESG)",
+  "compound": "Crystal Structure of Slr1438 protein from Synechocystis sp. PCC 6803, Northeast Structural Genomics Consortium Target SgR112",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 176974,
+  "header": "Structural Genomics, Unknown function",
+  "idcode": "3K25",
+  "image_base64_characters": 9531,
+  "resolution": "2.551",
+  "sequence_length": 675,
+  "source": "Synechocystis sp."
+}

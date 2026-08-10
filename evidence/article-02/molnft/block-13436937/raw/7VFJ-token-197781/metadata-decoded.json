@@ -1,0 +1,13 @@
+{
+  "accession_date": "09/13/21",
+  "authors": "Zhu, J.P., Zhang, K., Li, J., Zheng, W., Gu, M.",
+  "compound": "Cytochrome c-type biogenesis protein CcmABCD",
+  "experiment_type": "ELECTRON MICROSCOPY",
+  "file_base64_characters": 100638,
+  "header": "MEMBRANE PROTEIN",
+  "idcode": "7VFJ",
+  "image_base64_characters": 14674,
+  "resolution": "3.98",
+  "sequence_length": 1572,
+  "source": "Escherichia coli BL21(DE3)"
+}

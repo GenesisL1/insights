@@ -1,0 +1,13 @@
+{
+  "accession_date": "08/05/22",
+  "authors": "Martin, G.M., Ward, A.B.",
+  "compound": "Cryo-EM structure of 239 Fab in complex with recombinant shortened Plasmodium falciparum circumsporozoite protein (rsCSP)",
+  "experiment_type": "ELECTRON MICROSCOPY",
+  "file_base64_characters": 178352,
+  "header": "IMMUNE SYSTEM",
+  "idcode": "8DYW",
+  "image_base64_characters": 12996,
+  "resolution": "3.72",
+  "sequence_length": 8045,
+  "source": "Homo sapiens; Plasmodium falciparum"
+}

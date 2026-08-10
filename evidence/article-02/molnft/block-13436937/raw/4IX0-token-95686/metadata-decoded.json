@@ -1,0 +1,13 @@
+{
+  "accession_date": "01/24/13",
+  "authors": "Mills, J., Bolduc, J., Khare, S., Stoddard, B., Baker, D.",
+  "compound": "Computational Design of an Unnatural Amino Acid Metalloprotein with Atomic Level Accuracy",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 46730,
+  "header": "METAL BINDING PROTEIN",
+  "idcode": "4IX0",
+  "image_base64_characters": 15096,
+  "resolution": "2.5",
+  "sequence_length": 335,
+  "source": "Sulfolobus solfataricus"
+}

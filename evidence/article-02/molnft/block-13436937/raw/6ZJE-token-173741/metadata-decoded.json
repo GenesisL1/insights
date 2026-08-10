@@ -1,0 +1,13 @@
+{
+  "accession_date": "06/28/20",
+  "authors": "Grundstrom, C., Rogne, P., Wolf-Watz, M., Sauer-Eriksson, A.E.",
+  "compound": "Crystal structure of human adenylate kinase 3, AK3, in complex with inhibitor Ap5A",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 107378,
+  "header": "TRANSFERASE",
+  "idcode": "6ZJE",
+  "image_base64_characters": 11752,
+  "resolution": "1.48",
+  "sequence_length": 305,
+  "source": "Homo sapiens"
+}

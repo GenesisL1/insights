@@ -1,0 +1,13 @@
+{
+  "accession_date": "09/04/14",
+  "authors": "Yamashita, S., Tomita, K.",
+  "compound": "tRNA-processing enzyme complex 2",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 211089,
+  "header": "TRANSFERASE/RNA",
+  "idcode": "4WC4",
+  "image_base64_characters": 12672,
+  "resolution": "3.501",
+  "sequence_length": 560,
+  "source": "Aquifex aeolicus; SYNTHETIC CONSTRUCT"
+}

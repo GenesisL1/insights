@@ -1,0 +1,13 @@
+{
+  "accession_date": "02/21/06",
+  "authors": "Langley, D.B., Duff, A.P., Freeman, H.C., Guss, J.M., Juda, G.A., Dooley, D.M., Contakes, S.M., Halpern-Manners, N.W., Dunn, A.R., Gray, H.B.",
+  "compound": "AGAO in complex with wc4d3 (Ru-wire inhibitor, 4-carbon linker, delta enantiomer, data set 3)",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 219462,
+  "header": "OXIDOREDUCTASE",
+  "idcode": "2CFG",
+  "image_base64_characters": 18159,
+  "resolution": "1.55",
+  "sequence_length": 1407,
+  "source": "ARTHROBACTER GLOBIFORMIS"
+}

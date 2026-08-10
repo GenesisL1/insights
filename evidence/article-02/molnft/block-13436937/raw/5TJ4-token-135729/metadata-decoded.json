@@ -1,0 +1,13 @@
+{
+  "accession_date": "10/03/16",
+  "authors": "Chao, L.K., Herzberg, O.",
+  "compound": "Gasdermin-B C-terminal domain containing the polymorphism residues Gly299:Pro306 fused to maltose binding protein",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 443625,
+  "header": "LIGAND BINDING PROTEIN",
+  "idcode": "5TJ4",
+  "image_base64_characters": 14423,
+  "resolution": "3.5",
+  "sequence_length": 6689,
+  "source": "Escherichia coli, Homo sapiens"
+}

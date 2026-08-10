@@ -1,0 +1,13 @@
+{
+  "accession_date": "05/22/14",
+  "authors": "Olivier, N.B.",
+  "compound": "S.aureus TMK in complex with the potent inhibitor compound 38, 2-(3-CHLOROPHENOXY)-3-METHOXY-4-{(1R)-1-[(3S)-3-(5-METHYL-2,4-DIOXO-3,4-DIHYDROPYRIMIDIN-1(2H)-YL)PIPERIDIN-1-YL]PROPYL}BENZOIC ACID",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 61660,
+  "header": "TRANSFERASE/TRANSFERASE INHIBITOR",
+  "idcode": "4QGF",
+  "image_base64_characters": 14009,
+  "resolution": "1.83",
+  "sequence_length": 513,
+  "source": "Staphylococcus aureus subsp. aureus"
+}

@@ -1,0 +1,13 @@
+{
+  "accession_date": "02/16/23",
+  "authors": "Chen, Y., Zhou, F., Huang, R., Tolbert, W., Pazgier, M.",
+  "compound": "Cryo-EM structure of T/F100 SOSIP.664 HIV-1 Env trimer with LMHS mutations in complex with 8ANC195 and 10-1074",
+  "experiment_type": "ELECTRON MICROSCOPY",
+  "file_base64_characters": 268912,
+  "header": "VIRAL PROTEIN/IMMUNE SYSTEM",
+  "idcode": "8G6U",
+  "image_base64_characters": 17021,
+  "resolution": "3.16",
+  "sequence_length": 5669,
+  "source": "Homo sapiens; Human immunodeficiency virus 1"
+}

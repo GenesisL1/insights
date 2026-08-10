@@ -1,0 +1,21 @@
+{
+  "bytes": 1078351,
+  "headers": {
+    "access-control-allow-headers": "X-Requested-With,Content-Type,Authorization,rcsb-analytics-traffic-origin,rcsb-analytics-traffic-stage",
+    "access-control-allow-origin": "*",
+    "alt-svc": "h3=\":443\";ma=60;",
+    "content-disposition": "inline; filename=\"2lz6.bcif\"",
+    "content-encoding": "gzip",
+    "content-type": "application/octet-stream",
+    "date": "Mon, 10 Aug 2026 19:47:11 GMT",
+    "keep-alive": "timeout=5",
+    "strict-transport-security": "max-age=16000000; includeSubDomains; preload;",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-powered-by": "Express"
+  },
+  "retrieved_at_utc": "2026-08-10T19:47:11Z",
+  "sha256": "ca3404aa2bb5d6c03894db3d826f70442fdd9a9091ff0a6bc53d4019eb20ae59",
+  "status_code": 200,
+  "url": "https://models.rcsb.org/2lz6.bcif"
+}

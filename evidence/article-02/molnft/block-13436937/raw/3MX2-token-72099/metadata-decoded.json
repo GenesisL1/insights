@@ -1,0 +1,13 @@
+{
+  "accession_date": "05/06/10",
+  "authors": "Qi, X., Lan, S., Wang, W., Schelde, L.M., Dong, H., Wallat, G., Liang, Y., Ly, H., Dong, C., Scottish Structural Proteomics Facility (SSPF)",
+  "compound": "Lassa fever virus Nucleoprotein complexed with dTTP",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 416103,
+  "header": "NUCLEAR PROTEIN",
+  "idcode": "3MX2",
+  "image_base64_characters": 13106,
+  "resolution": "1.983",
+  "sequence_length": 1871,
+  "source": "Lassa virus"
+}

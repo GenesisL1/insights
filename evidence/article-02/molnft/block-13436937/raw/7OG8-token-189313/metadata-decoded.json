@@ -1,0 +1,13 @@
+{
+  "accession_date": "05/06/21",
+  "authors": "Moche, M., Karlsson, J., Loh, E.",
+  "compound": "Wild-type Hfq protein from Neisseria meningitidis",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 28591,
+  "header": "RNA BINDING PROTEIN",
+  "idcode": "7OG8",
+  "image_base64_characters": 19108,
+  "resolution": "1.4",
+  "sequence_length": 123,
+  "source": "Neisseria meningitidis serogroup C / serotype 2a (strain ATCC 700532 / DSM 15464 / FAM18)"
+}

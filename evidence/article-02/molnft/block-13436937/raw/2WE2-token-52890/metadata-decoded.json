@@ -1,0 +1,13 @@
+{
+  "accession_date": "03/27/09",
+  "authors": "Freeman, L., Buisson, M., Tarbouriech, N., Burmeister, W.P.",
+  "compound": "EBV dUTPase double mutant Gly78Asp-Asp131Ser with dUMP",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 104339,
+  "header": "HYDROLASE",
+  "idcode": "2WE2",
+  "image_base64_characters": 14492,
+  "resolution": "1.5",
+  "sequence_length": 367,
+  "source": "HUMAN HERPESVIRUS 4"
+}

@@ -1,0 +1,13 @@
+{
+  "accession_date": "12/05/04",
+  "authors": "Harris, P.A., Cheung, M., Hunter, R.N., Brown, M.L., Veal, J.M., Nolte, R.T., Wang, L., Liu, W., Crosby, R.M., Johnson, J.H., Epperly, A.H., Kumar, R., Luttrell, D.K., Stafford, J.A.",
+  "compound": "Crystal structure of VEGFR2 in complex with a 2-anilino-5-aryl-oxazole inhibitor",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 47898,
+  "header": "TRANSFERASE",
+  "idcode": "1Y6B",
+  "image_base64_characters": 13637,
+  "resolution": "2.1",
+  "sequence_length": 444,
+  "source": "Homo sapiens"
+}

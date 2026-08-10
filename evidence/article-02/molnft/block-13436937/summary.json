@@ -1,0 +1,55 @@
+{
+  "B_pin": 13436937,
+  "B_pin_block_hash": "0xd1827056b63e4dd4ebf2e443a569f9a28ceb442a3f2943f8f30ce03908fcb896",
+  "B_seed": 13436979,
+  "B_seed_block_hash": "0x523c4b1c9ce0b3a581cff3901a10a32d01163026a43e1582d0d8c23c3dd88d02",
+  "N": 100,
+  "byte_identical_records": 0,
+  "canonical_endpoint": "https://models.rcsb.org/{pdb_id}.bcif",
+  "contract_address": "0xd58B01f6C18086e5202cdC5D7Ad3E41790360102",
+  "coordinate_tolerance_angstrom": 1e-06,
+  "deterministic_recompute_at_utc": null,
+  "direct_nft_id_queries": true,
+  "enumerated_parent_count": 229271,
+  "enumeration_method": {
+    "enumerated_parent_count": 229271,
+    "method": "direct_contract_parent_nft_id_range",
+    "off_chain_index_used": false,
+    "parent_counter_function": "nextNFTId()",
+    "parent_counter_value": 229272,
+    "parent_id_end": 229271,
+    "parent_id_start": 1
+  },
+  "environment": {
+    "machine": "x86_64",
+    "packages": {
+      "beautifulsoup4": "4.13.4",
+      "biotite": "1.5.0",
+      "eth-abi": "5.2.0",
+      "msgpack": "1.1.1",
+      "numpy": "2.2.6",
+      "pycryptodome": "3.23.0",
+      "requests": "2.32.4"
+    },
+    "platform": "Linux-6.17.0-1020-azure-x86_64-with-glibc2.39",
+    "python": "3.11.15 (main, Jun 16 2026, 21:41:52) [GCC 13.3.0]"
+  },
+  "evidence_relative_path": "evidence/article-02/molnft/block-13436937",
+  "evm_chain_id": 29,
+  "failures": 100,
+  "failures_by_reason": {
+    "MISSING_FILE": 2,
+    "PARSE_FAIL": 98
+  },
+  "fidelity_passes": 0,
+  "loss_model": "lossless BinaryCIF payload",
+  "off_chain_index_used": false,
+  "requirements_lock_sha256": "cc0cb134a882b399d30be574ddf6811abc80d5199ee2f411a683873d6303bd7e",
+  "rpc_endpoint": "https://rpc.genesisl1.org",
+  "rpc_provider": "public GenesisL1 EVM JSON-RPC",
+  "sample_spec_precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
+  "schema": "org.genesisl1.molnft_direct_randomized_fidelity.v1",
+  "successes": 0,
+  "wall_clock_end_utc": "2026-08-10T19:48:39Z",
+  "wall_clock_start_utc": "2026-08-10T19:45:57Z"
+}

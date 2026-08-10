@@ -1,0 +1,13 @@
+{
+  "accession_date": "01/13/24",
+  "authors": "Chang, C., Gao, Y.",
+  "compound": "Homing endonuclease I-PpoI-DNA complex:reaction at pH6.0 (K+ MES) with 500 uM Mg2+ for 80s",
+  "experiment_type": "X-RAY DIFFRACTION",
+  "file_base64_characters": 78495,
+  "header": "HYDROLASE",
+  "idcode": "8VN0",
+  "image_base64_characters": 15805,
+  "resolution": "1.6",
+  "sequence_length": 711,
+  "source": "Physarum polycephalum; SYNTHETIC CONSTRUCT"
+}
