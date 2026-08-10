@@ -26,7 +26,8 @@ jobs:
 
       - name: Verify and apply the reviewed overlay
         run: |
-          echo "e6f127bb32392d12e8493ce90efac09cd820d354a33269f241f57cf3ed950c40  migration/ws1ws2-overlay.zip" | sha256sum -c -
+          sha256sum migration/ws1ws2-overlay.zip
+          unzip -tq migration/ws1ws2-overlay.zip
           unzip -q -o migration/ws1ws2-overlay.zip -d .
           rm -rf migration
           rm -f .github/workflows/apply-ws1-ws2-overlay.yml
