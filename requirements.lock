@@ -1,0 +1,9 @@
+# Reproducible WS-1 / WS-2 evidence environment
+# Python 3.11.x is recorded in each evidence summary.
+beautifulsoup4==4.13.4
+biotite==1.5.0
+eth-abi==5.2.0
+msgpack==1.1.1
+numpy==2.2.6
+pycryptodome==3.23.0
+requests==2.32.4
