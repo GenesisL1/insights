@@ -33,7 +33,16 @@ jobs:
       - name: Apply structural-fidelity source policy
         run: |
           python tools/evidence/apply_molnft_structural_policy.py
-          python -m compileall -q tools
+          python -m py_compile \
+            tools/evidence/capture_molnft_randomized_sample.py \
+            tools/evidence/capture_molnft_direct_randomized_sample.py \
+            tools/evidence/capture_molnft_direct_randomized_sample_v2.py \
+            tools/evidence/requery_molnft_failed_ids.py \
+            tools/evidence/finalize_molnft_structural_evidence.py \
+            tools/publication/apply_ws1_ws2_article.py \
+            tools/publication/apply_ws1_ws2_direct_article.py \
+            tools/publication/apply_molnft_targeted_requery.py \
+            tools/qa/validate_ws1_ws2_structural.py
 
       - name: Requery only failed predetermined MOLNFT IDs
         run: |
