@@ -1,2 +1,3 @@
 Requery only PDB 5KCS / NFT 124713 and PDB 6QFB / NFT 162649 through the requested RPCA URLs; no replacement draw.
 Retry after limiting compilation to the active MOLNFT evidence paths.
+Print the exact remaining post-requery structural mismatch.
