@@ -24,9 +24,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Verify and apply the reviewed overlay
+      - name: Record staged overlay digest
         run: |
           sha256sum migration/ws1ws2-overlay.zip
+          wc -c migration/ws1ws2-overlay.zip
+
+      - name: Upload staged overlay for byte comparison
+        uses: actions/upload-artifact@v4
+        with:
+          name: staged-ws1-ws2-overlay
+          path: migration/ws1ws2-overlay.zip
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Verify and apply the reviewed overlay
+        run: |
           unzip -tq migration/ws1ws2-overlay.zip
           unzip -q -o migration/ws1ws2-overlay.zip -d .
           rm -rf migration
