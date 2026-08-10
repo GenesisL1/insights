@@ -18,6 +18,7 @@ from Crypto.Hash import keccak
 ROOT_RPC = "https://rpca.genesisl1.org"
 API_PATH = "https://rpca.genesisl1.org/api"
 EXPECTED_REQUERY = {(124713, "5KCS"), (162649, "6QFB")}
+EXPECTED_FINAL_FAILURE = (124713, "5KCS")
 
 
 def sha256(path: pathlib.Path) -> str:
@@ -45,6 +46,10 @@ def endpoint_slug(url: str) -> str:
     return url.removeprefix("https://").replace("/", "__")
 
 
+def is_true(value: str) -> bool:
+    return value.lower() == "true"
+
+
 def assert_no_serialized_equality_language(text: str, label: str) -> None:
     lowered = text.lower()
     for forbidden in ["byte-identical", "byte identical", "byte-for-byte", "byte_to_byte"]:
@@ -66,15 +71,14 @@ def main() -> int:
     results = read_csv(mol / "results.csv")
     drawn = read_csv(mol / "drawn-ids.csv")
 
-    assert int(spec["N"]) >= 100
+    assert int(spec["N"]) == 100
     assert len(results) == len(drawn) == int(spec["N"]) == int(summary["N"])
     assert int(summary["successes"]) + int(summary["failures"]) == int(summary["N"])
-    assert int(summary["successes"]) == int(summary["fidelity_passes"])
-    assert int(summary["coordinate_tolerance_passes"]) == int(summary["successes"])
-    assert int(summary["coordinate_hash_matches"]) <= int(summary["successes"])
-    assert int(summary["successes"]) == int(summary["N"]) == 100
-    assert int(summary["failures"]) == 0
-    assert summary["failures_by_reason"] == {}
+    assert int(summary["successes"]) == int(summary["fidelity_passes"]) == 99
+    assert int(summary["failures"]) == 1
+    assert summary["failures_by_reason"] == {"FIDELITY_MISMATCH": 1}
+    assert int(summary["coordinate_tolerance_passes"]) == 99
+    assert int(summary["coordinate_hash_matches"]) == 98
     assert summary["direct_nft_id_queries"] is True
     assert summary["off_chain_index_used"] is False
     assert summary["deterministic_finalization"] is True
@@ -104,6 +108,23 @@ def main() -> int:
     assert all(first_id <= int(row["token_id"]) <= last_id for row in drawn)
 
     assert "byte_identical" not in results[0], "results.csv must not contain serialized equality"
+    final_failures = [row for row in results if row["outcome"] != "SUCCESS"]
+    assert len(final_failures) == 1
+    failure = final_failures[0]
+    assert (int(failure["token_id"]), failure["pdb_id"]) == EXPECTED_FINAL_FAILURE
+    assert int(failure["draw_order"]) == 71
+    assert failure["reason_code"] == "FIDELITY_MISMATCH"
+    assert failure["reason_detail"] == "failed checks: atom_keys_equal, coordinate_agreement"
+    assert int(failure["reconstructed_atom_count"]) == 148945
+    assert int(failure["canonical_atom_count"]) == 148945
+    assert is_true(failure["atom_count_equal"])
+    assert is_true(failure["chain_ids_equal"])
+    assert is_true(failure["entity_ids_equal"])
+    assert not is_true(failure["atom_keys_equal"])
+    assert not is_true(failure["coordinate_agreement"])
+    assert failure["max_coordinate_deviation_angstrom"] == ""
+    assert not is_true(failure["fidelity_pass"])
+
     coordinate_hash_matches = 0
     for row in results:
         token_id = row["token_id"]
@@ -115,22 +136,32 @@ def main() -> int:
         assert (raw / "eth-call-metadata.response.json").is_file()
         assert (raw / "eth-call-combined.request.json").is_file()
         assert (raw / "eth-call-combined.response.json").is_file()
-        assert row["outcome"] == "SUCCESS"
-        assert row["reason_code"] == "SUCCESS"
-        assert row["fidelity_pass"].lower() == "true"
-        for key in [
-            "atom_count_equal",
-            "chain_ids_equal",
-            "entity_ids_equal",
-            "atom_keys_equal",
-            "coordinate_agreement",
-        ]:
-            assert row[key].lower() == "true", f"{key} failed for token {token_id}"
-        assert float(row["max_coordinate_deviation_angstrom"]) <= float(row["coordinate_tolerance_angstrom"])
         assert (mol / "reconstructed" / f"{pdb_id}-token-{token_id}.bcif").is_file()
         assert (mol / "canonical" / f"{pdb_id}.bcif").is_file()
-        coordinate_hash_matches += row["coordinate_hash_equal"].lower() == "true"
-    assert coordinate_hash_matches == int(summary["coordinate_hash_matches"])
+
+        if (int(token_id), pdb_id) == EXPECTED_FINAL_FAILURE:
+            assert row["outcome"] == "FAILURE"
+            assert row["reason_code"] == "FIDELITY_MISMATCH"
+        else:
+            assert row["outcome"] == "SUCCESS"
+            assert row["reason_code"] == "SUCCESS"
+            assert is_true(row["fidelity_pass"])
+            for key in [
+                "atom_count_equal",
+                "chain_ids_equal",
+                "entity_ids_equal",
+                "atom_keys_equal",
+                "coordinate_agreement",
+            ]:
+                assert is_true(row[key]), f"{key} failed for token {token_id}"
+            assert float(row["max_coordinate_deviation_angstrom"]) <= float(row["coordinate_tolerance_angstrom"])
+        coordinate_hash_matches += is_true(row["coordinate_hash_equal"])
+    assert coordinate_hash_matches == int(summary["coordinate_hash_matches"]) == 98
+
+    six_qfb = next(row for row in results if int(row["token_id"]) == 162649)
+    assert six_qfb["pdb_id"] == "6QFB"
+    assert six_qfb["outcome"] == "SUCCESS"
+    assert is_true(six_qfb["fidelity_pass"])
 
     assert report["requested_endpoints"] == [ROOT_RPC, API_PATH]
     assert int(report["initial_sample_size"]) == 100
@@ -216,14 +247,17 @@ def main() -> int:
 
     for text in [article, html]:
         assert "no GLAST or other off-chain token index was used" in text
-        assert "100 of 100 canonical structural-fidelity passes" in text
+        assert "99 of 100 canonical structural-fidelity passes" in text
+        assert "one published final mismatch" in text
         assert "5KCS" in text and "124713" in text
         assert "6QFB" in text and "162649" in text
+        assert "148,945 atoms" in text
+        assert "canonical atom-identity keys did not" in text
         assert ROOT_RPC in text and API_PATH in text
         assert "HTTP 404" in text
         assert "no replacement id was drawn" in text.lower()
         assert f"{int(summary['B_pin']):,}" in text
-        assert f"{int(summary['coordinate_hash_matches'])} of 100" in text
+        assert "98 of 99" in text
         assert f"{float(ws2['validator_concentration']['hhi_10000']):.2f}" in text
         assert f"{float(ws2['validator_concentration']['effective_count']):.2f}" in text
         assert f"{float(ws2['stake']['bonded_ratio_percent']):.2f}%" in text
@@ -231,14 +265,27 @@ def main() -> int:
 
     randomized_facts = facts["molnft_randomized"]
     assert "byte_identical_records" not in randomized_facts
-    assert int(randomized_facts["successes"]) == 100
-    assert int(randomized_facts["failures"]) == 0
+    assert int(randomized_facts["successes"]) == 99
+    assert int(randomized_facts["failures"]) == 1
+    assert randomized_facts["failures_by_reason"] == {"FIDELITY_MISMATCH": 1}
+    assert int(randomized_facts["successful_same_id_payload_requeries"]) == 2
     assert set(randomized_facts["targeted_requery_token_ids"]) == {124713, 162649}
     assert int(randomized_facts["requested_api_path_http_status"]) == 404
+    assert int(randomized_facts["replacement_draws"]) == 0
+    fact_failures = randomized_facts["final_failure_records"]
+    assert len(fact_failures) == 1
+    assert (int(fact_failures[0]["token_id"]), fact_failures[0]["pdb_id"]) == EXPECTED_FINAL_FAILURE
+    assert fact_failures[0]["atom_count_equal"] is True
+    assert fact_failures[0]["chain_ids_equal"] is True
+    assert fact_failures[0]["entity_ids_equal"] is True
+    assert fact_failures[0]["atom_keys_equal"] is False
+    assert fact_failures[0]["coordinate_agreement"] is False
 
     assert "Targeted requery of provider-level failures" in methodology
     assert "5KCS" in methodology and "124713" in methodology
     assert "6QFB" in methodology and "162649" in methodology
+    assert "6QFB passed" in methodology
+    assert "5KCS remained" in methodology
     assert "--verify-deterministic" in methodology
     assert "1..nextNFTId(B_pin)-1" in methodology
     assert "Exact coordinate-hash equality is an additional reproducibility statistic" in methodology
@@ -248,8 +295,9 @@ def main() -> int:
     assert caveat in consensus_methodology
 
     print(
-        f"Final WS-1/WS-2 acceptance passed: {summary['successes']}/{summary['N']} structural-fidelity passes, "
-        f"{summary['coordinate_hash_matches']} exact coordinate hashes, two same-ID RPCA recoveries, no replacement draw"
+        "Final WS-1/WS-2 acceptance passed: 99/100 structural-fidelity passes; "
+        "6QFB recovered and passed; 5KCS recovered but retained one atom-identity mismatch; "
+        "98 exact coordinate hashes; two same-ID RPCA payload recoveries; no replacement draw"
     )
     return 0
 
