@@ -1,0 +1,180 @@
+name: Publish direct-ID WS-1 and WS-2 evidence upgrade
+
+on:
+  push:
+    branches:
+      - evidence-ws1-ws2-upgrade-20260810
+    paths:
+      - evidence/article-02/molnft/START_WS1_WS2_DIRECT_PUBLISH
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: article02-direct-ws1-ws2-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Check out evidence branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: evidence-ws1-ws2-upgrade-20260810
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned evidence environment
+        run: |
+          python -m pip install --disable-pip-version-check --upgrade pip
+          python -m pip install --disable-pip-version-check -r requirements.lock
+
+      - name: Verify the isolated precommit
+        run: |
+          PRECOMMIT_SHA=$(git log -1 --format=%H -- evidence/article-02/molnft/sample-spec.json)
+          test -n "$PRECOMMIT_SHA"
+          mapfile -t CHANGED < <(git diff-tree --no-commit-id --name-only -r "$PRECOMMIT_SHA")
+          test "${#CHANGED[@]}" -eq 1
+          test "${CHANGED[0]}" = "evidence/article-02/molnft/sample-spec.json"
+          echo "PRECOMMIT_SHA=$PRECOMMIT_SHA" >> "$GITHUB_ENV"
+
+      - name: Capture the direct NFT-ID randomized sample
+        run: |
+          B_PIN=$(python -c "import json; print(json.load(open('evidence/article-02/molnft/sample-spec.json'))['B_pin'])")
+          rm -rf "evidence/article-02/molnft/block-${B_PIN}"
+          python tools/evidence/capture_molnft_direct_randomized_sample.py \
+            --repo . \
+            --spec evidence/article-02/molnft/sample-spec.json \
+            --precommit-sha "$PRECOMMIT_SHA" \
+            --output-root evidence/article-02/molnft \
+            --workers 3
+          echo "MOLNFT_DIR=evidence/article-02/molnft/block-${B_PIN}" >> "$GITHUB_ENV"
+          echo "MOLNFT_B_PIN=${B_PIN}" >> "$GITHUB_ENV"
+
+      - name: Compute WS-2 metrics
+        run: |
+          NETWORK_DIR=evidence/article-02/network-state/block-13431722
+          python tools/evidence/upgrade_ws2_metrics_direct.py \
+            --snapshot "$NETWORK_DIR/snapshot.json" \
+            --validators "$NETWORK_DIR/validators.csv" \
+            --delegators "$NETWORK_DIR/delegators.csv"
+          echo "NETWORK_DIR=$NETWORK_DIR" >> "$GITHUB_ENV"
+
+      - name: Update Article 02 and recompute local evidence
+        run: |
+          python tools/publication/apply_ws1_ws2_direct_article.py \
+            --molnft-evidence "$MOLNFT_DIR" \
+            --ws2 "$NETWORK_DIR/WS2_METRICS.json"
+          python tools/evidence/capture_molnft_direct_randomized_sample.py \
+            --recompute "$MOLNFT_DIR"
+
+      - name: Run acceptance validation
+        run: |
+          python -m py_compile \
+            tools/evidence/capture_molnft_randomized_sample.py \
+            tools/evidence/capture_molnft_direct_randomized_sample.py \
+            tools/evidence/upgrade_ws2_metrics.py \
+            tools/evidence/upgrade_ws2_metrics_direct.py \
+            tools/publication/apply_ws1_ws2_article.py \
+            tools/publication/apply_ws1_ws2_direct_article.py \
+            tools/qa/validate_ws1_ws2_direct.py
+          python tools/evidence/upgrade_ws2_metrics_direct.py \
+            --snapshot "$NETWORK_DIR/snapshot.json" \
+            --validators "$NETWORK_DIR/validators.csv" \
+            --delegators "$NETWORK_DIR/delegators.csv" \
+            --verify-only
+          python tools/qa/validate_ws1_ws2_direct.py \
+            --molnft "$MOLNFT_DIR" \
+            --network "$NETWORK_DIR"
+          if [ -f tools/qa/validate_svg_layout.py ]; then
+            python tools/qa/validate_svg_layout.py
+          fi
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
+
+      - name: Commit the validated evidence and article
+        run: |
+          rm -f evidence/article-02/molnft/START_WS1_WS2_DIRECT
+          rm -f evidence/article-02/molnft/START_WS1_WS2_DIRECT_RESUME
+          rm -f evidence/article-02/molnft/START_WS1_WS2_DIRECT_FINISH
+          rm -f evidence/article-02/molnft/START_WS1_WS2_DIRECT_PUBLISH
+          git config user.name "GenesisL1 Evidence Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "evidence: publish direct-ID Article 02 WS-1 and WS-2 upgrade"
+          git push origin HEAD:evidence-ws1-ws2-upgrade-20260810
+          echo "EVIDENCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Build publication and evidence bundles
+        run: |
+          rm -rf .artifacts
+          mkdir -p .artifacts
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib, os, pathlib, zipfile
+          root = pathlib.Path('.').resolve()
+          artifacts = (root / '.artifacts').resolve()
+          mol = (root / os.environ['MOLNFT_DIR']).resolve()
+          network = (root / os.environ['NETWORK_DIR']).resolve()
+          bpin = os.environ['MOLNFT_B_PIN']
+          excluded = {'.git', '.artifacts', '.tmp', '__pycache__'}
+
+          def allowed(path: pathlib.Path) -> bool:
+              path = path.resolve()
+              rel = path.relative_to(root)
+              return not any(part in excluded for part in rel.parts) and path.suffix not in {'.pyc', '.pyo'}
+
+          def add_tree(zf, source, prefix=''):
+              source = source.resolve()
+              for candidate in sorted(source.rglob('*')):
+                  path = candidate.resolve()
+                  if path.is_file() and allowed(path):
+                      zf.write(path, (pathlib.Path(prefix) / path.relative_to(source)).as_posix())
+
+          outputs = []
+          full = artifacts / f'GenesisL1_Insights_Article_02_WS1_WS2_FULL_block-{bpin}.zip'
+          with zipfile.ZipFile(full, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+              add_tree(zf, root, 'GenesisL1-insights')
+          outputs.append(full)
+
+          deploy = artifacts / f'GenesisL1_Insights_Article_02_WS1_WS2_DEPLOY_block-{bpin}.zip'
+          with zipfile.ZipFile(deploy, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+              add_tree(zf, root / 'site', 'site')
+              add_tree(zf, root / 'deployment', 'deployment')
+          outputs.append(deploy)
+
+          ws1 = artifacts / f'GenesisL1_MOLNFT_Direct_Randomized_Fidelity_Evidence_block-{bpin}.zip'
+          with zipfile.ZipFile(ws1, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+              add_tree(zf, mol, f'molnft-direct-randomized-block-{bpin}')
+          outputs.append(ws1)
+
+          ws2 = artifacts / 'GenesisL1_WS2_Concentration_Evidence_block-13431722.zip'
+          with zipfile.ZipFile(ws2, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+              add_tree(zf, network, 'network-state-block-13431722')
+          outputs.append(ws2)
+
+          lines = []
+          for path in outputs:
+              digest = hashlib.sha256(path.read_bytes()).hexdigest()
+              lines.append(f'{digest}  {path.name}')
+              with zipfile.ZipFile(path) as zf:
+                  bad = zf.testzip()
+                  if bad is not None:
+                      raise SystemExit(f'corrupt archive member {bad} in {path}')
+          (artifacts / 'SHA256SUMS.txt').write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          PY
+
+      - name: Upload final bundles
+        uses: actions/upload-artifact@v4
+        with:
+          name: genesisl1-article02-direct-ws1-ws2-${{ env.MOLNFT_B_PIN }}
+          path: .artifacts/*
+          if-no-files-found: error
+          retention-days: 90
