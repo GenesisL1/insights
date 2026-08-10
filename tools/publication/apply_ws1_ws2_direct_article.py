@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply the direct-NFT-ID WS-1 result and WS-2 metrics to Article 02."""
+"""Apply the finalized direct-NFT-ID WS-1 result and WS-2 metrics to Article 02."""
 from __future__ import annotations
 
 import argparse
@@ -23,8 +23,15 @@ def failure_phrase(summary: dict[str, Any]) -> str:
     failures = int(summary["failures"])
     if failures == 0:
         return "no recorded failures"
+    labels = {
+        "RPC_OUT_OF_GAS": "RPC out-of-gas responses",
+        "RPC_TIMEOUT": "RPC timeouts",
+        "RPC_ERROR": "other RPC errors",
+        "CANONICAL_UNAVAILABLE": "unavailable canonical objects",
+        "FIDELITY_MISMATCH": "structural fidelity mismatches",
+    }
     details = summary.get("failures_by_reason") or {}
-    rendered = ", ".join(f"{value} {key}" for key, value in sorted(details.items()))
+    rendered = ", ".join(f"{value} {labels.get(key, key.lower().replace('_', ' '))}" for key, value in sorted(details.items()))
     return f"{failures} published failures ({rendered})"
 
 
@@ -32,6 +39,7 @@ def ws1_markdown(summary: dict[str, Any], seed: dict[str, Any]) -> str:
     n = int(summary["N"])
     successes = int(summary["successes"])
     fidelity = int(summary["fidelity_passes"])
+    exact_coordinates = int(summary.get("coordinate_hash_matches", 0))
     identical = int(summary.get("byte_identical_records", 0))
     enumerated = int(summary["enumerated_parent_count"])
     tolerance = Decimal(str(summary["coordinate_tolerance_angstrom"]))
@@ -43,13 +51,16 @@ def ws1_markdown(summary: dict[str, Any], seed: dict[str, Any]) -> str:
         f"**{int(enum['parent_id_start']):,}–{int(enum['parent_id_end']):,}** (**{enumerated:,} IDs**), defined directly by "
         f"`nextNFTId()` at block **{int(summary['B_pin']):,}**. Each selected PDB identifier was read from "
         f"`getMetadata(tokenId)` and its payload from `getCombinedData(tokenId)`; **no GLAST or other off-chain token index was used**. "
-        f"The pipeline reconstructed **{successes} of {n}** selected records and published {failure_phrase(summary)} with raw RPC "
-        f"responses for every draw. <sup><a href=\"#source-15\">15</a></sup>\n\n"
-        f"Canonical fidelity was tested record by record against RCSB BinaryCIF objects after deterministic atom-order normalization. "
-        f"**{fidelity} records passed** the declared atom-count, chain/entity-ID, atom-identity, coordinate-hash and coordinate-agreement "
-        f"checks at a maximum permitted deviation of **{tolerance:.6f} Å**; **{identical}** were also byte-identical to the retrieved "
-        f"canonical BinaryCIF. The future-block seed derivation, complete numeric parent-ID population, draw, success/failure table, "
-        f"reconstructed and canonical objects, environment fingerprint and SHA-256 manifest are preserved in the evidence package."
+        f"The audit produced **{successes} of {n} canonical structural-fidelity passes** and retained {failure_phrase(summary)} with "
+        f"the raw RPC request and response for every draw. No failed ID was replaced. <sup><a href=\"#source-15\">15</a></sup>\n\n"
+        f"For each comparable record, the audit required equal atom counts, chain and entity sets, canonical atom identities, and a "
+        f"maximum paired coordinate deviation no greater than the precommitted **{tolerance:.6f} Å** tolerance. All **{fidelity}** "
+        f"successful comparisons passed those conditions. Exact normalized coordinate hashes additionally matched for "
+        f"**{exact_coordinates} of {fidelity}** records, while **{identical}** current RCSB BinaryCIF files were byte-identical to the "
+        f"historical on-chain serialization. The latter is reported separately because BinaryCIF metadata and encoding can change "
+        f"without changing the canonicalized atom identities or Cartesian structure. The future-block seed, complete numeric parent-ID "
+        f"population, draw, failure table, reconstructed and canonical objects, environment fingerprint and SHA-256 manifest are "
+        f"preserved in the evidence package."
     )
 
 
