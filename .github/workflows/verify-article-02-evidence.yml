@@ -5,6 +5,7 @@ on:
   push:
     branches: [main, evidence-ws1-ws2-upgrade-20260810]
     paths:
+      - "README.md"
       - "content/article-02-next-verifiable-renaissance/**"
       - "site/insights/genesisl1-decentralization-scientific-renaissance.html"
       - "evidence/article-02/**"
