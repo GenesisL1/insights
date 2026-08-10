@@ -1,0 +1,13 @@
+{
+  "accession_date": "06/06/16",
+  "authors": "Arenz, S., Juette, M.F., Graf, M., Nguyen, F., Huter, P., Polikanov, Y.S., Blanchard, S.C., Wilson, D.N.",
+  "compound": "Cryo-EM structure of the Escherichia coli 70S ribosome in complex with antibiotic Evernimycin, mRNA, TetM and P-site tRNA at 3.9A resolution",
+  "experiment_type": "ELECTRON MICROSCOPY",
+  "file_base64_characters": 0,
+  "header": "RIBOSOME",
+  "idcode": "5KCS",
+  "image_base64_characters": 17754,
+  "resolution": "3.9",
+  "sequence_length": 15078,
+  "source": "Enterococcus faecalis; Escherichia coli (strain K12); SYNTHETIC CONSTRUCT"
+}

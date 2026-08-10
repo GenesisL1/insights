@@ -416,7 +416,6 @@ def run_capture(
         "failures": sum(row["outcome"] != "SUCCESS" for row in results),
         "failures_by_reason": dict(sorted((key, value) for key, value in reason_counts.items() if key != "SUCCESS")),
         "fidelity_passes": sum(bool(row.get("fidelity_pass")) for row in results),
-        "byte_identical_records": sum(bool(row.get("byte_identical")) for row in results),
         "coordinate_tolerance_angstrom": spec["fidelity"]["coordinate_tolerance_angstrom"],
         "loss_model": spec["fidelity"]["loss_model"],
         "rpc_endpoint": client.active_url,

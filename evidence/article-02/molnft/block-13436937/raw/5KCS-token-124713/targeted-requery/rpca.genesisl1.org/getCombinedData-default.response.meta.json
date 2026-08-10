@@ -1,0 +1,20 @@
+{
+  "bytes": 106,
+  "headers": {
+    "connection": "keep-alive",
+    "content-length": "106",
+    "content-type": "application/json",
+    "date": "Mon, 10 Aug 2026 22:07:43 GMT",
+    "server": "nginx",
+    "vary": "Origin"
+  },
+  "http_status": 200,
+  "json_decoded": true,
+  "rpc_error": {
+    "code": -32000,
+    "message": "rpc error: code = Internal desc = out of gas"
+  },
+  "sha256": "7de6e5682b4deee8d77ab97464d09c255b93be16cf11f0ee156125d10132d884",
+  "transport_error": null,
+  "url": "https://rpca.genesisl1.org"
+}

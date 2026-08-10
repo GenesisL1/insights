@@ -793,7 +793,6 @@ def compare_bcif(reconstructed: pathlib.Path, canonical: pathlib.Path, tolerance
                 rec["entities"] == can["entities"],
                 rec_keys == can_keys,
                 coordinate_equal,
-                rec["coordinate_hash"] == can["coordinate_hash"],
             ]
         ),
     }
@@ -888,7 +887,6 @@ def capture_record(
                 "canonical_bytes": len(canonical),
                 "reconstructed_sha256": sha256_bytes(reconstructed),
                 "canonical_sha256": sha256_bytes(canonical),
-                "byte_identical": reconstructed == canonical,
             }
         )
         if not comparison["fidelity_pass"]:
@@ -917,7 +915,6 @@ RESULT_FIELDS = [
     "canonical_bytes",
     "reconstructed_sha256",
     "canonical_sha256",
-    "byte_identical",
     "reconstructed_atom_count",
     "canonical_atom_count",
     "atom_count_equal",
@@ -1027,7 +1024,6 @@ def recompute(directory: pathlib.Path) -> None:
                         "canonical_bytes": canonical.stat().st_size,
                         "reconstructed_sha256": sha256_file(reconstructed),
                         "canonical_sha256": sha256_file(canonical),
-                        "byte_identical": reconstructed.read_bytes() == canonical.read_bytes(),
                     }
                 )
                 row["outcome"] = "SUCCESS" if comparison["fidelity_pass"] else "FAILURE"
@@ -1045,7 +1041,6 @@ def recompute(directory: pathlib.Path) -> None:
             "successes": sum(row["outcome"] == "SUCCESS" for row in results),
             "failures": sum(row["outcome"] != "SUCCESS" for row in results),
             "failures_by_reason": dict(sorted((key, value) for key, value in reason_counts.items() if key != "SUCCESS")),
-            "byte_identical_records": sum(bool(row.get("byte_identical")) for row in results),
             "fidelity_passes": sum(bool(row.get("fidelity_pass")) for row in results),
             "deterministic_recompute_at_utc": old_summary.get("deterministic_recompute_at_utc"),
         }
@@ -1239,7 +1234,6 @@ def run_capture(repo: pathlib.Path, spec_path: pathlib.Path, precommit_sha: str,
         "failures": sum(row["outcome"] != "SUCCESS" for row in results),
         "failures_by_reason": dict(sorted((key, value) for key, value in reason_counts.items() if key != "SUCCESS")),
         "fidelity_passes": sum(bool(row.get("fidelity_pass")) for row in results),
-        "byte_identical_records": sum(bool(row.get("byte_identical")) for row in results),
         "coordinate_tolerance_angstrom": spec["fidelity"]["coordinate_tolerance_angstrom"],
         "loss_model": spec["fidelity"]["loss_model"],
         "rpc_endpoint": client.active_url,

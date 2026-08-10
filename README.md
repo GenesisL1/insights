@@ -23,15 +23,24 @@ The preserved network snapshot records 27 active validators, validator HHI of 54
 
 The MOLNFT sample specification was committed before future seed block 13,436,979 existed. Its block hash selected 100 NFT IDs without replacement from the contract-defined range `1..nextNFTId(B_pin)-1`, comprising 229,271 parent IDs. No GLAST or other off-chain token index was used.
 
+The initial retrieval completed 98 comparisons. Only the two failed predetermined rows were queried again:
+
+- **5KCS / NFT 124713** — Cryo-EM structure of the *Escherichia coli* 70S ribosome in complex with Evernimycin, mRNA, TetM and P-site tRNA;
+- **6QFB / NFT 162649** — human ATP citrate lyase holoenzyme in complex with citrate, coenzyme A and Mg·ADP.
+
+At `https://rpca.genesisl1.org`, default `getCombinedData` calls reproduced the provider-level out-of-gas errors. Explicit-gas calls for those same IDs at the same pinned block returned both payloads. The exact `https://rpca.genesisl1.org/api` path returned HTTP 404 and is not a JSON-RPC route. No successful row was requeried and no replacement ID was drawn.
+
+After payload recovery, **6QFB passed** the canonical structural comparator. **5KCS remained the one final mismatch**: reconstructed and current RCSB objects each contained 148,945 atoms and had equal chain and entity sets, but their canonical atom-identity keys differed, so paired coordinate agreement could not be established.
+
 The finalized audit reports:
 
-- **98 of 100 canonical structural-fidelity passes**;
-- **97 of 98 exact normalized coordinate-hash matches**;
-- **2 preserved RPC out-of-gas failures**, with no replacement draw;
-- raw `getMetadata(tokenId)` and `getCombinedData(tokenId)` requests and responses for every selected ID;
+- **99 of 100 canonical structural-fidelity passes**;
+- **1 published final structural mismatch: 5KCS / NFT 124713**;
+- **98 of 99 exact normalized coordinate-hash matches among passing records**;
+- complete raw requests and responses for the original calls and targeted same-ID requery;
 - reconstructed and current RCSB BinaryCIF objects, per-record outcomes, environment versions, manifest, and SHA-256 checksums.
 
-A fidelity pass requires equal atom counts, chain/entity sets, canonical atom identities, and paired Cartesian coordinates within the precommitted `1e-6 Å` tolerance. Complete-file byte equality is reported separately because the current RCSB BinaryCIF serialization may differ from the historical object while the canonicalized structure agrees.
+A fidelity pass requires equal atom counts, chain/entity sets, canonical atom identities, and paired Cartesian coordinates within the precommitted `1e-6 Å` tolerance. Serialized-object equality is not calculated. Each object's SHA-256 is retained independently as an integrity identifier only.
 
 ## Repository boundaries
 
@@ -70,9 +79,9 @@ python tools/qa/validate_ws1_ws2_final.py \
 Recompute the MOLNFT comparison from preserved local evidence without contacting an RPC endpoint or RCSB:
 
 ```bash
-python tools/evidence/finalize_molnft_direct_evidence.py \
+python tools/evidence/finalize_molnft_structural_evidence.py \
   --evidence "$MOLNFT" \
-  --verify-byte-for-byte
+  --verify-deterministic
 ```
 
 The permanent GitHub Actions workflow [Verify Article 02 evidence](.github/workflows/verify-article-02-evidence.yml) runs the same acceptance checks.

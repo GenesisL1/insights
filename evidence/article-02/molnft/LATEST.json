@@ -3,10 +3,36 @@
   "evidence_block": 13436937,
   "path": "block-13436937",
   "sample_size": 100,
-  "fidelity_passes": 98,
-  "failures": 2,
-  "failure_reason": "RPC_OUT_OF_GAS",
+  "fidelity_passes": 99,
+  "failures": 1,
   "selection": "future-block-seeded direct NFT-ID sample without replacement",
   "off_chain_token_index_used": false,
-  "sample_spec_precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a"
+  "sample_spec_precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
+  "failures_by_reason": {
+    "FIDELITY_MISMATCH": 1
+  },
+  "coordinate_hash_matches": 98,
+  "initial_failures": 2,
+  "successful_same_id_payload_requeries": 2,
+  "targeted_requery_token_ids": [
+    124713,
+    162649
+  ],
+  "replacement_draws": 0,
+  "final_failure_records": [
+    {
+      "draw_order": 71,
+      "token_id": 124713,
+      "pdb_id": "5KCS",
+      "reason_code": "FIDELITY_MISMATCH",
+      "reason_detail": "failed checks: atom_keys_equal, coordinate_agreement",
+      "reconstructed_atom_count": 148945,
+      "canonical_atom_count": 148945,
+      "atom_count_equal": true,
+      "chain_ids_equal": true,
+      "entity_ids_equal": true,
+      "atom_keys_equal": false,
+      "coordinate_agreement": false
+    }
+  ]
 }

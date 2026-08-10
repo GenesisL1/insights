@@ -35,12 +35,41 @@
     "B_pin": 13436937,
     "B_seed": 13436979,
     "N": 100,
-    "byte_identical_records": 0,
+    "coordinate_hash_matches": 98,
     "evidence_relative_path": "evidence/article-02/molnft/block-13436937",
-    "failures": 2,
-    "fidelity_passes": 98,
+    "failures": 1,
+    "failures_by_reason": {
+      "FIDELITY_MISMATCH": 1
+    },
+    "fidelity_passes": 99,
+    "final_failure_records": [
+      {
+        "atom_count_equal": true,
+        "atom_keys_equal": false,
+        "canonical_atom_count": 148945,
+        "chain_ids_equal": true,
+        "coordinate_agreement": false,
+        "draw_order": 71,
+        "entity_ids_equal": true,
+        "pdb_id": "5KCS",
+        "reason_code": "FIDELITY_MISMATCH",
+        "reason_detail": "failed checks: atom_keys_equal, coordinate_agreement",
+        "reconstructed_atom_count": 148945,
+        "token_id": 124713
+      }
+    ],
+    "initial_failure_reason": "RPC_OUT_OF_GAS",
+    "initial_failures": 2,
     "precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
-    "successes": 98
+    "replacement_draws": 0,
+    "requested_api_path_http_status": 404,
+    "successes": 99,
+    "successful_same_id_payload_requeries": 2,
+    "targeted_requery_endpoint": "https://rpca.genesisl1.org",
+    "targeted_requery_token_ids": [
+      124713,
+      162649
+    ]
   },
   "multi_validator_delegators": 195,
   "not_bonded_stake_display": "1,819,652.96",

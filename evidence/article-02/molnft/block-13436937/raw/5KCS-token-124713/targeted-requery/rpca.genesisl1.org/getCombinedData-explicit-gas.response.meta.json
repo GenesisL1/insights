@@ -1,0 +1,17 @@
+{
+  "bytes": 2860199,
+  "headers": {
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 10 Aug 2026 22:07:43 GMT",
+    "server": "nginx",
+    "transfer-encoding": "chunked",
+    "vary": "Origin"
+  },
+  "http_status": 200,
+  "json_decoded": true,
+  "result_hex_characters": 2860162,
+  "sha256": "ec75cfc7c4fc71e7c0a2dc537cd861e989134c7852d055ba10037d908e263083",
+  "transport_error": null,
+  "url": "https://rpca.genesisl1.org"
+}

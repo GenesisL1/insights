@@ -1,3 +1,0 @@
-Requery only PDB 5KCS / NFT 124713 and PDB 6QFB / NFT 162649 through the requested RPCA URLs; no replacement draw.
-Finalize the observed result: 6QFB passes after recovery; 5KCS remains one canonical atom-identity mismatch; 99 of 100 structural passes.
-Persist validated evidence while excluding workflow paths from the Actions push.
