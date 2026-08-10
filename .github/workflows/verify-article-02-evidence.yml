@@ -3,7 +3,7 @@ name: Verify Article 02 evidence
 on:
   workflow_dispatch:
   push:
-    branches: [main, evidence-ws1-ws2-upgrade-20260810, molnft-rpca-failed-only-20260811]
+    branches: [main, molnft-rpca-failed-only-20260811]
     paths:
       - "README.md"
       - "content/article-02-next-verifiable-renaissance/**"
