@@ -1,4 +1,4 @@
-name: Finalize MOLNFT evidence without raw atom-key aggregate
+name: Finalize MOLNFT evidence without secondary 99-of-100 metrics
 
 on:
   push:
@@ -35,6 +35,7 @@ jobs:
           python tools/maintenance/remove_raw_atom_key_metric.py
           python tools/maintenance/remove_stale_atom_key_summary_fields.py
           python tools/maintenance/remove_stale_atom_key_qa_assertions.py
+          python tools/maintenance/remove_auxiliary_99_aggregate.py
           python -m py_compile \
             tools/evidence/molnft_structural_compare.py \
             tools/evidence/capture_molnft_randomized_sample.py \
@@ -81,26 +82,27 @@ jobs:
           with (mol / 'results.csv').open(newline='', encoding='utf-8') as handle:
               rows = list(csv.DictReader(handle))
           assert summary['fidelity_passes'] == 100 and summary['failures'] == 0
-          assert 'strict_atom_key_matches' not in summary
-          assert 'revision_aware_atom_identity_passes' not in summary
-          assert 'strict_atom_key_matches' not in latest
-          assert 'revision_aware_atom_identity_passes' not in latest
-          assert 'strict_atom_key_matches' not in facts
-          assert 'revision_aware_atom_identity_passes' not in facts
+          for payload in (summary, latest, facts):
+              assert 'strict_atom_key_matches' not in payload
+              assert 'revision_aware_atom_identity_passes' not in payload
+              assert 'coordinate_hash_matches' not in payload
           assert 'atom_keys_equal' not in rows[0]
           assert 'strict_atom_key_coordinate_hash_equal' not in rows[0]
           assert all(row['atom_identity_agreement'].lower() == 'true' for row in rows)
+          assert all('reconstructed_coordinate_sha256' in row and 'canonical_coordinate_sha256' in row for row in rows)
           for path in [
               root / 'README.md',
               root / 'content/article-02-next-verifiable-renaissance/article.md',
               root / 'site/insights/genesisl1-decentralization-scientific-renaissance.html',
+              mol / 'README.md',
           ]:
               text = path.read_text(encoding='utf-8').lower()
               assert '99 of 100' not in text
               assert 'strict raw atom' not in text
               assert 'raw canonical-key' not in text
+              assert 'exact normalized coordinate-hash matches' not in text
               assert '100 of 100 canonical structural-fidelity passes' in text
-          print('Validated: 100/100 passes, zero failures, no raw atom-key aggregate or public 99/100 phrasing')
+          print('Validated: one public result only — 100/100 structural-fidelity passes, zero failures')
           PY
 
       - name: Commit corrected evidence and publication
@@ -108,5 +110,5 @@ jobs:
           git config user.name "GenesisL1 Evidence Bot"
           git config user.email "actions@users.noreply.github.com"
           git add -A
-          git commit -m "evidence: report MOLNFT fidelity as 100 of 100 without raw-key aggregate"
+          git commit -m "evidence: publish only the 100-of-100 MOLNFT fidelity result"
           git push origin HEAD:remove-misleading-raw-key-metric-20260811
