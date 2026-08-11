@@ -1,10 +1,9 @@
+# Reuse the pinned evidence environment required to verify the immutable
+# 100-record MOLNFT reconstruction audit.
+-r requirements.lock
+
+# Current publication and graphics dependencies.
 cairosvg>=2.7,<3
 Pillow>=10,<12
 playwright>=1.46,<2
-requests>=2.32,<3
-eth-abi>=5,<6
-eth-utils>=5,<7
-eth-hash[pycryptodome]>=0.7,<1
-msgpack>=1,<2
-
 mistune>=3.1,<4
