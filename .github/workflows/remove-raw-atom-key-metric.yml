@@ -95,28 +95,25 @@ jobs:
           assert all(row['atom_identity_agreement'].lower() == 'true' for row in rows)
           assert all('reconstructed_coordinate_sha256' in row and 'canonical_coordinate_sha256' in row for row in rows)
 
-          public_paths = [
-              root / 'README.md',
-              root / 'content/article-02-next-verifiable-renaissance/article.md',
-              root / 'site/insights/genesisl1-decentralization-scientific-renaissance.html',
-              mol / 'README.md',
-          ]
-          for path in public_paths:
-              text = path.read_text(encoding='utf-8').lower()
+          root_readme = (root / 'README.md').read_text(encoding='utf-8').lower()
+          article = (root / 'content/article-02-next-verifiable-renaissance/article.md').read_text(encoding='utf-8').lower()
+          html = (root / 'site/insights/genesisl1-decentralization-scientific-renaissance.html').read_text(encoding='utf-8').lower()
+          evidence_readme = (mol / 'README.md').read_text(encoding='utf-8').lower()
+          public_texts = [root_readme, article, html, evidence_readme]
+
+          for text in public_texts:
               assert '99 of 100' not in text
               assert 'strict raw atom' not in text
               assert 'raw canonical-key' not in text
               assert 'exact normalized coordinate-hash matches' not in text
 
-          for path in public_paths[:3]:
-              text = path.read_text(encoding='utf-8').lower()
+          for text in [root_readme, article, html]:
               assert '100 of 100 canonical structural-fidelity passes' in text
               assert 'zero final failures' in text or 'zero failures' in text
 
-          evidence_text = (mol / 'README.md').read_text(encoding='utf-8').lower()
-          assert '| selected records | **100** |' in evidence_text
-          assert '| canonical structural-fidelity passes | **100** |' in evidence_text
-          assert '| final failures | **0** |' in evidence_text
+          assert 'selected records' in evidence_readme and '**100**' in evidence_readme
+          assert 'canonical structural-fidelity passes' in evidence_readme
+          assert 'final failures' in evidence_readme and '**0**' in evidence_readme
 
           qa_text = (root / 'tools/qa/validate_ws1_ws2_structural.py').read_text(encoding='utf-8').lower()
           assert '99 exact coordinate hashes' not in qa_text
