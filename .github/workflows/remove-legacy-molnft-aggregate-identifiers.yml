@@ -32,6 +32,7 @@ jobs:
 
       - name: Clean maintained source
         run: |
+          python tools/maintenance/fix_legacy_cleanup_replacements.py
           python tools/maintenance/remove_legacy_molnft_aggregate_identifiers.py
           python -m py_compile \
             tools/evidence/finalize_molnft_structural_evidence.py \
