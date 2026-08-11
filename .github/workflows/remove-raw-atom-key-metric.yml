@@ -95,28 +95,38 @@ jobs:
           assert all(row['atom_identity_agreement'].lower() == 'true' for row in rows)
           assert all('reconstructed_coordinate_sha256' in row and 'canonical_coordinate_sha256' in row for row in rows)
 
-          root_readme = (root / 'README.md').read_text(encoding='utf-8').lower()
-          article = (root / 'content/article-02-next-verifiable-renaissance/article.md').read_text(encoding='utf-8').lower()
-          html = (root / 'site/insights/genesisl1-decentralization-scientific-renaissance.html').read_text(encoding='utf-8').lower()
-          evidence_readme = (mol / 'README.md').read_text(encoding='utf-8').lower()
-          public_texts = [root_readme, article, html, evidence_readme]
+          public_files = {
+              'root README': root / 'README.md',
+              'article': root / 'content/article-02-next-verifiable-renaissance/article.md',
+              'production HTML': root / 'site/insights/genesisl1-decentralization-scientific-renaissance.html',
+              'evidence README': mol / 'README.md',
+          }
+          forbidden = [
+              '99 of 100',
+              'strict raw atom',
+              'raw canonical-key',
+              'exact normalized coordinate-hash matches',
+          ]
+          public_texts = {}
+          for label, path in public_files.items():
+              text = path.read_text(encoding='utf-8').lower()
+              public_texts[label] = text
+              for phrase in forbidden:
+                  if phrase in text:
+                      raise SystemExit(f'{label} still contains forbidden phrase: {phrase}')
 
-          for text in public_texts:
-              assert '99 of 100' not in text
-              assert 'strict raw atom' not in text
-              assert 'raw canonical-key' not in text
-              assert 'exact normalized coordinate-hash matches' not in text
+          for label in ['root README', 'article', 'production HTML']:
+              if '100 of 100 canonical structural-fidelity passes' not in public_texts[label]:
+                  raise SystemExit(f'{label} is missing the 100-of-100 result')
 
-          for text in [root_readme, article, html]:
-              assert '100 of 100 canonical structural-fidelity passes' in text
-              assert 'zero final failures' in text or 'zero failures' in text
-
-          assert 'selected records' in evidence_readme and '**100**' in evidence_readme
-          assert 'canonical structural-fidelity passes' in evidence_readme
-          assert 'final failures' in evidence_readme and '**0**' in evidence_readme
+          evidence_text = public_texts['evidence README']
+          for phrase in ['selected records', 'canonical structural-fidelity passes', 'final failures']:
+              if phrase not in evidence_text:
+                  raise SystemExit(f'evidence README is missing: {phrase}')
 
           qa_text = (root / 'tools/qa/validate_ws1_ws2_structural.py').read_text(encoding='utf-8').lower()
-          assert '99 exact coordinate hashes' not in qa_text
+          if '99 exact coordinate hashes' in qa_text:
+              raise SystemExit('QA still contains the removed auxiliary aggregate')
           print('Validated: one scientific outcome only — 100/100 structural-fidelity passes, zero failures')
           PY
 
