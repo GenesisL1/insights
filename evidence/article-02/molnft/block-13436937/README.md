@@ -17,7 +17,6 @@ The sample specification fixed `N = 100` before the seed block existed. The seed
 | Selected records | **100** |
 | Canonical structural-fidelity passes | **100** |
 | Final failures | **0** |
-| Exact normalized coordinate-hash matches | **99** |
 | Coordinate tolerance | **1e-06 Å** |
 
 Final failure accounting: **none**.

@@ -35,7 +35,6 @@
     "B_pin": 13436937,
     "B_seed": 13436979,
     "N": 100,
-    "coordinate_hash_matches": 99,
     "evidence_relative_path": "evidence/article-02/molnft/block-13436937",
     "failures": 0,
     "failures_by_reason": {},

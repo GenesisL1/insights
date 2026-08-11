@@ -73,7 +73,7 @@ def ws1_markdown(summary: dict[str, Any], seed: dict[str, Any]) -> str:
         f"maximum paired coordinate deviation no greater than the precommitted **{tolerance:.6f} Å** tolerance. All **{fidelity}** "
         f"comparisons passed. A documented later RCSB atom-name revision may be reconciled only when `_atom_site.id` remains unique "
         f"and unchanged, every non-name identity field agrees, and coordinates remain within the original tolerance. No PDB-specific "
-        f"alias table is used. Exact normalized coordinate hashes are retained per record as an auxiliary reproducibility check, not a "
+        f"alias table is used. Normalized coordinate hashes are retained per record as auxiliary reproducibility evidence, not as a "
         f"fidelity criterion. Serialized BinaryCIF equality is neither calculated nor used as a pass condition; each object's SHA-256 "
         f"is retained independently only as an integrity identifier. The future-block seed, complete numeric parent-ID population, "
         f"draw, failure table, reconstructed and canonical objects, environment fingerprint and SHA-256 manifest are preserved in the "

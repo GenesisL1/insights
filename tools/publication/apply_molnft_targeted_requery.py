@@ -73,8 +73,7 @@ def publication_paragraphs(summary: dict[str, Any], report: dict[str, Any]) -> t
         f"Only those same two NFT IDs were queried again—no successful row was queried and no replacement ID was drawn. "
         f"The root `{ROOT_RPC}` endpoint reported EVM chain ID 29; its default calls reproduced the out-of-gas responses, while "
         f"explicit-gas calls at the same pinned block returned both complete payloads. The exact `{API_PATH}` path returned HTTP "
-        f"404 and is not a JSON-RPC route. Both recovered structures pass. For PDB **5KCS** / NFT **124713**, the raw atom-name "
-        f"keys differed only because the current RCSB file documents a later **{revision['rcsb_atom_name_revision_date']}** revision "
+        f"404 and is not a JSON-RPC route. Both recovered structures pass. For PDB **5KCS** / NFT **124713**, the current RCSB file documents a later **{revision['rcsb_atom_name_revision_date']}** revision "
         f"to `_atom_site.label_atom_id` and `_atom_site.auth_atom_id`: **{int(revision['atom_name_change_count'])} labels** in "
         f"component **6MZ** changed ({change_text(revision)}). `_atom_site.id`, every non-name identity field, all "
         f"**148,945 atoms**, and every Cartesian coordinate remained aligned; maximum deviation was **0 Å**. The comparator "
@@ -168,7 +167,7 @@ def update_facts(path: pathlib.Path, summary: dict[str, Any], report: dict[str, 
     payload = json.loads(path.read_text(encoding="utf-8"))
     current = dict(payload.get("molnft_randomized") or {})
     current.pop("byte_identical_records", None)
-    for stale_key in ("strict_atom_key_matches", "revision_aware_atom_identity_passes"):
+    for stale_key in ("strict_atom_key_matches", "revision_aware_atom_identity_passes", "coordinate_hash_matches"):
         current.pop(stale_key, None)
     current.update(
         {
@@ -180,7 +179,6 @@ def update_facts(path: pathlib.Path, summary: dict[str, Any], report: dict[str, 
             "failures_by_reason": summary["failures_by_reason"],
             "fidelity_passes": summary["fidelity_passes"],
             "revision_aware_records": summary["revision_aware_records"],
-            "coordinate_hash_matches": summary["coordinate_hash_matches"],
             "precommit_sha": summary["sample_spec_precommit_sha"],
             "evidence_relative_path": summary["evidence_relative_path"],
             "initial_failures": report["initial_failures"],
@@ -202,6 +200,7 @@ def update_latest(path: pathlib.Path, summary: dict[str, Any], report: dict[str,
     payload.pop("failure_reason", None)
     payload.pop("strict_atom_key_matches", None)
     payload.pop("revision_aware_atom_identity_passes", None)
+    payload.pop("coordinate_hash_matches", None)
     payload.update(
         {
             "sample_size": summary["N"],
@@ -209,7 +208,6 @@ def update_latest(path: pathlib.Path, summary: dict[str, Any], report: dict[str,
             "failures": summary["failures"],
             "failures_by_reason": summary["failures_by_reason"],
             "revision_aware_records": summary["revision_aware_records"],
-            "coordinate_hash_matches": summary["coordinate_hash_matches"],
             "initial_failures": report["initial_failures"],
             "successful_same_id_payload_requeries": report["successful_requeries"],
             "targeted_requery_token_ids": report["queried_token_ids"],

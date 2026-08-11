@@ -2,9 +2,9 @@
   "algorithm": "SHA-256",
   "files": [
     {
-      "bytes": 3180,
+      "bytes": 3126,
       "path": "README.md",
-      "sha256": "888d612fd76124cfa69e7dd4468f83829c30b4e04d310fe3478e43b0d740cf08"
+      "sha256": "5149f65c08961814eae5d3e8a44c20e7656c1b8275305a164ea31c89ce34ff28"
     },
     {
       "bytes": 234579,
@@ -4257,9 +4257,9 @@
       "sha256": "5c6a392f4774e67fc611b40c21bec7e3300e0e88f56285dc750083dd9891593a"
     },
     {
-      "bytes": 5415,
+      "bytes": 5382,
       "path": "summary.json",
-      "sha256": "23d0d9e48f07bda8f0f3453e38745e11c6916956bd0a7c8a70de6c6c987d20a0"
+      "sha256": "54896eb37a2674ba455fb72bc567077f7f52c51dd6a024d869bc898c45a8b713"
     },
     {
       "bytes": 10556,

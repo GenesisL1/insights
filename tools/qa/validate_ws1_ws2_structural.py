@@ -80,7 +80,7 @@ def main() -> int:
     assert int(summary["failures"]) == 0
     assert summary["failures_by_reason"] == {}
     assert int(summary["coordinate_tolerance_passes"]) == 100
-    assert int(summary["coordinate_hash_matches"]) == 99
+    assert "coordinate_hash_matches" not in summary
     assert "strict_atom_key_matches" not in summary
     assert "revision_aware_atom_identity_passes" not in summary
     assert len(summary["revision_aware_records"]) == 1
@@ -143,7 +143,6 @@ def main() -> int:
     assert is_true(revision_row["coordinate_hash_equal"])
     assert is_true(revision_row["fidelity_pass"])
 
-    coordinate_hash_matches = 0
     for row in results:
         token_id = row["token_id"]
         pdb_id = row["pdb_id"] or "UNKNOWN"
@@ -169,8 +168,6 @@ def main() -> int:
         ]:
             assert is_true(row[key]), f"{key} failed for token {token_id}"
         assert float(row["max_coordinate_deviation_angstrom"]) <= float(row["coordinate_tolerance_angstrom"])
-        coordinate_hash_matches += is_true(row["coordinate_hash_equal"])
-    assert coordinate_hash_matches == int(summary["coordinate_hash_matches"]) == 99
 
     six_qfb = next(row for row in results if int(row["token_id"]) == 162649)
     assert six_qfb["pdb_id"] == "6QFB"
@@ -288,6 +285,7 @@ def main() -> int:
     assert randomized_facts["failures_by_reason"] == {}
     assert "strict_atom_key_matches" not in randomized_facts
     assert "revision_aware_atom_identity_passes" not in randomized_facts
+    assert "coordinate_hash_matches" not in randomized_facts
     assert int(randomized_facts["successful_same_id_payload_requeries"]) == 2
     assert set(randomized_facts["targeted_requery_token_ids"]) == {124713, 162649}
     assert int(randomized_facts["requested_api_path_http_status"]) == 404
@@ -316,9 +314,9 @@ def main() -> int:
     assert caveat in consensus_methodology
 
     print(
-        "Final WS-1/WS-2 acceptance passed: 100/100 structural-fidelity passes; "
+        "Final WS-1/WS-2 acceptance passed: 100/100 structural-fidelity passes, zero failures; "
         "5KCS reconciled through documented 2026-07-01 RCSB atom-name revision metadata with zero coordinate deviation; "
-        "99 exact coordinate hashes; two same-ID RPCA payload recoveries; no replacement draw"
+        "two same-ID RPCA payload recoveries; no replacement draw"
     )
     return 0
 

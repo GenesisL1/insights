@@ -184,7 +184,6 @@ The sample specification fixed `N = {summary['N']}` before the seed block existe
 | Selected records | **{summary['N']}** |
 | Canonical structural-fidelity passes | **{summary['fidelity_passes']}** |
 | Final failures | **{summary['failures']}** |
-| Exact normalized coordinate-hash matches | **{summary['coordinate_hash_matches']}** |
 | Coordinate tolerance | **{summary['coordinate_tolerance_angstrom']} Å** |
 
 Final failure accounting: **{failures}**.
@@ -270,6 +269,7 @@ def finalize(directory: pathlib.Path) -> None:
         "complete_file_hash_role",
         "strict_atom_key_matches",
         "revision_aware_atom_identity_passes",
+        "coordinate_hash_matches",
     ]:
         summary.pop(obsolete, None)
     summary.update(
@@ -281,7 +281,6 @@ def finalize(directory: pathlib.Path) -> None:
             "fidelity_passes": sum(bool(row.get("fidelity_pass")) for row in rows),
             "canonical_comparisons": sum(bool(row.get("canonical_sha256")) for row in rows),
             "coordinate_tolerance_passes": sum(bool(row.get("coordinate_agreement")) for row in rows),
-            "coordinate_hash_matches": sum(bool(row.get("coordinate_hash_equal")) for row in rows),
             "revision_aware_records": [
                 {
                     "draw_order": row.get("draw_order"),

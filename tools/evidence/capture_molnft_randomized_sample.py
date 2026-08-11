@@ -1017,7 +1017,6 @@ def recompute(directory: pathlib.Path) -> None:
             "failures_by_reason": dict(sorted((key, value) for key, value in reason_counts.items() if key != "SUCCESS")),
             "fidelity_passes": sum(bool(row.get("fidelity_pass")) for row in results),
             "coordinate_tolerance_passes": sum(bool(row.get("coordinate_agreement")) for row in results),
-            "coordinate_hash_matches": sum(bool(row.get("coordinate_hash_equal")) for row in results),
             "revision_aware_records": [
                 {
                     "draw_order": row.get("draw_order"),
@@ -1235,7 +1234,6 @@ def run_capture(repo: pathlib.Path, spec_path: pathlib.Path, precommit_sha: str,
         "failures_by_reason": dict(sorted((key, value) for key, value in reason_counts.items() if key != "SUCCESS")),
         "fidelity_passes": sum(bool(row.get("fidelity_pass")) for row in results),
         "coordinate_tolerance_passes": sum(bool(row.get("coordinate_agreement")) for row in results),
-        "coordinate_hash_matches": sum(bool(row.get("coordinate_hash_equal")) for row in results),
         "revision_aware_records": [
             {
                 "draw_order": row.get("draw_order"),

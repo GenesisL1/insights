@@ -9,7 +9,6 @@
   "off_chain_token_index_used": false,
   "sample_spec_precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
   "failures_by_reason": {},
-  "coordinate_hash_matches": 99,
   "initial_failures": 2,
   "successful_same_id_payload_requeries": 2,
   "targeted_requery_token_ids": [

@@ -8,7 +8,6 @@
   "canonical_endpoint": "https://models.rcsb.org/{pdb_id}.bcif",
   "contract_address": "0xd58B01f6C18086e5202cdC5D7Ad3E41790360102",
   "coordinate_hash_algorithm": "SHA-256 over big-endian float64 XYZ triples in accepted atom-pairing order with signed zero normalized",
-  "coordinate_hash_matches": 99,
   "coordinate_hash_role": "exact normalized coordinate hashes are recorded separately in the accepted atom-pairing order; equality is not required when the declared coordinate tolerance passes",
   "coordinate_tolerance_angstrom": 1e-06,
   "coordinate_tolerance_passes": 100,
