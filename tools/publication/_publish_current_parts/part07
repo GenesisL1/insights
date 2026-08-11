@@ -1,6 +1,0 @@
-    print(json.dumps({"pinned_height": facts["pinned_height"], "active_validators": facts["active_validators"], "unique_active_delegators": facts["unique_active_delegators"], "molnft_parent_records": facts["molnft"]["counts"]["pdb_v2_parent_records"]}, indent=2))
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

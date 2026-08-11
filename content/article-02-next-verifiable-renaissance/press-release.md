@@ -7,7 +7,7 @@
 The publication is accompanied by reproducible network and protocol-state evidence rather than relying on dashboard screenshots or unpinned claims.
 
 <!-- PRESS_CURRENT_STATE_BEGIN -->
-At GenesisL1 block **13,439,614**, the network had **28 active consensus validators**. The largest validator represented **9.03%** of voting power, the top three **23.20%**, and the top five **35.89%**. 5 validators were required to reach one third of voting power and 11 to reach two thirds. The snapshot records a validator HHI of **520.73** and an effective validator count of **19.20**.
+At GenesisL1 block **13,439,825**, the network had **28 active consensus validators**. The largest validator represented **9.03%** of voting power, the top three **23.20%**, and the top five **35.89%**. 5 validators were required to reach one third of voting power and 11 to reach two thirds. The snapshot records a validator HHI of **520.73** and an effective validator count of **19.20**.
 
 The same state records **24,957,676.89 L1** bonded, equal to **53.36%** of native supply, across **1,371 unique delegator addresses** to active validators. The largest active delegator address represented **5.71%** of bonded delegation and the top ten represented **29.98%**. Address-level figures are published with an explicit caveat that an address is not necessarily one beneficial owner.
 

@@ -1,8 +1,13 @@
-# MOLNFT Article 02 evidence
+# MOLNFT randomized fidelity evidence
 
-- [`sample-spec.json`](sample-spec.json) — immutable precommitted randomized-sample specification.
-- [`LATEST.json`](LATEST.json) — machine-readable pointer to the current Article 02 MOLNFT evidence.
-- [`block-13436937/`](block-13436937/) — direct NFT-ID randomized reconstruction and canonical structural-fidelity audit.
-- [`block-13412747/`](block-13412747/) — earlier eight-record reconstruction package retained as historical evidence.
+- Reconstruction block: **13,436,937**
+- Future seed block: **13,436,979**
+- Selected records: **100**
+- Successful reconstructions: **100**
+- Canonical structural-fidelity passes: **100/100**
+- Final failures: **0**
+- Replacement draws: **0**
 
-The current audit uses the PDB v2 contract's direct parent NFT-ID range `1..nextNFTId(B_pin)-1`. It does not use GLAST or another off-chain token index.
+[`sample-spec.json`](sample-spec.json) fixes the sample before the future seed block. [`block-13436937/`](block-13436937/) contains the draw, raw calls, reconstructed and canonical BinaryCIF objects, per-record outcomes and checksums.
+
+The documented 5KCS RCSB atom-name revision is retained as provenance; all 148,945 coordinates align at `0 Å`, so the record is a structural-fidelity pass.

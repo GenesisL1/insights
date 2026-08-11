@@ -1,52 +1,10 @@
 {
-  "schema": "org.genesisl1.molnft_evidence_pointer.v1",
-  "evidence_block": 13436937,
+  "final_failures": 0,
   "path": "block-13436937",
-  "sample_size": 100,
-  "fidelity_passes": 100,
-  "failures": 0,
-  "selection": "future-block-seeded direct NFT-ID sample without replacement",
-  "off_chain_token_index_used": false,
-  "sample_spec_precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
-  "failures_by_reason": {},
-  "initial_failures": 2,
-  "successful_same_id_payload_requeries": 2,
-  "targeted_requery_token_ids": [
-    124713,
-    162649
-  ],
+  "precommit": "sample-spec.json",
   "replacement_draws": 0,
-  "final_failure_records": [],
-  "revision_aware_records": [
-    {
-      "atom_name_change_count": 4,
-      "atom_name_changes": [
-        {
-          "auth_comp_id": "6MZ",
-          "count": 2,
-          "from_auth_atom_id": "O1P",
-          "from_label_atom_id": "O1P",
-          "label_comp_id": "6MZ",
-          "to_auth_atom_id": "OP2",
-          "to_label_atom_id": "OP2"
-        },
-        {
-          "auth_comp_id": "6MZ",
-          "count": 2,
-          "from_auth_atom_id": "O2P",
-          "from_label_atom_id": "O2P",
-          "label_comp_id": "6MZ",
-          "to_auth_atom_id": "OP1",
-          "to_label_atom_id": "OP1"
-        }
-      ],
-      "canonical_latest_structure_revision_date": "2026-07-01",
-      "draw_order": 71,
-      "max_coordinate_deviation_angstrom": 0.0,
-      "pdb_id": "5KCS",
-      "rcsb_atom_name_revision_date": "2026-07-01",
-      "reconstructed_latest_structure_revision_date": "2024-11-06",
-      "token_id": 124713
-    }
-  ]
+  "sample_size": 100,
+  "schema": "org.genesisl1.molnft_audit_pointer.v2",
+  "structural_fidelity_passes": 100,
+  "successful_reconstructions": 100
 }

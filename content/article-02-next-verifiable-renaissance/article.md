@@ -19,7 +19,7 @@ The network’s community pool provides a second public mechanism. Protocol-fund
 ## Current network state
 
 <!-- CURRENT_NETWORK_BEGIN -->
-At GenesisL1 block **13,439,614**, dated **August 11, 2026**, the active consensus set contained **28 validators** out of a protocol maximum of 50. The largest validator held **9.03%** of voting power; the top three held **23.20%**, the top five **35.89%**, and the top ten **63.22%**. 5 validators were required to reach one third of voting power and 11 to reach two thirds. The validator HHI was **520.73**, corresponding to an effective validator count of **19.20**. <sup><a href="#source-2">2</a></sup>
+At GenesisL1 block **13,439,825**, dated **August 11, 2026**, the active consensus set contained **28 validators** out of a protocol maximum of 50. The largest validator held **9.03%** of voting power; the top three held **23.20%**, the top five **35.89%**, and the top ten **63.22%**. 5 validators were required to reach one third of voting power and 11 to reach two thirds. The validator HHI was **520.73**, corresponding to an effective validator count of **19.20**. <sup><a href="#source-2">2</a></sup>
 
 | Current observable state | Result |
 |---|---:|
@@ -51,7 +51,7 @@ At the current evidence block, the MOLNFT PDB v2 contract reported **229,271 par
 
 A separate, precommitted randomized audit tested reconstruction fidelity rather than merely reading counters. The sample size was fixed at **100 records** before the future seed block existed; IDs were drawn without replacement from the pinned PDB v2 parent range, with no off-chain token index and no replacement draws. The finalized result was **100 successful reconstructions, 100 of 100 canonical structural-fidelity passes and zero final failures**. <sup><a href="#source-3">3</a></sup>
 
-One sampled record, 5KCS, had four atom-name labels changed by a documented later RCSB nomenclature revision. Stable atom IDs, every non-name identity field and all **148,945 Cartesian coordinates** remained aligned, with maximum deviation of **0 Å**. It is therefore recorded as a structural-fidelity pass, with the nomenclature revision retained transparently as provenance—not as a second score.
+One sampled record, 5KCS, had 4 atom-name labels changed by a documented later RCSB nomenclature revision. Stable atom IDs, every non-name identity field and all **148,945 Cartesian coordinates** remained aligned, with maximum deviation of **0 Å**. It is therefore recorded as a structural-fidelity pass, with the nomenclature revision retained transparently as provenance—not as a second score.
 <!-- CURRENT_MOLNFT_END -->
 
 The important distinction is between **identity and storage syntax**. A scientific object can remain the same molecular structure even when an external reference archive later normalizes a label. The audit therefore evaluates declared structural criteria—atom counts, chain and entity sets, atom identity and coordinate agreement—while preserving the exact reconstructed and canonical objects for independent inspection.
@@ -152,7 +152,7 @@ L1 coin pays network fees, meters smart-contract execution, secures consensus th
 
 <!-- CURRENT_SOURCES_BEGIN -->
 1. <span id="source-1"></span>**GenesisL1 Technical Whitepaper, Version 1.0, July 2026.** Public distribution, protocol architecture, L1 coin utility, governance and institutional operation. [Whitepaper ↗](https://genesisl1.com/whitepaper.pdf)
-2. <span id="source-2"></span>**GenesisL1 current network and protocol-state snapshot at block 13,439,614.** Raw CometBFT, Cosmos and EVM responses; complete validator and delegation tables; current MOLNFT counters; calculations and SHA-256 manifest. [Current evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/network-state/block-13439614)
+2. <span id="source-2"></span>**GenesisL1 current network and protocol-state snapshot at block 13,439,825.** Raw CometBFT, Cosmos and EVM responses; complete validator and delegation tables; current MOLNFT counters; calculations and SHA-256 manifest. [Current evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/network-state/block-13439825)
 3. <span id="source-3"></span>**GenesisL1 randomized MOLNFT reconstruction evidence at block 13,436,937.** Precommitted sample, future-block seed, direct NFT-ID calls, reconstructed and canonical BinaryCIF objects, per-record outcomes and checksums. [Audit evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13436937)
 4. <span id="source-4"></span>**GenesisL1 Forest / GL1F.** Deterministic model representation and inference tooling. [Source ↗](https://github.com/GenesisL1/Forest) · [Technical paper ↗](https://gl1f.com/GL1F.pdf)
 5. <span id="source-5"></span>**GenesisL1 CIPNFT.** Client-side encryption, on-chain ciphertext provenance and recipient-bound disclosure. [Source ↗](https://github.com/GenesisL1/cipnft)
@@ -160,7 +160,7 @@ L1 coin pays network fees, meters smart-contract execution, secures consensus th
 <!-- CURRENT_SOURCES_END -->
 
 <!-- CURRENT_MEASUREMENT_BEGIN -->
-**Measurement note.** Current validator, delegator, stake and MOLNFT counter figures are pinned to GenesisL1 block 13,439,614. Publication comparisons use two-decimal displayed values consistently; exact integers and higher-precision calculations remain in the machine-readable snapshot. The randomized MOLNFT reconstruction audit is a separate immutable experiment pinned to block 13,436,937.
+**Measurement note.** Current validator, delegator, stake and MOLNFT counter figures are pinned to GenesisL1 block 13,439,825. Publication comparisons use two-decimal displayed values consistently; exact integers and higher-precision calculations remain in the machine-readable snapshot. The randomized MOLNFT reconstruction audit is a separate immutable experiment pinned to block 13,436,937.
 <!-- CURRENT_MEASUREMENT_END -->
 
 This article is informational and published by GenesisL1 about GenesisL1. Nothing here is an offer, a promise of return or investment advice.

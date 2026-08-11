@@ -1,10 +1,8 @@
 {
-  "block_hash": "DB6953F971F56420374FAF84FEE98A1BFB280A723462F0D05774C76BCDD6535A",
-  "block_time_utc": "2026-08-09T21:14:01.357862732Z",
-  "captured_at_utc": "2026-08-09T21:16:14Z",
-  "pinned_height": 13431722,
-  "schema": "org.genesisl1.network_state_latest_pointer.v1",
-  "snapshot_directory": "block-13431722",
-  "snapshot_relative_path": "evidence/article-02/network-state/block-13431722",
-  "snapshot_sha256": "1d6c1dd883773ff5e33f5fed39053f5a2e78fa020554d2dee44dfa7041b969af"
+  "block_hash": "D2028CA4D6752110FE8CA3362A6DCAF62CC1647E13824AF6DDDA0B50473EE487",
+  "block_time_utc": "2026-08-11T07:10:47.423119293Z",
+  "captured_at_utc": "2026-08-11T07:12:51Z",
+  "pinned_height": 13439825,
+  "schema": "org.genesisl1.current_state_pointer.v2",
+  "snapshot_relative_path": "evidence/article-02/network-state/block-13439825"
 }
