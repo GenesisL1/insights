@@ -1,6 +1,6 @@
 # GenesisL1 Publishes Evidence-Backed Framework for Verifiable AI and Sovereign Science
 
-*New publication combines a current network-state snapshot with a precommitted 100-record MOLNFT audit showing 100 of 100 structural-fidelity passes.*
+*New publication combines a current network-state snapshot with a 100-record MOLNFT audit showing 100 of 100 structural-fidelity passes.*
 
 **ONLINE — August 11, 2026** — GenesisL1 today published **“GenesisL1: Public Infrastructure for Verifiable AI and Sovereign Science,”** an evidence-backed account of how a public Layer 1 can connect scientific data provenance, deterministic model execution, encrypted rights and institution-operated infrastructure.
 
@@ -16,7 +16,7 @@ Compared consistently at two-decimal precision with the whitepaper reference sta
 Current MOLNFT contract counters are captured at the same publication block. The PDB v2 contract reported **229,271 parent molecular records** and **265,786 total ERC-721 tokens**, including **36,515 child chunks** for larger payloads. Legacy v1 collections are reported separately and are not combined into an ambiguous corpus total.
 <!-- PRESS_CURRENT_STATE_END -->
 
-The publication also presents the final result of a separate, precommitted randomized MOLNFT audit. A sample of 100 parent records was fixed before a future seed block existed and drawn without replacement through direct contract calls. The audit produced **100 successful reconstructions, 100 of 100 canonical structural-fidelity passes, zero final failures and no replacement draws**.
+The publication also presents the final result of a separate randomized MOLNFT audit. The sample specification records an announcement time of 19:15:22Z, before block 13,436,979 existed; that time is self-recorded and not independently timestamped. What any third party can verify from the published record is that the draw is fully determined by the hash of block 13,436,979 and the specification's contents. The resulting IDs were drawn without replacement through direct contract calls. The audit produced **100 successful reconstructions, 100 of 100 canonical structural-fidelity passes, zero final failures and no replacement draws**.
 
 For one sampled structure, 5KCS, a later RCSB revision changed four atom-name labels. Stable atom IDs, every non-name identity field and all 148,945 coordinates remained aligned at zero angstrom deviation. The record is therefore treated as a structural-fidelity pass while the nomenclature revision remains visible in the evidence.
 

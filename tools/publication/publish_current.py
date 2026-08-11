@@ -220,7 +220,7 @@ def molnft_block(f: dict[str, Any]) -> str:
     rev = a["revision_aware_records"][0]
     return f'''At the current evidence block, the MOLNFT PDB v2 contract reported **{fmt_int(c['pdb_v2_parent_records'])} parent molecular records** and **{fmt_int(c['pdb_v2_total_tokens'])} total ERC-721 tokens**, including **{fmt_int(c['pdb_v2_child_chunks'])} child chunks** used to extend larger payloads. Legacy PDB v1 and AlphaFold/Swiss-Prot v1 collections are reported separately because they represent a different storage generation and may overlap scientifically; they are not added to the PDB v2 parent count as one corpus total. <sup><a href="#source-2">2</a></sup>
 
-A separate, precommitted randomized audit tested reconstruction fidelity rather than merely reading counters. The sample size was fixed at **{a['N']} records** before the future seed block existed; IDs were drawn without replacement from the pinned PDB v2 parent range, with no off-chain token index and no replacement draws. The finalized result was **{a['successes']} successful reconstructions, {a['fidelity_passes']} of {a['N']} canonical structural-fidelity passes and zero final failures**. <sup><a href="#source-3">3</a></sup>
+A separate randomized audit tested reconstruction fidelity rather than merely reading counters. The sample specification records an announcement time of 19:15:22Z, before block 13,436,979 existed; that time is self-recorded and not independently timestamped. What any third party can verify from the published record is that the draw is fully determined by the hash of block 13,436,979 and the specification's contents. The resulting {a['N']} IDs were drawn without replacement from the pinned PDB v2 parent range, with no off-chain token index and no replacement draws. The finalized result was **{a['successes']} successful reconstructions, {a['fidelity_passes']} of {a['N']} canonical structural-fidelity passes and zero final failures**. <sup><a href="#source-3">3</a></sup>
 
 One sampled record, {rev['pdb_id']}, had {rev['atom_name_change_count']} atom-name labels changed by a documented later RCSB nomenclature revision. Stable atom IDs, every non-name identity field and all **148,945 Cartesian coordinates** remained aligned, with maximum deviation of **{rev['max_coordinate_deviation_angstrom']:g} Å**. It is therefore recorded as a structural-fidelity pass, with the nomenclature revision retained transparently as provenance—not as a second score.'''
 
@@ -228,7 +228,7 @@ One sampled record, {rev['pdb_id']}, had {rev['atom_name_change_count']} atom-na
 def sources_block(f: dict[str, Any]) -> str:
     return f'''1. <span id="source-1"></span>**GenesisL1 Technical Whitepaper, Version 1.0, July 2026.** Public distribution, protocol architecture, L1 coin utility, governance and institutional operation. [Whitepaper ↗](https://genesisl1.com/whitepaper.pdf)
 2. <span id="source-2"></span>**GenesisL1 current network and protocol-state snapshot at block {f['pinned_height_display']}.** Raw CometBFT, Cosmos and EVM responses; complete validator and delegation tables; current MOLNFT counters; calculations and SHA-256 manifest. [Current evidence ↗]({f['snapshot_url']})
-3. <span id="source-3"></span>**GenesisL1 randomized MOLNFT reconstruction evidence at block {fmt_int(f['molnft_randomized']['B_pin'])}.** Precommitted sample, future-block seed, direct NFT-ID calls, reconstructed and canonical BinaryCIF objects, per-record outcomes and checksums. [Audit evidence ↗](https://github.com/GenesisL1/insights/tree/main/{f['molnft_randomized']['evidence_relative_path']})
+3. <span id="source-3"></span>**GenesisL1 randomized MOLNFT reconstruction evidence at block {fmt_int(f['molnft_randomized']['B_pin'])}.** Published sample specification, future-block seed, direct NFT-ID calls, reconstructed and canonical BinaryCIF objects, per-record outcomes and checksums. [Audit evidence ↗](https://github.com/GenesisL1/insights/tree/main/{f['molnft_randomized']['evidence_relative_path']})
 4. <span id="source-4"></span>**GenesisL1 Forest / GL1F.** Deterministic model representation and inference tooling. [Source ↗](https://github.com/GenesisL1/Forest) · [Technical paper ↗](https://gl1f.com/GL1F.pdf)
 5. <span id="source-5"></span>**GenesisL1 CIPNFT.** Client-side encryption, on-chain ciphertext provenance and recipient-bound disclosure. [Source ↗](https://github.com/GenesisL1/cipnft)
 6. **CometBFT consensus specification, v0.38.** Voting-power and commit-threshold model. [Specification ↗](https://docs.cometbft.com/v0.38/spec/consensus/consensus)'''
@@ -377,7 +377,7 @@ def render_pages(facts: dict[str, Any]) -> None:
 
     press_text = PRESS_MD.read_text(encoding="utf-8")
     press_title, press_subtitle, press_body = split_title(press_text)
-    press_description = "GenesisL1 publishes current validator and delegation evidence alongside a precommitted MOLNFT audit with 100 of 100 structural-fidelity passes."
+    press_description = "GenesisL1 publishes current validator and delegation evidence alongside a 100-record MOLNFT audit with 100 of 100 structural-fidelity passes."
     press_html = article_shell(
         press_title,
         press_subtitle,

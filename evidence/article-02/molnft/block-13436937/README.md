@@ -4,7 +4,7 @@
 **Pinned block hash:** `0xd1827056b63e4dd4ebf2e443a569f9a28ceb442a3f2943f8f30ce03908fcb896`  
 **Future seed block:** `13436979`  
 **Seed block hash:** `0x523c4b1c9ce0b3a581cff3901a10a32d01163026a43e1582d0d8c23c3dd88d02`  
-**Sample-spec precommit:** `3cdd075f86a7ed1230d654cc8d0586bd56555c2a`
+**Sample-spec SHA-256:** `4ef2904abeabf2a6e37789bad15aa68cf4ccb171359968f078af4d575909324b`
 
 ## Selection
 

@@ -49,7 +49,7 @@ GenesisL1 combines several primitives that are usually separated across private 
 <!-- CURRENT_MOLNFT_BEGIN -->
 At the current evidence block, the MOLNFT PDB v2 contract reported **229,271 parent molecular records** and **265,786 total ERC-721 tokens**, including **36,515 child chunks** used to extend larger payloads. Legacy PDB v1 and AlphaFold/Swiss-Prot v1 collections are reported separately because they represent a different storage generation and may overlap scientifically; they are not added to the PDB v2 parent count as one corpus total. <sup><a href="#source-2">2</a></sup>
 
-A separate, precommitted randomized audit tested reconstruction fidelity rather than merely reading counters. The sample size was fixed at **100 records** before the future seed block existed; IDs were drawn without replacement from the pinned PDB v2 parent range, with no off-chain token index and no replacement draws. The finalized result was **100 successful reconstructions, 100 of 100 canonical structural-fidelity passes and zero final failures**. <sup><a href="#source-3">3</a></sup>
+A separate randomized audit tested reconstruction fidelity rather than merely reading counters. The sample specification records an announcement time of 19:15:22Z, before block 13,436,979 existed; that time is self-recorded and not independently timestamped. What any third party can verify from the published record is that the draw is fully determined by the hash of block 13,436,979 and the specification's contents. The resulting 100 IDs were drawn without replacement from the pinned PDB v2 parent range, with no off-chain token index and no replacement draws. The finalized result was **100 successful reconstructions, 100 of 100 canonical structural-fidelity passes and zero final failures**. <sup><a href="#source-3">3</a></sup>
 
 One sampled record, 5KCS, had 4 atom-name labels changed by a documented later RCSB nomenclature revision. Stable atom IDs, every non-name identity field and all **148,945 Cartesian coordinates** remained aligned, with maximum deviation of **0 Å**. It is therefore recorded as a structural-fidelity pass, with the nomenclature revision retained transparently as provenance—not as a second score.
 <!-- CURRENT_MOLNFT_END -->
@@ -134,7 +134,7 @@ At the latest pinned publication block, GenesisL1 had 28 active consensus valida
 
 ### What did the randomized MOLNFT audit find?
 
-The precommitted 100-record audit produced 100 successful reconstructions, 100 canonical structural-fidelity passes, zero final failures and no replacement draws. The documented 5KCS atom-name revision is preserved as provenance and does not represent structural loss.
+The published 100-record audit produced 100 successful reconstructions, 100 canonical structural-fidelity passes, zero final failures and no replacement draws. The documented 5KCS atom-name revision is preserved as provenance and does not represent structural loss.
 
 ### Can sensitive scientific data remain local?
 
@@ -153,7 +153,7 @@ L1 coin pays network fees, meters smart-contract execution, secures consensus th
 <!-- CURRENT_SOURCES_BEGIN -->
 1. <span id="source-1"></span>**GenesisL1 Technical Whitepaper, Version 1.0, July 2026.** Public distribution, protocol architecture, L1 coin utility, governance and institutional operation. [Whitepaper ↗](https://genesisl1.com/whitepaper.pdf)
 2. <span id="source-2"></span>**GenesisL1 current network and protocol-state snapshot at block 13,439,825.** Raw CometBFT, Cosmos and EVM responses; complete validator and delegation tables; current MOLNFT counters; calculations and SHA-256 manifest. [Current evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/network-state/block-13439825)
-3. <span id="source-3"></span>**GenesisL1 randomized MOLNFT reconstruction evidence at block 13,436,937.** Precommitted sample, future-block seed, direct NFT-ID calls, reconstructed and canonical BinaryCIF objects, per-record outcomes and checksums. [Audit evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13436937)
+3. <span id="source-3"></span>**GenesisL1 randomized MOLNFT reconstruction evidence at block 13,436,937.** Published sample specification, future-block seed, direct NFT-ID calls, reconstructed and canonical BinaryCIF objects, per-record outcomes and checksums. [Audit evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13436937)
 4. <span id="source-4"></span>**GenesisL1 Forest / GL1F.** Deterministic model representation and inference tooling. [Source ↗](https://github.com/GenesisL1/Forest) · [Technical paper ↗](https://gl1f.com/GL1F.pdf)
 5. <span id="source-5"></span>**GenesisL1 CIPNFT.** Client-side encryption, on-chain ciphertext provenance and recipient-bound disclosure. [Source ↗](https://github.com/GenesisL1/cipnft)
 6. **CometBFT consensus specification, v0.38.** Voting-power and commit-threshold model. [Specification ↗](https://docs.cometbft.com/v0.38/spec/consensus/consensus)

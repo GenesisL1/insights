@@ -87,7 +87,7 @@
   ],
   "rpc_endpoint": "https://rpc.genesisl1.org",
   "rpc_provider": "public GenesisL1 EVM JSON-RPC",
-  "sample_spec_precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
+  "sample_spec_sha256": "4ef2904abeabf2a6e37789bad15aa68cf4ccb171359968f078af4d575909324b",
   "schema": "org.genesisl1.molnft_direct_randomized_fidelity.v1",
   "serialized_object_hash_role": "reconstructed and canonical SHA-256 values are independent integrity identifiers only; equality is neither evaluated nor used for fidelity",
   "successes": 100,

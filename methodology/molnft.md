@@ -6,9 +6,9 @@ The immutable Article 02 audit keeps three claims separate:
 2. reconstruction proves that a selected on-chain payload can be recovered as a BinaryCIF object;
 3. structural-fidelity testing compares that recovered object with the corresponding preserved RCSB BinaryCIF.
 
-## Precommit and selection
+## Sample specification and selection
 
-Before the future seed block existed, `evidence/article-02/molnft/sample-spec.json` fixed the contract, reconstruction height, seed height, sample size `N = 100`, direct parent NFT-ID population, draw algorithm, canonical source and coordinate tolerance.
+The sample specification records an announcement time of 19:15:22Z, before block 13,436,979 existed; that time is self-recorded and not independently timestamped. What any third party can verify from the published record is that the draw is fully determined by the hash of block 13,436,979 and the specification's contents.
 
 The seed was derived from the future EVM block hash. Parent IDs were sampled without replacement from `1..nextNFTId(B_pin)-1` with rejection sampling. No GLAST or other off-chain token index was used, and no failed row could be replaced by another draw.
 

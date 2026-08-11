@@ -171,7 +171,7 @@ def write_report(directory: pathlib.Path, summary: dict[str, Any]) -> None:
 **Pinned block hash:** `{summary['B_pin_block_hash']}`  
 **Future seed block:** `{summary['B_seed']}`  
 **Seed block hash:** `{summary['B_seed_block_hash']}`  
-**Sample-spec precommit:** `{summary['sample_spec_precommit_sha']}`
+**Sample-spec SHA-256:** `{summary['sample_spec_sha256']}`
 
 ## Selection
 
@@ -303,13 +303,15 @@ def finalize(directory: pathlib.Path) -> None:
     )
     if targeted_report is not None:
         summary["targeted_requery"] = targeted_summary(targeted_report)
+    summary.pop("sample_spec_precommit_sha", None)
+    summary["sample_spec_sha256"] = base.sha256_file(directory / "sample-spec.json")
     (directory / "summary.json").write_bytes(base.stable_json(summary))
     write_report(directory, summary)
     seed = json.loads((directory / "seed-derivation.json").read_text(encoding="utf-8"))
     base.integrity(
         directory,
         {
-            "precommit_sha": seed["sample_spec_precommit_sha"],
+            "sample_spec_sha256": seed["sample_spec_sha256"],
             "seed_block_hash": seed["B_seed_block_hash"],
             "finalization": "deterministic local structural comparison v4 with documented RCSB atom-name revision reconciliation",
         },
