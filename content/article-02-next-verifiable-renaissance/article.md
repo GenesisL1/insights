@@ -1,215 +1,166 @@
-# GenesisL1 and the Next Verifiable Renaissance
+# GenesisL1: Public Infrastructure for Verifiable AI and Sovereign Science
 
-*A public scientific Layer 1 where molecular data, verifiable AI, encrypted rights and autonomous agents share one durable, independently verifiable history.*
+*A current, evidence-backed account of public ownership, network decentralization, molecular-data integrity and institution-operated scientific infrastructure.*
 
-Every blockchain claims decentralization.
+Scientific computing is becoming more capable, more autonomous and more difficult to audit. A result may depend on a dataset version, model checkpoint, execution environment, access right and sequence of machine actions distributed across services that can later change or disappear.
 
-Few begin by decentralizing ownership.
+GenesisL1 is designed to make that computational lineage durable. It is a live public Layer 1 where scientific objects, models, rights, transactions and governance can share one independently verifiable history.
+
+The central proposition is practical: **institutions should be able to verify scientific computation without surrendering control of the data that must remain private.**
+
+## Public ownership is part of the architecture
 
 GenesisL1 launched without a token sale, private round, venture allocation, founder allocation, team allocation, advisor allocation or private unlock schedule. Its disclosed bootstrap distributor retained no allocation after the public one-to-one transition. <sup><a href="#source-1">1</a></sup>
 
-That origin is more than token distribution. Scientific infrastructure carries data, models, rights and provenance across generations of software. The interests embedded beneath that infrastructure therefore matter to the evidence it preserves.
+That origin does not by itself guarantee decentralization. It does remove a structural layer of private ownership and future insider vesting beneath the protocol. For scientific infrastructure, that matters: the system preserving evidence should disclose not only how it reaches consensus, but also whose reserved economic claims sit behind it.
 
-**Ownership is part of the evidence.**
+The network’s community pool provides a second public mechanism. Protocol-funded resources can be allocated through on-chain governance for shared infrastructure, research tooling and ecosystem development. This is public patronage with a visible ledger rather than a private cap table.
 
-Every civilization builds a vessel for what it hopes will outlive it. Libraries gave memory a home. Universities gave inquiry a community. Academies gave criticism an institution. Journals gave discovery a durable public form. The printing press let an idea travel farther than the court, workshop or patron that first supported it.
+## Current network state
 
-GenesisL1 asks the same civilizational question in computational form: how can scientific objects remain identifiable, attributable and independently verifiable after any one application, company or sponsor disappears?
+<!-- CURRENT_NETWORK_BEGIN -->
+At GenesisL1 block **13,439,614**, dated **August 11, 2026**, the active consensus set contained **28 validators** out of a protocol maximum of 50. The largest validator held **9.03%** of voting power; the top three held **23.20%**, the top five **35.89%**, and the top ten **63.22%**. 5 validators were required to reach one third of voting power and 11 to reach two thirds. The validator HHI was **520.73**, corresponding to an effective validator count of **19.20**. <sup><a href="#source-2">2</a></sup>
 
-> **The ledger is the press. The pool is the patron. The nodes are the libraries. Verification is the inheritance.**
+| Current observable state | Result |
+|---|---:|
+| Active consensus validators | **28 / 50** |
+| Largest validator share | **9.03%** |
+| Top-three / top-five / top-ten share | **23.20% / 35.89% / 63.22%** |
+| Validators required for one third / two thirds | **5 / 11** |
+| Validator HHI / effective validator count | **520.73 / 19.20** |
+| Bonded stake | **24,957,676.89 L1** |
+| Bonded share of native supply | **53.36%** |
+| Unique delegator addresses to active validators | **1,371** |
+| Largest / top-ten active-delegator share | **5.71% / 29.98%** |
 
-## The Renaissance was always a protocol
+Compared on the same two-decimal basis with the whitepaper reference state, the active set expanded from **20 to 28 validators**. The largest-validator share moved from **13.09% to 9.03%** (−4.06 percentage points), the top-three share from **35.62% to 23.20%** (−12.42 points), and the top-five share from **51.07% to 35.89%** (−15.18 points). The one-third coefficient widened from **3 to 5 validators**, and the two-thirds coefficient from **8 to 11**.
 
-A Renaissance is remembered through exceptional minds. It becomes civilization-scale through systems that let one mind continue the work of another.
+Delegation was also distributed across **1,371 active delegator addresses** and **2,063 active validator–delegator relationships**; **218 addresses** delegated across more than one active validator. The largest active delegator address represented **5.71%** of bonded delegation and the top ten represented **29.98%**. An address is not necessarily one beneficial owner: custodians can aggregate many users, while one party can control multiple addresses. These figures therefore measure observable ledger distribution, not complete social independence.
+<!-- CURRENT_NETWORK_END -->
 
-Leonardo da Vinci joined anatomy, mechanics and art within the same notebooks. Newton’s *Principia* joined terrestrial and celestial motion through a common mathematical account of gravitation. Marie Curie advanced the science of radioactivity through exact measurement and disciplined repetition. Their originality mattered; so did the records, instruments and institutions that allowed others to test, extend and teach the work. <sup><a href="#source-10">10</a></sup><sup><a href="#source-11">11</a></sup><sup><a href="#source-12">12</a></sup>
+This is a snapshot, not a permanent label. Validator power, delegations and supply change continuously. The repository preserves the pinned block, raw responses, complete CSV tables, exact calculations and checksums so the published figures can be reproduced rather than trusted as screenshots.
 
-The early modern *Republic of Letters* moved observations across political borders through shared practices of correspondence, citation and criticism. The Royal Society’s *Philosophical Transactions*, first published in 1665, gave scientific work a persistent periodical form. Its motto, *Nullius in verba*—“take nobody’s word for it”—captured the decisive principle: evidence must remain open to independent examination. <sup><a href="#source-4">4</a></sup><sup><a href="#source-5">5</a></sup>
+## A common state for data, models, rights and agents
 
-A public scientific ledger belongs to this lineage. It gives computational objects persistent identity, ordered history and multiple independent custodians. A dataset can remain citable after a portal changes. A model can remain identifiable after its original host disappears. A right can preserve provenance across applications. A computation can be replayed against the same public state.
+GenesisL1 combines several primitives that are usually separated across private databases and mutable APIs.
 
-Hence the next Renaissance will depend not only on faster instruments, but on stronger memory.
+### MOLNFT: molecular records with durable identity
 
-## GenesisL1: one verifiable scientific state
+<!-- CURRENT_MOLNFT_BEGIN -->
+At the current evidence block, the MOLNFT PDB v2 contract reported **229,271 parent molecular records** and **265,786 total ERC-721 tokens**, including **36,515 child chunks** used to extend larger payloads. Legacy PDB v1 and AlphaFold/Swiss-Prot v1 collections are reported separately because they represent a different storage generation and may overlap scientifically; they are not added to the PDB v2 parent count as one corpus total. <sup><a href="#source-2">2</a></sup>
 
-Science is entering an era of biological foundation models and increasingly autonomous computational research. Agentic systems are being developed for literature review, hypothesis generation, data analysis and model interpretation; biological AI is expanding across DNA, RNA, proteins, cells and virtual biological systems. <sup><a href="#source-7">7</a></sup><sup><a href="#source-8">8</a></sup>
+A separate, precommitted randomized audit tested reconstruction fidelity rather than merely reading counters. The sample size was fixed at **100 records** before the future seed block existed; IDs were drawn without replacement from the pinned PDB v2 parent range, with no off-chain token index and no replacement draws. The finalized result was **100 successful reconstructions, 100 of 100 canonical structural-fidelity passes and zero final failures**. <sup><a href="#source-3">3</a></sup>
 
-At that scale, the decisive question is not only *what did the model answer?* It is which data, model, method, account, rights and execution path produced it—and whether another institution can inspect or replay that lineage.
+One sampled record, 5KCS, had four atom-name labels changed by a documented later RCSB nomenclature revision. Stable atom IDs, every non-name identity field and all **148,945 Cartesian coordinates** remained aligned, with maximum deviation of **0 Å**. It is therefore recorded as a structural-fidelity pass, with the nomenclature revision retained transparently as provenance—not as a second score.
+<!-- CURRENT_MOLNFT_END -->
 
-GenesisL1 brings those elements into one public state rather than leaving them scattered across mutable APIs and private databases.
+The important distinction is between **identity and storage syntax**. A scientific object can remain the same molecular structure even when an external reference archive later normalizes a label. The audit therefore evaluates declared structural criteria—atom counts, chain and entity sets, atom identity and coordinate agreement—while preserving the exact reconstructed and canonical objects for independent inspection.
 
-**MOLNFT** gives molecular records durable identity and contract-readable provenance. At GenesisL1 block **13,412,747**, the full-payload PDB v2 contract reported **229,271 parent records** and **265,786 total ERC-721 tokens**, including child chunks used to extend larger payloads. A separately reported legacy v1 subtotal comprised **191,600 PDB tokens** and **542,319 AlphaFold/Swiss-Prot tokens**. These storage generations are reported separately rather than combined into an ambiguous corpus total. <sup><a href="#source-13">13</a></sup>
+### Model NFTs and GL1F: replayable computational instruments
 
-A randomized evidence package fixed **N = 100** in an isolated repository commit before GenesisL1 seed block **13,436,979** existed. The resulting block hash selected IDs without replacement from the PDB v2 contract's pinned parent NFT-ID range **1–229,271** (**229,271 IDs**), defined directly by `nextNFTId()` at block **13,436,937**. Each PDB identifier came from `getMetadata(tokenId)` and each payload from `getCombinedData(tokenId)`; **no GLAST or other off-chain token index was used**. The initial retrieval completed 98 comparisons and produced provider-level out-of-gas responses for exactly two predetermined draws: PDB **5KCS** / NFT **124713** (Cryo-EM structure of the Escherichia coli 70S ribosome in complex with antibiotic Evernimycin, mRNA, TetM and P-site tRNA at 3.9A resolution); and PDB **6QFB** / NFT **162649** (Structure of the human ATP citrate lyase holoenzyme in complex with citrate, coenzyme A and Mg.ADP). Only those same two NFT IDs were queried again—no successful row was queried and no replacement ID was drawn. The root `https://rpca.genesisl1.org` endpoint reported EVM chain ID 29; its default calls reproduced the out-of-gas responses, while explicit-gas calls at the same pinned block returned both complete payloads. The exact `https://rpca.genesisl1.org/api` path returned HTTP 404 and is not a JSON-RPC route. Both recovered structures pass. For PDB **5KCS** / NFT **124713**, the current RCSB file documents a later **2026-07-01** revision to `_atom_site.label_atom_id` and `_atom_site.auth_atom_id`: **4 labels** in component **6MZ** changed (O1P→OP2 for 2 atoms; and O2P→OP1 for 2 atoms). `_atom_site.id`, every non-name identity field, all **148,945 atoms**, and every Cartesian coordinate remained aligned; maximum deviation was **0 Å**. The comparator therefore treats this documented nomenclature remediation as identity-preserving rather than as a molecular mismatch. The finalized audit records **100 of 100 canonical structural-fidelity passes**. <sup><a href="#source-15">15</a></sup>
+Model NFTs can bind a model’s identity, serialized parameters, access rules and invocation history. GL1F adds deterministic on-chain inference for supported model classes, so the same model bytes, input and execution rules can produce a replayable result across independent nodes. <sup><a href="#source-4">4</a></sup>
 
-A fidelity pass required equal atom counts, chain and entity sets, atom-identity agreement, and a maximum paired coordinate deviation no greater than the precommitted **0.000001 Å** tolerance. All **100** comparisons passed. For 5KCS, the documented later RCSB atom-name revision was reconciled only because `_atom_site.id` remained unique and unchanged, every non-name identity field agreed, and all 148,945 coordinates paired at **0 Å** deviation. No PDB-specific alias table was used. Exact normalized coordinate hashes remain available per record as an auxiliary reproducibility check, not as a fidelity criterion. Serialized BinaryCIF equality is neither calculated nor used as a pass condition; reconstructed and canonical SHA-256 values are retained independently only to identify the preserved objects. The future-block seed, complete parent-ID population, immutable draw, original provider errors, targeted same-ID calls, reconstructed and canonical objects, RCSB revision evidence, environment fingerprint and SHA-256 manifest are preserved in the evidence package.
+This does not make a model scientifically correct. It makes the computational instrument identifiable: another party can determine which model was used, under which rules, and what the network recorded.
 
-**Model NFTs and GL1F** bind model identity, serialized parameters, access rules and deterministic inference. The same model bytes, input and execution rules can become a replayable scientific instrument across independent nodes.
+### CIPNFT: protected disclosure with public provenance
 
-**CIPNFT** provides a protected-rights layer for confidential scientific assets. Its public implementation encrypts content client-side, stores ciphertext on-chain and supports recipient-bound disclosure without requiring a private application server to hold the scientific plaintext. <sup><a href="#source-14">14</a></sup>
+CIPNFT provides a rights layer for confidential scientific assets. Its public implementation encrypts content client-side, records ciphertext and provenance on-chain, and supports recipient-bound disclosure without requiring a private application server to hold the scientific plaintext. <sup><a href="#source-5">5</a></sup>
 
-**AI agents** can discover these objects, verify identity and rights, invoke deterministic computation and record authorized actions against the same history.
+Public verification and confidentiality are not opposites. The ledger can preserve object identity, rights, commitments and authorized outputs while raw genomes, clinical records, proprietary methods and personal identifiers remain under institutional custody.
 
-This is the practical meaning of verifiable AI: model provenance, data lineage, deterministic execution, machine-readable rights and an audit trail that survives the interface that produced it.
+### AI agents: action under inspectable rules
 
-**If our claims and your node disagree, your node is correct.**
+AI agents can discover registered objects, verify model and rights metadata, invoke deterministic computation and record authorized actions against the same public history. The value is not autonomy alone; it is **accountable autonomy**—machine action whose inputs, permissions and outputs can be inspected after the interface that initiated it has disappeared.
 
-## L1 coin: the protocol resource
+## Institutional sovereignty without isolation
 
-**L1 coin is the native resource used to operate and secure GenesisL1.** It pays network fees, meters smart-contract execution, secures consensus through staking, participates in governance and supports the community pool. Scientific applications may use the same protocol resource for authorized access, model invocation or machine-to-machine settlement. <sup><a href="#source-1">1</a></sup>
+A national genome program, public biobank, university or health-research authority should not need to upload sensitive source data to a common public database in order to participate in a shared verification system.
 
-This is an operational role: L1 coin is not equity, a revenue claim or a promise of return. Its significance inside GenesisL1 is the protocol work it performs.
+GenesisL1 supports a three-layer boundary:
 
-## Public ownership, public patronage
+1. **Sovereign custody.** Raw data, identities, consent records, encryption keys and internal access systems remain local.
+2. **Protected disclosure.** CIPNFT can carry encrypted assets, rights and recipient-bound access when information must cross institutional boundaries.
+3. **Common verification.** Public objects, commitments, model and method identities, authorized outputs and transaction history can be independently verified from any node.
 
-Every serious journal asks authors to disclose competing interests because the structure around research can influence what is funded, emphasized and published. The same logic applies one layer deeper.
+An institution can therefore run an approved model within its own environment, publish only a permitted aggregate or commitment, and tie that output to a specific model, method and authorization record. Another institution can verify the lineage without receiving the underlying personal data.
 
-A chain intended to preserve molecular structures, model provenance, scientific data and intellectual rights should make its own ownership history legible. GenesisL1 began without a private cap table beneath the protocol: no seed round, VC allocation, founder tranche, team vesting or future insider unlock cliff.
+This is **local custody, selective disclosure and shared proof**.
 
-That removes a permanent priority claim from the infrastructure itself.
+## What the ledger proves—and what it does not
 
-**Ownership dispersed at genesis cannot be recreated after years of accumulation.**
+On-chain verification can establish:
 
-Funding did not disappear. It moved into a public mechanism. A governance-controlled community pool receives a protocol-defined share of issuance and can support shared infrastructure, scientific applications, datasets, validators, archives and reproducibility through visible proposals and votes. <sup><a href="#source-1">1</a></sup>
+- which object, model, code, account and rights state were referenced;
+- which transaction and execution path produced a recorded output;
+- whether the same public state and deterministic rules reproduce that output;
+- when a claim or asset entered the shared history and what later changed.
 
-The Renaissance required patrons. GenesisL1 does not abolish patronage; it makes the patronal chair public, persistent and governed on-chain. The ledger preserves the work. The pool can fund the work. Neither requires a private owner of the scientific record.
+It cannot establish scientific truth by itself. Biological validity, clinical utility and causal interpretation still require appropriate datasets, experimental design, independent reproduction, peer review and, where applicable, laboratory or clinical testing.
 
-William Nordhaus estimated that innovators retained roughly 2.2% of the social surplus generated by technological advances in the U.S. nonfarm business economy from 1948 to 2001. The estimate is contextual, but its direction is powerful: knowledge creates value far beyond its first sponsor, hence public scientific infrastructure should be designed for the public that ultimately benefits. <sup><a href="#source-6">6</a></sup>
+The ledger is an evidence and coordination layer—not a substitute for science.
 
-## Decentralization, measured
+## L1 coin: protocol resource, not a private claim
 
-Decentralization is most persuasive when it is timestamped, reproducible and open to correction.
+L1 coin is the native resource used for transaction fees, smart-contract execution, staking security, governance and the community pool. Scientific applications may also use it for authorized access, model invocation or machine-to-machine settlement. <sup><a href="#source-1">1</a></sup>
 
-The GenesisL1 comparison below uses the July 2026 whitepaper reference at block **13,313,640** and a preserved current network-state snapshot at block **13,431,722**. Publication values are rounded consistently to two decimal places; exact integer voting power and higher-precision calculations remain available in the machine-readable evidence. <sup><a href="#source-1">1</a></sup><sup><a href="#source-2">2</a></sup>
+L1 coin is not equity, a revenue claim or a promise of return. Its role is operational: it meters and secures the public protocol.
 
-| Measure | Whitepaper reference | Block 13,431,722 | Change |
-|---|---:|---:|---:|
-| Active validators | 20 | 27 | +7 |
-| Largest validator | 13.09% | 9.03% | −4.06 points |
-| Top three | 35.62% | 24.76% | −10.86 points |
-| Top five | 51.07% | 37.44% | −13.63 points |
-| One-third coefficient | 3 | 5 | +2 validators |
-| Strict two-thirds coefficient | 8 | 11 | +3 validators |
-| Validator HHI (0–10,000) | — | 547.05 | — |
-| Effective validator count | — | 18.28 | — |
-| Bonded / native supply | — | 53.37% | — |
+## A concrete institutional operating model
 
-The active set expanded by 35%. Five leading validators were required to reach one-third of voting power, while eleven were required to exceed the two-thirds commit threshold. At the same height, **24,954,378.94 L1**—**53.37%** of the **46,754,961.14 L1** native supply—was bonded; the staking pool also reported **1,819,652.96 L1** not bonded. Validator HHI was **547.05**, corresponding to an effective validator count of **18.28**. The largest-validator, top-three and top-five shares all declined relative to the whitepaper reference.
+Participation should mean operation rather than endorsement. An institution can contribute by:
 
-Across addresses delegating to active validators, the largest address represented **5.71%**, the top five **18.09%**, the top ten **29.98%** and the top 50 **80.12%**. Address-level HHI was **177.74**, with an effective address count of **56.26**. These are address-level—not entity-level—measurements: custodians may aggregate many beneficiaries in one address, while one party may use many addresses, so address dispersion does not bound beneficial-owner dispersion.
+- running an independently controlled validator;
+- preserving an archive node and local indexer;
+- verifying one bounded scientific workflow from explicit inputs to authorized output;
+- defining a memorandum covering custody, security, scientific scope, publication and continuity.
 
-This does not mean “five validators control GenesisL1.” In CometBFT, more than two-thirds of voting power is required to commit a block. One-third is principally a liveness threshold: a coordinated cohort at or above it can prevent the remainder from exceeding two-thirds, but cannot alone finalize arbitrary state. <sup><a href="#source-3">3</a></sup>
+The objective is not to place every scientific byte on a blockchain. It is to make the identity, provenance, rights and permitted computational history of important scientific objects durable enough to survive individual applications, vendors and sponsors.
 
-The evidence repository preserves the raw JSON responses, ranked CSV, methodology and SHA-256 checksums. The [live GenesisL1 validator set](https://explorer.genesisl1.org/validators) remains publicly inspectable as stake and operators change.
+## The verifiable scientific renaissance
 
-## Sovereignty without isolation
+The printing press made knowledge portable. Scientific journals made claims inspectable. Networked computing made collaboration global. The next step is to make computational scientific history independently verifiable.
 
-A modern scientific institution should not have to choose between control of sensitive data and participation in a common evidence system.
+GenesisL1 brings public ownership, measurable consensus, molecular-data provenance, deterministic model execution, encrypted rights and accountable agents into one live scientific Layer 1.
 
-GenesisL1 separates the boundary into three layers.
-
-### 1. Sovereign custody
-
-Raw genomic or clinical data, identity mappings, consent records, private keys, access logs and internal policy remain inside the institution’s legal and technical perimeter. Approved computation can run locally. A full or archive node with a local indexer gives the institution its own replica and query path for public GenesisL1 state.
-
-### 2. CIPNFT-protected disclosure
-
-CIPNFT can represent encrypted scientific assets and recipient-bound access without publishing plaintext. An institution can preserve authorship, provenance and transfer rules while delivering decryption capability only to an authorized counterparty. The protocol supplies a technical primitive; consent, ethics review, cybersecurity and applicable law remain institutional responsibilities.
-
-### 3. Common verification
-
-MOLNFT public structures, dataset commitments, model and method identities, rights metadata, provenance records and authorized derived outputs can live in the shared state. Another institution can verify that the same public object, model version and execution path were used without requiring the originating institution to surrender its raw records.
-
-Consider a national genome program, public biobank or health-research authority. It may keep genomes and personal identifiers entirely local, run an approved model within its own environment, and publish only a permitted aggregate or commitment tied to a specific model and method identity. A second institution can verify the computational lineage from its own node without receiving the underlying personal data.
-
-This is **institutional sovereignty without institutional isolation**: local custody, selective disclosure and shared proof. No vendor must remain alive for an institution’s replica to exist, and no external portal must remain honest for public state to remain verifiable.
-
-## A federation of scientific institutions
-
-GenesisL1 becomes more useful as an institutional system when participation means operation rather than endorsement.
-
-### Run an independent validator
-
-Operate infrastructure, signing keys and upgrade decisions under your own control. Every independently accountable validator broadens consensus responsibility. [Explore the live validator set](https://explorer.genesisl1.org/validators).
-
-### Preserve an archive and local indexer
-
-Retain an institution-controlled replica of the public scientific state and query it through your own infrastructure. An archive converts access from a vendor dependency into institutional capability.
-
-### Complete one bounded scientific workflow
-
-Choose explicit inputs, model identity, execution rules, rights and outputs. A MOLNFT structure, Model NFT inference and CIPNFT-protected result can form one inspectable lineage another institution can replay or verify.
-
-### Define an operational memorandum
-
-Set out custody, security, scientific scope, publication rules, responsibilities and continuity before a pilot begins. The objective is not ceremonial affiliation but a system another institution can inspect, operate and reproduce.
-
-The invitation is concrete: secure part of consensus, preserve part of memory or verify one scientific workflow.
-
-## GenesisL1 and the next Renaissance
-
-The first great presses multiplied text. Scientific journals multiplied scrutiny. The internet multiplied access. GenesisL1 is built to multiply verifiability.
-
-For scientific data, AI models and machine-generated research, persistence alone is no longer enough. Institutions must be able to identify the exact object, model, rights and execution history behind a result—without surrendering sovereign custody of what should remain private.
-
-GenesisL1 joins decentralized science (DeSci), MOLNFT molecular data, Model NFTs, deterministic inference, CIPNFT encrypted rights, AI-agent infrastructure, public governance and measurable consensus inside one scientific Layer 1.
-
-Together they establish a common record in which data remains attributable, models become replayable instruments, rights become programmable and autonomous software can act under inspectable rules.
-
-Every civilization chooses what it will make durable.
-
-The Renaissance made knowledge portable. The scientific revolution made it testable. **GenesisL1 can make its computational history independently verifiable.**
+The result is not a promise that every claim is true. It is a stronger foundation for discovering **what was used, who was authorized, what was executed and whether another institution can verify it**.
 
 ---
 
 ## Frequently asked questions
 
-### What makes the GenesisL1 distribution model different?
+### What is the current GenesisL1 validator state?
 
-GenesisL1 had no token sale and no reserved founder, team, advisor or investor allocation. There is no private vesting schedule or future insider unlock cliff beneath the protocol.
+At the latest pinned publication block, GenesisL1 had 28 active consensus validators. The largest held 9.03% of voting power; 5 validators were required to reach one third and 11 to reach two thirds. Exact data and raw responses are preserved in the current evidence snapshot.
 
-### What is L1 coin used for inside GenesisL1?
+### What did the randomized MOLNFT audit find?
 
-L1 coin is the native protocol resource for network fees, smart-contract execution, staking security, governance and the community pool. It is not equity, a revenue claim or a promise of return.
+The precommitted 100-record audit produced 100 successful reconstructions, 100 canonical structural-fidelity passes, zero final failures and no replacement draws. The documented 5KCS atom-name revision is preserved as provenance and does not represent structural loss.
 
-### What does the pinned MOLNFT evidence prove?
+### Can sensitive scientific data remain local?
 
-The counters package at block 13,412,747 reports collection state. A separately precommitted randomized sample of 100 parent records at block 13,436,937 used a future block hash and direct NFT-ID calls. Two default provider calls initially ran out of gas; only those same predetermined IDs were re-queried through the RPCA root endpoint with an explicit call-gas allowance, with no replacement draw. Both payloads were recovered and all 100 records passed. For 5KCS, four 6MZ atom-name labels changed in a documented RCSB revision dated 2026-07-01; stable atom IDs, all other identity fields and all coordinates were unchanged, so this is recorded as nomenclature remediation rather than structural loss.
+Yes. Raw data, identities, consent records and keys can remain under local institutional custody while the shared ledger carries permitted commitments, encrypted assets, model and method identities, rights and authorized outputs.
 
-### What are MOLNFT and CIPNFT?
+### Is blockchain verification the same as scientific validation?
 
-MOLNFT gives molecular structures durable identity and contract-readable provenance. CIPNFT represents encrypted scientific assets with on-chain provenance and recipient-bound disclosure. Together they connect public scientific objects and protected rights within one verifiable lineage.
+No. Blockchain verification establishes the computational and rights record. Scientific validity still depends on domain evidence, experimental design, reproduction, peer review and appropriate laboratory or clinical validation.
 
-### How has GenesisL1 decentralization changed since the whitepaper?
+### What is L1 coin used for?
 
-The active set expanded from 20 to 27 validators. Rounded consistently to two decimals, the largest-validator share moved from 13.09% to 9.03%, the top-three share from 35.62% to 24.76%, and the top-five share from 51.07% to 37.44%. The one-third coefficient widened from three validators to five, and the strict two-thirds coefficient from eight to eleven. The same snapshot records 24,954,378.94 L1 bonded across 1,298 unique active delegator addresses.
-
-### Can an institution retain sovereign control of sensitive data?
-
-Yes. Raw data, identity, consent, keys and internal access systems can remain local while the shared ledger carries permitted public objects, encrypted assets, commitments, model and method identities, provenance and authorized outputs.
-
-### Is on-chain verification the same as scientific validation?
-
-No. On-chain verification establishes the computational record: which object, model, code, rights and state were used and what result was recorded. Scientific validity still depends on domain evidence, experimental design, independent reproduction, peer review and, where applicable, laboratory or clinical testing.
+L1 coin pays network fees, meters smart-contract execution, secures consensus through staking, participates in governance and supports the community pool. It is not equity or a promise of return.
 
 ## Sources and verification
 
-1. **GenesisL1 Technical Whitepaper, Version 1.0, July 2026.** Public genesis and distribution, validator reference state, institution-operated nodes and indexers, community-pool governance, L1 coin utility and consensus model. [Whitepaper ↗](https://genesisl1.com/whitepaper.pdf)
-2. **GenesisL1 reproducible network-state snapshot at block 13,431,722.** Raw CometBFT and Cosmos JSON, complete validator and delegation CSVs, bonded-stake metrics, manifest and SHA-256 checksums. [Immutable snapshot ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/network-state/block-13431722)
-3. **CometBFT consensus specification, v0.38.** More-than-two-thirds commit threshold and voting-power model. [Specification ↗](https://docs.cometbft.com/v0.38/spec/consensus/consensus)
-4. **The Royal Society — History.** Institutional origins and *Nullius in verba*. [History ↗](https://royalsociety.org/about-us/who-we-are/history/)
-5. **The Royal Society — History of Philosophical Transactions.** The scientific periodical from 1665. [Journal history ↗](https://royalsociety.org/journals/publishing-activities/publishing350/history-philosophical-transactions/)
-6. **William D. Nordhaus, “Schumpeterian Profits in the American Economy,” NBER Working Paper 10433.** [Paper ↗](https://www.nber.org/papers/w10433)
-7. **Li et al., “Agentic AI and the rise of in silico team science in biomedical research,” Nature Biotechnology, 2026.** [Article ↗](https://www.nature.com/articles/s41587-026-03035-1)
-8. **“Generalist biological artificial intelligence in modeling the language of life,” Nature Biotechnology, 2026.** [Article ↗](https://www.nature.com/articles/s41587-026-03064-w)
-9. **GenesisL1 Overview and Ecosystem.** Model NFTs, deterministic inference, AI agents and protocol utility. [Overview ↗](https://genesisl1.com/overview.html) · [Ecosystem ↗](https://genesisl1.com/ecosystem.html)
-10. **Royal Collection Trust — Leonardo da Vinci, “The major organs and vessels.”** [Collection record ↗](https://www.rct.uk/collection/stories/stories-of-medics-and-medicine-in-the-royal-collection/the-major-organs-and-vessels)
-11. **The Royal Society — “The Reception of Newton’s *Principia*.”** Conference material on the work’s mathematical and scientific legacy. [Royal Society ↗](https://royalsociety.org/science-events-and-lectures/2013/newtons-principia/)
-12. **Nobel Prize — Marie Curie, Biographical.** [Biography ↗](https://www.nobelprize.org/prizes/chemistry/1911/marie-curie/biographical/)
-13. **GenesisL1 pinned MOLNFT evidence at block 13,412,747.** Contract counters, raw JSON-RPC responses, runtime-code hashes, reconstructed BinaryCIF objects and SHA-256 manifests. [Evidence repository ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13412747)
-14. **GenesisL1 CIPNFT source repository.** Client-side encryption, fully on-chain ciphertext and recipient-bound delivery workflow. [Source ↗](https://github.com/GenesisL1/cipnft)
-15. **GenesisL1 randomized MOLNFT reconstruction and fidelity evidence at block 13,436,937.** Pre-committed sample specification, future-block seed, enumerated parent IDs, raw calls, reconstructed and canonical BinaryCIF objects, per-record outcomes and SHA-256 manifest. [Randomized evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13436937)
+<!-- CURRENT_SOURCES_BEGIN -->
+1. <span id="source-1"></span>**GenesisL1 Technical Whitepaper, Version 1.0, July 2026.** Public distribution, protocol architecture, L1 coin utility, governance and institutional operation. [Whitepaper ↗](https://genesisl1.com/whitepaper.pdf)
+2. <span id="source-2"></span>**GenesisL1 current network and protocol-state snapshot at block 13,439,614.** Raw CometBFT, Cosmos and EVM responses; complete validator and delegation tables; current MOLNFT counters; calculations and SHA-256 manifest. [Current evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/network-state/block-13439614)
+3. <span id="source-3"></span>**GenesisL1 randomized MOLNFT reconstruction evidence at block 13,436,937.** Precommitted sample, future-block seed, direct NFT-ID calls, reconstructed and canonical BinaryCIF objects, per-record outcomes and checksums. [Audit evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13436937)
+4. <span id="source-4"></span>**GenesisL1 Forest / GL1F.** Deterministic model representation and inference tooling. [Source ↗](https://github.com/GenesisL1/Forest) · [Technical paper ↗](https://gl1f.com/GL1F.pdf)
+5. <span id="source-5"></span>**GenesisL1 CIPNFT.** Client-side encryption, on-chain ciphertext provenance and recipient-bound disclosure. [Source ↗](https://github.com/GenesisL1/cipnft)
+6. **CometBFT consensus specification, v0.38.** Voting-power and commit-threshold model. [Specification ↗](https://docs.cometbft.com/v0.38/spec/consensus/consensus)
+<!-- CURRENT_SOURCES_END -->
 
-Measurement note: Current validator, delegator and stake figures are pinned to block 13,431,722. Publication comparisons are rounded consistently to two decimal places; exact integer state and higher-precision calculations remain in the machine-readable snapshot. MOLNFT reconstruction claims remain pinned separately to block 13,412,747 and refer only to the predeclared sample published in that evidence package.
+<!-- CURRENT_MEASUREMENT_BEGIN -->
+**Measurement note.** Current validator, delegator, stake and MOLNFT counter figures are pinned to GenesisL1 block 13,439,614. Publication comparisons use two-decimal displayed values consistently; exact integers and higher-precision calculations remain in the machine-readable snapshot. The randomized MOLNFT reconstruction audit is a separate immutable experiment pinned to block 13,436,937.
+<!-- CURRENT_MEASUREMENT_END -->
 
-This article is informational and published by GenesisL1 about GenesisL1. L1 coin is the native utility and security asset of the network; nothing here is an offer, promise of return or investment advice.
+This article is informational and published by GenesisL1 about GenesisL1. Nothing here is an offer, a promise of return or investment advice.

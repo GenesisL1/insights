@@ -1,0 +1,68 @@
+One sampled record, {rev['pdb_id']}, had {rev['atom_name_change_count']} atom-name labels changed by a documented later RCSB nomenclature revision. Stable atom IDs, every non-name identity field and all **148,945 Cartesian coordinates** remained aligned, with maximum deviation of **{rev['max_coordinate_deviation_angstrom']:g} Å**. It is therefore recorded as a structural-fidelity pass, with the nomenclature revision retained transparently as provenance—not as a second score.'''
+
+
+def sources_block(f: dict[str, Any]) -> str:
+    return f'''1. <span id="source-1"></span>**GenesisL1 Technical Whitepaper, Version 1.0, July 2026.** Public distribution, protocol architecture, L1 coin utility, governance and institutional operation. [Whitepaper ↗](https://genesisl1.com/whitepaper.pdf)
+2. <span id="source-2"></span>**GenesisL1 current network and protocol-state snapshot at block {f['pinned_height_display']}.** Raw CometBFT, Cosmos and EVM responses; complete validator and delegation tables; current MOLNFT counters; calculations and SHA-256 manifest. [Current evidence ↗]({f['snapshot_url']})
+3. <span id="source-3"></span>**GenesisL1 randomized MOLNFT reconstruction evidence at block {fmt_int(f['molnft_randomized']['B_pin'])}.** Precommitted sample, future-block seed, direct NFT-ID calls, reconstructed and canonical BinaryCIF objects, per-record outcomes and checksums. [Audit evidence ↗](https://github.com/GenesisL1/insights/tree/main/{f['molnft_randomized']['evidence_relative_path']})
+4. <span id="source-4"></span>**GenesisL1 Forest / GL1F.** Deterministic model representation and inference tooling. [Source ↗](https://github.com/GenesisL1/Forest) · [Technical paper ↗](https://gl1f.com/GL1F.pdf)
+5. <span id="source-5"></span>**GenesisL1 CIPNFT.** Client-side encryption, on-chain ciphertext provenance and recipient-bound disclosure. [Source ↗](https://github.com/GenesisL1/cipnft)
+6. **CometBFT consensus specification, v0.38.** Voting-power and commit-threshold model. [Specification ↗](https://docs.cometbft.com/v0.38/spec/consensus/consensus)'''
+
+
+def measurement_block(f: dict[str, Any]) -> str:
+    return f'''**Measurement note.** Current validator, delegator, stake and MOLNFT counter figures are pinned to GenesisL1 block {f['pinned_height_display']}. Publication comparisons use two-decimal displayed values consistently; exact integers and higher-precision calculations remain in the machine-readable snapshot. The randomized MOLNFT reconstruction audit is a separate immutable experiment pinned to block {fmt_int(f['molnft_randomized']['B_pin'])}.'''
+
+
+def press_block(f: dict[str, Any]) -> str:
+    w = f["whitepaper"]
+    c = f["molnft"]["counts"]
+    return f'''At GenesisL1 block **{f['pinned_height_display']}**, the network had **{f['active_validators']} active consensus validators**. The largest validator represented **{f['largest_share_percent']}%** of voting power, the top three **{f['top3_share_percent']}%**, and the top five **{f['top5_share_percent']}%**. {f['one_third_coefficient']} validators were required to reach one third of voting power and {f['two_thirds_coefficient']} to reach two thirds. The snapshot records a validator HHI of **{f['validator_hhi_10000']}** and an effective validator count of **{f['effective_validator_count']}**.
+
+The same state records **{f['bonded_stake_display']} L1** bonded, equal to **{f['bonded_ratio_total_supply_percent']}%** of native supply, across **{fmt_int(f['unique_active_delegators'])} unique delegator addresses** to active validators. The largest active delegator address represented **{f['largest_delegator_share_percent']}%** of bonded delegation and the top ten represented **{f['top10_delegator_share_percent']}%**. Address-level figures are published with an explicit caveat that an address is not necessarily one beneficial owner.
+
+Compared consistently at two-decimal precision with the whitepaper reference state, the active validator set expanded from {w['active_validators']} to {f['active_validators']}. The largest-validator share moved from {w['largest_share_percent']}% to {f['largest_share_percent']}%, the top-three share from {w['top3_share_percent']}% to {f['top3_share_percent']}%, and the top-five share from {w['top5_share_percent']}% to {f['top5_share_percent']}%.
+
+Current MOLNFT contract counters are captured at the same publication block. The PDB v2 contract reported **{fmt_int(c['pdb_v2_parent_records'])} parent molecular records** and **{fmt_int(c['pdb_v2_total_tokens'])} total ERC-721 tokens**, including **{fmt_int(c['pdb_v2_child_chunks'])} child chunks** for larger payloads. Legacy v1 collections are reported separately and are not combined into an ambiguous corpus total.'''
+
+
+def update_markdown(facts: dict[str, Any]) -> None:
+    article = ARTICLE_MD.read_text(encoding="utf-8")
+    article = replace_marker(article, "CURRENT_NETWORK", network_block(facts))
+    article = replace_marker(article, "CURRENT_MOLNFT", molnft_block(facts))
+    article = replace_marker(article, "CURRENT_SOURCES", sources_block(facts))
+    article = replace_marker(article, "CURRENT_MEASUREMENT", measurement_block(facts))
+    # Keep the FAQ statement current without making the entire article a template.
+    article = re.sub(
+        r"At the latest pinned publication block, GenesisL1 had \d+ active consensus validators\..*?Exact data and raw responses are preserved in the current evidence snapshot\.",
+        f"At the latest pinned publication block, GenesisL1 had {facts['active_validators']} active consensus validators. The largest held {facts['largest_share_percent']}% of voting power; {facts['one_third_coefficient']} validators were required to reach one third and {facts['two_thirds_coefficient']} to reach two thirds. Exact data and raw responses are preserved in the current evidence snapshot.",
+        article,
+        count=1,
+        flags=re.S,
+    )
+    ARTICLE_MD.write_text(article.rstrip() + "\n", encoding="utf-8")
+
+    press = PRESS_MD.read_text(encoding="utf-8")
+    press = replace_marker(press, "PRESS_CURRENT_STATE", press_block(facts))
+    press = re.sub(r"\*\*ONLINE — [^*]+\*\*", f"**ONLINE — {facts['block_date_display']}**", press, count=1)
+    PRESS_MD.write_text(press.rstrip() + "\n", encoding="utf-8")
+
+
+def split_title(markdown_text: str) -> tuple[str, str, str]:
+    lines = markdown_text.strip().splitlines()
+    if not lines or not lines[0].startswith("# "):
+        raise ValueError("Markdown document must begin with an H1")
+    title = lines[0][2:].strip()
+    subtitle = ""
+    index = 1
+    while index < len(lines) and not lines[index].strip():
+        index += 1
+    if index < len(lines) and lines[index].strip().startswith("*") and lines[index].strip().endswith("*"):
+        subtitle = lines[index].strip().strip("*").strip()
+        index += 1
+    body = "\n".join(lines[index:]).lstrip()
+    return title, subtitle, body
+
+
+def slugify(value: str) -> str:
+    plain = re.sub(r"<[^>]+>", "", value)

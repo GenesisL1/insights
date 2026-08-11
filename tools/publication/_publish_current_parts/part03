@@ -1,0 +1,79 @@
+    plain = html.unescape(plain).lower()
+    slug = re.sub(r"[^a-z0-9]+", "-", plain).strip("-")
+    return slug or "section"
+
+
+class HeadingRenderer(mistune.HTMLRenderer):
+    def heading(self, text: str, level: int, **attrs: Any) -> str:
+        return f'<h{level} id="{slugify(text)}">{text}</h{level}>\n'
+
+
+def markdown_html(markdown_text: str) -> str:
+    renderer = HeadingRenderer(escape=False)
+    markdown = mistune.create_markdown(renderer=renderer, plugins=["table", "strikethrough"])
+    return markdown(markdown_text)
+
+
+def json_script(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+
+
+def article_shell(title: str, subtitle: str, body_html: str, facts: dict[str, Any], canonical: str, description: str, page_type: str = "TechArticle") -> str:
+    word_count = len(re.findall(r"\b[\w’'-]+\b", re.sub(r"<[^>]+>", " ", body_html)))
+    minutes = max(1, (word_count + 199) // 200)
+    date_modified = facts["block_date_iso"]
+    social = "https://genesisl1.com/insights/assets/genesisl1-scientific-renaissance-social-1200x630.png"
+    schema = {
+        "@context": "https://schema.org",
+        "@type": page_type,
+        "headline": title,
+        "description": description,
+        "datePublished": "2026-08-01" if page_type == "TechArticle" else facts["block_date_iso"],
+        "dateModified": date_modified,
+        "inLanguage": "en",
+        "wordCount": word_count,
+        "timeRequired": f"PT{minutes}M",
+        "mainEntityOfPage": canonical,
+        "image": social,
+        "author": {"@type": "Person", "name": "Mikhail Fedorov", "url": "https://genesisl1.com/"},
+        "publisher": {"@type": "Organization", "name": "GenesisL1", "url": "https://genesisl1.com/"},
+        "citation": [
+            "https://genesisl1.com/whitepaper.pdf",
+            facts["snapshot_url"],
+            f"https://github.com/GenesisL1/insights/tree/main/{facts['molnft_randomized']['evidence_relative_path']}",
+        ],
+    }
+    return f'''<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>{html.escape(title)} | GenesisL1</title>
+<meta name="description" content="{html.escape(description, quote=True)}">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<link rel="canonical" href="{canonical}"><meta name="author" content="Mikhail Fedorov"><meta name="theme-color" content="#ffffff">
+<meta property="og:type" content="article"><meta property="og:site_name" content="GenesisL1"><meta property="og:url" content="{canonical}">
+<meta property="og:title" content="{html.escape(title, quote=True)}"><meta property="og:description" content="{html.escape(description, quote=True)}"><meta property="og:image" content="{social}">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{html.escape(title, quote=True)}"><meta name="twitter:description" content="{html.escape(description, quote=True)}"><meta name="twitter:image" content="{social}">
+<meta property="article:published_time" content="2026-08-01T00:00:00+03:00"><meta property="article:modified_time" content="{facts['block_time_utc']}">
+<script type="application/ld+json">{json_script(schema)}</script>
+<link rel="icon" type="image/svg+xml" href="assets/genesisl1-official-logo.svg"><link rel="apple-touch-icon" href="assets/genesisl1-official-logo.png">
+<link rel="stylesheet" href="article-02.css">
+</head>
+<body>
+<a class="skip-link" href="#article">Skip to article</a><div class="reading-progress" data-reading-progress aria-hidden="true"></div>
+<header class="site-header"><a class="brand" href="https://genesisl1.com/" aria-label="GenesisL1 home"><img src="assets/genesisl1-official-logo.svg" width="40" height="40" alt=""><span>GenesisL1</span></a><button class="menu-toggle" data-menu-toggle type="button" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button><nav class="primary-nav" data-primary-nav aria-label="Primary"><a href="https://genesisl1.com/">Home</a><a href="https://genesisl1.com/overview.html">Overview</a><a href="https://genesisl1.com/ecosystem.html">Ecosystem</a><a href="https://genesisl1.com/insights/">Insights</a><a class="nav-cta" href="https://genesisl1.com/whitepaper.pdf">Whitepaper ↗</a></nav></header>
+<main><section class="article-hero"><div class="article-hero__copy"><div class="article-kicker">GenesisL1 Insights · evidence-backed publication</div><h1>{html.escape(title)}</h1><p>{html.escape(subtitle)}</p><div class="article-meta"><span>By Mikhail Fedorov</span><span>Updated {html.escape(facts['block_date_display'])}</span><span>{minutes} min read</span></div></div><figure class="article-hero__figure"><picture><source srcset="assets/genesisl1-scientific-renaissance-hero.svg" type="image/svg+xml"><img src="assets/genesisl1-scientific-renaissance-hero.png" width="1600" height="1000" alt="GenesisL1 public scientific infrastructure for data, models, rights and verification"></picture></figure></section>
+<div class="article-layout"><aside class="article-rail"><div class="rail-label">Current evidence</div><strong>Block {facts['pinned_height_display']}</strong><span>{facts['active_validators']} validators</span><span>{fmt_int(facts['unique_active_delegators'])} active delegators</span><a href="{facts['snapshot_url']}">Verify state ↗</a></aside><article class="article-body" id="article">{body_html}<div class="share-row"><span>SHARE / VERIFY / OPERATE</span><div class="share-actions"><button type="button" data-copy-link>Copy link</button><a target="_blank" rel="noopener noreferrer" href="https://twitter.com/intent/tweet?text={quote(title)}&url={quote(canonical)}">X ↗</a><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/sharing/share-offsite/?url={quote(canonical)}">LinkedIn ↗</a></div></div></article></div></main>
+<footer class="site-footer"><div><strong>GenesisL1 · Chain 29</strong><br>Public Layer 1 for verifiable scientific data, models, rights and applications.</div><div class="footer-links"><a href="https://genesisl1.com/">Home</a><a href="https://genesisl1.com/insights/">Insights</a><a href="https://genesisl1.com/decentralization/">Evidence</a><a href="https://github.com/GenesisL1/insights">GitHub ↗</a></div></footer>
+<script defer src="article-02.js"></script></body></html>'''
+
+
+def render_pages(facts: dict[str, Any]) -> None:
+    article_text = ARTICLE_MD.read_text(encoding="utf-8")
+    title, subtitle, body = split_title(article_text)
+    article_description = "GenesisL1 combines public ownership, current validator evidence, MOLNFT molecular-data integrity, deterministic models and encrypted scientific rights."
+    article_html = article_shell(
+        title,
+        subtitle,
+        markdown_html(body),
+        facts,
