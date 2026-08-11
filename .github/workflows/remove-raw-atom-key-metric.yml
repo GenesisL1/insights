@@ -1,0 +1,110 @@
+name: Finalize MOLNFT evidence without raw atom-key aggregate
+
+on:
+  push:
+    branches: [remove-misleading-raw-key-metric-20260811]
+    paths:
+      - "evidence/article-02/molnft/RUN_REMOVE_RAW_ATOM_KEY_METRIC"
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out correction branch
+        uses: actions/checkout@v4
+        with:
+          ref: remove-misleading-raw-key-metric-20260811
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned evidence environment
+        run: |
+          python -m pip install --disable-pip-version-check --upgrade pip
+          python -m pip install --disable-pip-version-check -r requirements.lock
+
+      - name: Remove misleading aggregate from source and outputs
+        run: |
+          python tools/maintenance/remove_raw_atom_key_metric.py
+          python -m py_compile \
+            tools/evidence/molnft_structural_compare.py \
+            tools/evidence/capture_molnft_randomized_sample.py \
+            tools/evidence/finalize_molnft_structural_evidence.py \
+            tools/publication/apply_molnft_targeted_requery.py \
+            tools/publication/apply_ws1_ws2_direct_article.py \
+            tools/qa/validate_ws1_ws2_structural.py
+
+      - name: Regenerate evidence and Article 02
+        run: |
+          MOLNFT=evidence/article-02/molnft/block-13436937
+          python tools/evidence/finalize_molnft_structural_evidence.py \
+            --evidence "$MOLNFT"
+          python tools/publication/apply_molnft_targeted_requery.py \
+            --molnft-evidence "$MOLNFT"
+          python tools/evidence/finalize_molnft_structural_evidence.py \
+            --evidence "$MOLNFT" \
+            --verify-deterministic
+
+      - name: Validate evidence and publication
+        run: |
+          MOLNFT=evidence/article-02/molnft/block-13436937
+          NETWORK=evidence/article-02/network-state/block-13431722
+          (cd "$MOLNFT" && sha256sum -c SHA256SUMS.txt)
+          (cd "$NETWORK" && sha256sum -c SHA256SUMS.txt)
+          python tools/evidence/upgrade_ws2_metrics_direct.py \
+            --snapshot "$NETWORK/snapshot.json" \
+            --validators "$NETWORK/validators.csv" \
+            --delegators "$NETWORK/delegators.csv" \
+            --verify-only
+          python tools/qa/validate_ws1_ws2_structural.py \
+            --molnft "$MOLNFT" \
+            --network "$NETWORK"
+          if [ -f tools/qa/validate_svg_layout.py ]; then
+            python tools/qa/validate_svg_layout.py
+          fi
+          python - <<'PY'
+          import csv, json, pathlib
+          root = pathlib.Path('.')
+          mol = root / 'evidence/article-02/molnft/block-13436937'
+          summary = json.loads((mol / 'summary.json').read_text())
+          latest = json.loads((root / 'evidence/article-02/molnft/LATEST.json').read_text())
+          facts = json.loads((root / 'content/article-02-next-verifiable-renaissance/network-state.json').read_text())['molnft_randomized']
+          with (mol / 'results.csv').open(newline='', encoding='utf-8') as handle:
+              rows = list(csv.DictReader(handle))
+          assert summary['fidelity_passes'] == 100 and summary['failures'] == 0
+          assert 'strict_atom_key_matches' not in summary
+          assert 'revision_aware_atom_identity_passes' not in summary
+          assert 'strict_atom_key_matches' not in latest
+          assert 'revision_aware_atom_identity_passes' not in latest
+          assert 'strict_atom_key_matches' not in facts
+          assert 'revision_aware_atom_identity_passes' not in facts
+          assert 'atom_keys_equal' not in rows[0]
+          assert 'strict_atom_key_coordinate_hash_equal' not in rows[0]
+          assert all(row['atom_identity_agreement'].lower() == 'true' for row in rows)
+          for path in [
+              root / 'README.md',
+              root / 'content/article-02-next-verifiable-renaissance/article.md',
+              root / 'site/insights/genesisl1-decentralization-scientific-renaissance.html',
+          ]:
+              text = path.read_text(encoding='utf-8').lower()
+              assert '99 of 100' not in text
+              assert 'strict raw atom' not in text
+              assert 'raw canonical-key' not in text
+              assert '100 of 100 canonical structural-fidelity passes' in text
+          print('Validated: 100/100 passes, zero failures, no raw atom-key aggregate or public 99/100 phrasing')
+          PY
+
+      - name: Commit corrected evidence and publication
+        run: |
+          git config user.name "GenesisL1 Evidence Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "evidence: report MOLNFT fidelity as 100 of 100 without raw-key aggregate"
+          git push origin HEAD:remove-misleading-raw-key-metric-20260811
