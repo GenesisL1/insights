@@ -165,56 +165,49 @@ def update_html(path: pathlib.Path, paragraph1: str, paragraph2: str, summary: d
 
 def update_facts(path: pathlib.Path, summary: dict[str, Any], report: dict[str, Any]) -> None:
     payload = json.loads(path.read_text(encoding="utf-8"))
-    current = dict(payload.get("molnft_randomized") or {})
-    current.pop("byte_identical_records", None)
-    for stale_key in ("strict_atom_key_matches", "revision_aware_atom_identity_passes", "coordinate_hash_matches"):
-        current.pop(stale_key, None)
-    current.update(
-        {
-            "B_pin": summary["B_pin"],
-            "B_seed": summary["B_seed"],
-            "N": summary["N"],
-            "successes": summary["successes"],
-            "failures": summary["failures"],
-            "failures_by_reason": summary["failures_by_reason"],
-            "fidelity_passes": summary["fidelity_passes"],
-            "revision_aware_records": summary["revision_aware_records"],
-            "precommit_sha": summary["sample_spec_precommit_sha"],
-            "evidence_relative_path": summary["evidence_relative_path"],
-            "initial_failures": report["initial_failures"],
-            "initial_failure_reason": "RPC_OUT_OF_GAS",
-            "successful_same_id_payload_requeries": report["successful_requeries"],
-            "targeted_requery_token_ids": report["queried_token_ids"],
-            "targeted_requery_endpoint": ROOT_RPC,
-            "requested_api_path_http_status": 404,
-            "replacement_draws": report["replacement_draws"],
-            "final_failure_records": [],
-        }
-    )
-    payload["molnft_randomized"] = current
+    payload["molnft_randomized"] = {
+        "B_pin": summary["B_pin"],
+        "B_seed": summary["B_seed"],
+        "N": summary["N"],
+        "successes": summary["successes"],
+        "failures": summary["failures"],
+        "failures_by_reason": summary["failures_by_reason"],
+        "fidelity_passes": summary["fidelity_passes"],
+        "revision_aware_records": summary["revision_aware_records"],
+        "precommit_sha": summary["sample_spec_precommit_sha"],
+        "evidence_relative_path": summary["evidence_relative_path"],
+        "initial_failures": report["initial_failures"],
+        "initial_failure_reason": "RPC_OUT_OF_GAS",
+        "successful_same_id_payload_requeries": report["successful_requeries"],
+        "targeted_requery_token_ids": report["queried_token_ids"],
+        "targeted_requery_endpoint": ROOT_RPC,
+        "requested_api_path_http_status": 404,
+        "replacement_draws": report["replacement_draws"],
+        "final_failure_records": [],
+    }
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
 def update_latest(path: pathlib.Path, summary: dict[str, Any], report: dict[str, Any]) -> None:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    payload.pop("failure_reason", None)
-    payload.pop("strict_atom_key_matches", None)
-    payload.pop("revision_aware_atom_identity_passes", None)
-    payload.pop("coordinate_hash_matches", None)
-    payload.update(
-        {
-            "sample_size": summary["N"],
-            "fidelity_passes": summary["fidelity_passes"],
-            "failures": summary["failures"],
-            "failures_by_reason": summary["failures_by_reason"],
-            "revision_aware_records": summary["revision_aware_records"],
-            "initial_failures": report["initial_failures"],
-            "successful_same_id_payload_requeries": report["successful_requeries"],
-            "targeted_requery_token_ids": report["queried_token_ids"],
-            "replacement_draws": report["replacement_draws"],
-            "final_failure_records": [],
-        }
-    )
+    previous = json.loads(path.read_text(encoding="utf-8"))
+    payload = {
+        "schema": previous.get("schema", "org.genesisl1.molnft_evidence_pointer.v1"),
+        "evidence_block": summary["B_pin"],
+        "path": f"block-{summary['B_pin']}",
+        "sample_size": summary["N"],
+        "fidelity_passes": summary["fidelity_passes"],
+        "failures": summary["failures"],
+        "selection": previous.get("selection", "future-block-seeded direct NFT-ID sample without replacement"),
+        "off_chain_token_index_used": False,
+        "sample_spec_precommit_sha": summary["sample_spec_precommit_sha"],
+        "failures_by_reason": summary["failures_by_reason"],
+        "initial_failures": report["initial_failures"],
+        "successful_same_id_payload_requeries": report["successful_requeries"],
+        "targeted_requery_token_ids": report["queried_token_ids"],
+        "replacement_draws": report["replacement_draws"],
+        "final_failure_records": [],
+        "revision_aware_records": summary["revision_aware_records"],
+    }
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 

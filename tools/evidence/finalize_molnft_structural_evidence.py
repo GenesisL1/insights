@@ -264,14 +264,6 @@ def finalize(directory: pathlib.Path) -> None:
     base.write_results(directory / "results.csv", rows)
     reasons = Counter(str(row["reason_code"]) for row in rows)
     summary = dict(old_summary)
-    for obsolete in [
-        "byte_identical_records",
-        "complete_file_hash_role",
-        "strict_atom_key_matches",
-        "revision_aware_atom_identity_passes",
-        "coordinate_hash_matches",
-    ]:
-        summary.pop(obsolete, None)
     summary.update(
         {
             "N": len(rows),

@@ -61,7 +61,7 @@ facts_function = '''def update_facts(path: pathlib.Path, summary: dict[str, Any]
 '''
 text, count = re.subn(
     r'def update_facts\(.*?\n\n\ndef update_latest',
-    facts_function + 'def update_latest',
+    lambda _match: facts_function + 'def update_latest',
     text,
     count=1,
     flags=re.S,
@@ -95,7 +95,7 @@ latest_function = '''def update_latest(path: pathlib.Path, summary: dict[str, An
 '''
 text, count = re.subn(
     r'def update_latest\(.*?\n\n\ndef update_indexes',
-    latest_function + 'def update_indexes',
+    lambda _match: latest_function + 'def update_indexes',
     text,
     count=1,
     flags=re.S,
