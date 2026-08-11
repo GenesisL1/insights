@@ -1,4 +1,4 @@
-name: Refresh Article 02 current network evidence
+name: Refresh current Article 02 network state
 
 on:
   workflow_dispatch:
@@ -75,7 +75,7 @@ jobs:
           echo "NETWORK_SNAPSHOT=$DEST" >> "$GITHUB_ENV"
           echo "NETWORK_HEIGHT=$HEIGHT" >> "$GITHUB_ENV"
 
-      - name: Refresh only the dated network evidence in Article 02
+      - name: Refresh dated network evidence in Article 02
         run: python tools/publication/refresh_network_state.py --snapshot "$NETWORK_SNAPSHOT/snapshot.json"
 
       - name: Regenerate evidence-aware publication graphics
