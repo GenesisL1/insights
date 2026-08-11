@@ -1,0 +1,106 @@
+name: Remove legacy MOLNFT aggregate identifiers
+
+on:
+  push:
+    branches: [remove-legacy-molnft-aggregate-identifiers-20260811]
+    paths:
+      - "evidence/article-02/molnft/RUN_REMOVE_LEGACY_AGGREGATE_IDENTIFIERS"
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Check out cleanup branch
+        uses: actions/checkout@v4
+        with:
+          ref: remove-legacy-molnft-aggregate-identifiers-20260811
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned evidence environment
+        run: |
+          python -m pip install --disable-pip-version-check --upgrade pip
+          python -m pip install --disable-pip-version-check -r requirements.lock
+
+      - name: Clean maintained source
+        run: |
+          python tools/maintenance/remove_legacy_molnft_aggregate_identifiers.py
+          python -m py_compile \
+            tools/evidence/finalize_molnft_structural_evidence.py \
+            tools/publication/apply_molnft_targeted_requery.py \
+            tools/qa/validate_ws1_ws2_structural.py
+
+      - name: Verify evidence remains deterministic and complete
+        run: |
+          MOLNFT=evidence/article-02/molnft/block-13436937
+          NETWORK=evidence/article-02/network-state/block-13431722
+          (cd "$MOLNFT" && sha256sum -c SHA256SUMS.txt)
+          (cd "$NETWORK" && sha256sum -c SHA256SUMS.txt)
+          python tools/evidence/finalize_molnft_structural_evidence.py \
+            --evidence "$MOLNFT" \
+            --verify-deterministic
+          python tools/evidence/upgrade_ws2_metrics_direct.py \
+            --snapshot "$NETWORK/snapshot.json" \
+            --validators "$NETWORK/validators.csv" \
+            --delegators "$NETWORK/delegators.csv" \
+            --verify-only
+          python tools/qa/validate_ws1_ws2_structural.py \
+            --molnft "$MOLNFT" \
+            --network "$NETWORK"
+          if [ -f tools/qa/validate_svg_layout.py ]; then
+            python tools/qa/validate_svg_layout.py
+          fi
+
+      - name: Confirm maintained source contains no retired identifiers
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          forbidden = [
+              'byte_identical',
+              'byte-identical',
+              'byte identical',
+              'byte-for-byte',
+              'byte_to_byte',
+              'complete_file_hash_role',
+              'strict_atom_key_matches',
+              'revision_aware_atom_identity_passes',
+              'coordinate_hash_matches',
+              '99 of 100',
+              'raw canonical-key',
+          ]
+          paths = [
+              Path('tools/evidence/finalize_molnft_structural_evidence.py'),
+              Path('tools/publication/apply_molnft_targeted_requery.py'),
+              Path('tools/qa/validate_ws1_ws2_structural.py'),
+              Path('README.md'),
+              Path('content/article-02-next-verifiable-renaissance/article.md'),
+              Path('site/insights/genesisl1-decentralization-scientific-renaissance.html'),
+              Path('evidence/article-02/molnft/block-13436937/README.md'),
+              Path('evidence/article-02/molnft/block-13436937/summary.json'),
+              Path('evidence/article-02/molnft/LATEST.json'),
+              Path('content/article-02-next-verifiable-renaissance/network-state.json'),
+          ]
+          for path in paths:
+              text = path.read_text(encoding='utf-8').lower()
+              hits = [item for item in forbidden if item.lower() in text]
+              if hits:
+                  raise SystemExit(f'{path} contains retired identifiers: {hits}')
+          print('Maintained source and publication contain only the 100/100 structural-fidelity result')
+          PY
+
+      - name: Commit source cleanup
+        run: |
+          git config user.name "GenesisL1 Evidence Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: remove retired MOLNFT aggregate identifiers from source"
+          git push origin HEAD:remove-legacy-molnft-aggregate-identifiers-20260811
