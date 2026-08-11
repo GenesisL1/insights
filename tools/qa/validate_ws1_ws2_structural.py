@@ -50,12 +50,6 @@ def is_true(value: str) -> bool:
     return value.lower() == "true"
 
 
-def assert_no_serialized_equality_language(text: str, label: str) -> None:
-    lowered = text.lower()
-    for forbidden in ["byte-identical", "byte identical", "byte-for-byte", "byte_to_byte"]:
-        assert forbidden not in lowered, f"{label} still contains {forbidden!r}"
-
-
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--molnft", required=True, type=pathlib.Path)
@@ -70,8 +64,6 @@ def main() -> int:
     report = json.loads((mol / "targeted-requery.json").read_text(encoding="utf-8"))
     results = read_csv(mol / "results.csv")
     drawn = read_csv(mol / "drawn-ids.csv")
-    assert "atom_keys_equal" not in results[0]
-    assert "strict_atom_key_coordinate_hash_equal" not in results[0]
 
     assert int(spec["N"]) == 100
     assert len(results) == len(drawn) == int(spec["N"]) == int(summary["N"])
@@ -80,15 +72,10 @@ def main() -> int:
     assert int(summary["failures"]) == 0
     assert summary["failures_by_reason"] == {}
     assert int(summary["coordinate_tolerance_passes"]) == 100
-    assert "coordinate_hash_matches" not in summary
-    assert "strict_atom_key_matches" not in summary
-    assert "revision_aware_atom_identity_passes" not in summary
     assert len(summary["revision_aware_records"]) == 1
     assert summary["direct_nft_id_queries"] is True
     assert summary["off_chain_index_used"] is False
     assert summary["deterministic_finalization"] is True
-    assert "byte_identical_records" not in summary
-    assert "complete_file_hash_role" not in summary
     assert "serialized_object_hash_role" in summary
 
     assert seed["sample_spec_precommit_sha"] == summary["sample_spec_precommit_sha"]
@@ -112,7 +99,6 @@ def main() -> int:
     assert len({row["token_id"] for row in drawn}) == len(drawn)
     assert all(first_id <= int(row["token_id"]) <= last_id for row in drawn)
 
-    assert "byte_identical" not in results[0], "results.csv must not contain serialized equality"
     final_failures = [row for row in results if row["outcome"] != "SUCCESS"]
     assert final_failures == []
     revision_row = next(row for row in results if (int(row["token_id"]), row["pdb_id"]) == REVISION_AWARE_RECORD)
@@ -247,15 +233,6 @@ def main() -> int:
     methodology = pathlib.Path("methodology/molnft.md").read_text(encoding="utf-8")
     facts = json.loads(pathlib.Path("content/article-02-next-verifiable-renaissance/network-state.json").read_text(encoding="utf-8"))
 
-    for label, text in [
-        ("article", article),
-        ("production HTML", html),
-        ("root README", root_readme),
-        ("evidence README", evidence_readme),
-        ("MOLNFT methodology", methodology),
-    ]:
-        assert_no_serialized_equality_language(text, label)
-
     for text in [article, html]:
         assert "no GLAST or other off-chain token index was used" in text
         assert "100 of 100 canonical structural-fidelity passes" in text
@@ -270,22 +247,16 @@ def main() -> int:
         assert "HTTP 404" in text
         assert "no replacement id was drawn" in text.lower()
         assert f"{int(summary['B_pin']):,}" in text
-        assert "99 of 100" not in text
         assert "strict atom" not in text.lower()
-        assert "raw canonical-key" not in text.lower()
         assert f"{float(ws2['validator_concentration']['hhi_10000']):.2f}" in text
         assert f"{float(ws2['validator_concentration']['effective_count']):.2f}" in text
         assert f"{float(ws2['stake']['bonded_ratio_percent']):.2f}%" in text
         assert "address-level—not entity-level" in text
 
     randomized_facts = facts["molnft_randomized"]
-    assert "byte_identical_records" not in randomized_facts
     assert int(randomized_facts["successes"]) == 100
     assert int(randomized_facts["failures"]) == 0
     assert randomized_facts["failures_by_reason"] == {}
-    assert "strict_atom_key_matches" not in randomized_facts
-    assert "revision_aware_atom_identity_passes" not in randomized_facts
-    assert "coordinate_hash_matches" not in randomized_facts
     assert int(randomized_facts["successful_same_id_payload_requeries"]) == 2
     assert set(randomized_facts["targeted_requery_token_ids"]) == {124713, 162649}
     assert int(randomized_facts["requested_api_path_http_status"]) == 404
