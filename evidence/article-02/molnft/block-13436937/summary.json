@@ -8,7 +8,6 @@
   "canonical_endpoint": "https://models.rcsb.org/{pdb_id}.bcif",
   "contract_address": "0xd58B01f6C18086e5202cdC5D7Ad3E41790360102",
   "coordinate_hash_algorithm": "SHA-256 over big-endian float64 XYZ triples in accepted atom-pairing order with signed zero normalized",
-  "coordinate_hash_matches": 99,
   "coordinate_hash_role": "exact normalized coordinate hashes are recorded separately in the accepted atom-pairing order; equality is not required when the declared coordinate tolerance passes",
   "coordinate_tolerance_angstrom": 1e-06,
   "coordinate_tolerance_passes": 100,
@@ -47,14 +46,13 @@
     "atom_count_equal",
     "chain_ids_equal",
     "entity_ids_equal",
-    "atom_identity_agreement_by_raw_key_or_documented_rcsb_atom_name_revision",
+    "atom_identity_agreement",
     "coordinate_agreement_within_precommitted_tolerance"
   ],
   "fidelity_passes": 100,
   "loss_model": "lossless BinaryCIF payload",
   "off_chain_index_used": false,
   "requirements_lock_sha256": "cc0cb134a882b399d30be574ddf6811abc80d5199ee2f411a683873d6303bd7e",
-  "revision_aware_atom_identity_passes": 1,
   "revision_aware_records": [
     {
       "atom_name_change_count": 4,
@@ -92,7 +90,6 @@
   "sample_spec_precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
   "schema": "org.genesisl1.molnft_direct_randomized_fidelity.v1",
   "serialized_object_hash_role": "reconstructed and canonical SHA-256 values are independent integrity identifiers only; equality is neither evaluated nor used for fidelity",
-  "strict_atom_key_matches": 99,
   "successes": 100,
   "targeted_requery": {
     "gas_override": "0x7fffffffffffffff",

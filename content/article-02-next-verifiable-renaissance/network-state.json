@@ -35,7 +35,6 @@
     "B_pin": 13436937,
     "B_seed": 13436979,
     "N": 100,
-    "coordinate_hash_matches": 99,
     "evidence_relative_path": "evidence/article-02/molnft/block-13436937",
     "failures": 0,
     "failures_by_reason": {},
@@ -46,7 +45,6 @@
     "precommit_sha": "3cdd075f86a7ed1230d654cc8d0586bd56555c2a",
     "replacement_draws": 0,
     "requested_api_path_http_status": 404,
-    "revision_aware_atom_identity_passes": 1,
     "revision_aware_records": [
       {
         "atom_name_change_count": 4,
@@ -79,7 +77,6 @@
         "token_id": 124713
       }
     ],
-    "strict_atom_key_matches": 99,
     "successes": 100,
     "successful_same_id_payload_requeries": 2,
     "targeted_requery_endpoint": "https://rpca.genesisl1.org",

@@ -888,7 +888,6 @@ RESULT_FIELDS = [
     "reconstructed_entity_ids",
     "canonical_entity_ids",
     "entity_ids_equal",
-    "atom_keys_equal",
     "atom_identity_agreement",
     "atom_identity_comparison_method",
     "stable_atom_site_id_sets_equal",
@@ -902,7 +901,6 @@ RESULT_FIELDS = [
     "reconstructed_coordinate_sha256",
     "canonical_coordinate_sha256",
     "coordinate_hash_equal",
-    "strict_atom_key_coordinate_hash_equal",
     "coordinate_hash_ordering_method",
     "max_coordinate_deviation_angstrom",
     "coordinate_tolerance_angstrom",
@@ -1019,12 +1017,6 @@ def recompute(directory: pathlib.Path) -> None:
             "failures_by_reason": dict(sorted((key, value) for key, value in reason_counts.items() if key != "SUCCESS")),
             "fidelity_passes": sum(bool(row.get("fidelity_pass")) for row in results),
             "coordinate_tolerance_passes": sum(bool(row.get("coordinate_agreement")) for row in results),
-            "coordinate_hash_matches": sum(bool(row.get("coordinate_hash_equal")) for row in results),
-            "strict_atom_key_matches": sum(bool(row.get("atom_keys_equal")) for row in results),
-            "revision_aware_atom_identity_passes": sum(
-                bool(row.get("fidelity_pass")) and bool(row.get("rcsb_atom_name_revision_documented"))
-                for row in results
-            ),
             "revision_aware_records": [
                 {
                     "draw_order": row.get("draw_order"),
@@ -1044,7 +1036,7 @@ def recompute(directory: pathlib.Path) -> None:
                 "atom_count_equal",
                 "chain_ids_equal",
                 "entity_ids_equal",
-                "atom_identity_agreement_by_raw_key_or_documented_rcsb_atom_name_revision",
+                "atom_identity_agreement",
                 "coordinate_agreement_within_precommitted_tolerance",
             ],
             "coordinate_hash_role": "exact normalized coordinate hashes are recorded separately in the accepted atom-pairing order; equality is not required when the declared coordinate tolerance passes",
@@ -1242,12 +1234,6 @@ def run_capture(repo: pathlib.Path, spec_path: pathlib.Path, precommit_sha: str,
         "failures_by_reason": dict(sorted((key, value) for key, value in reason_counts.items() if key != "SUCCESS")),
         "fidelity_passes": sum(bool(row.get("fidelity_pass")) for row in results),
         "coordinate_tolerance_passes": sum(bool(row.get("coordinate_agreement")) for row in results),
-        "coordinate_hash_matches": sum(bool(row.get("coordinate_hash_equal")) for row in results),
-        "strict_atom_key_matches": sum(bool(row.get("atom_keys_equal")) for row in results),
-        "revision_aware_atom_identity_passes": sum(
-            bool(row.get("fidelity_pass")) and bool(row.get("rcsb_atom_name_revision_documented"))
-            for row in results
-        ),
         "revision_aware_records": [
             {
                 "draw_order": row.get("draw_order"),

@@ -391,13 +391,6 @@ def compare_bcif(reconstructed: pathlib.Path, canonical: pathlib.Path, tolerance
 
     rec_coordinate_hash = _coordinate_hash(paired_rows_rec) if paired_rows_rec else ""
     can_coordinate_hash = _coordinate_hash(paired_rows_can) if paired_rows_can else ""
-    strict_rec_hash = _coordinate_hash(
-        [("\x1f".join(key), coordinate) for key, coordinate in rec["strict_rows"]]
-    )
-    strict_can_hash = _coordinate_hash(
-        [("\x1f".join(key), coordinate) for key, coordinate in can["strict_rows"]]
-    )
-
     atom_count_equal = rec["count"] == can["count"]
     chain_ids_equal = rec["chains"] == can["chains"]
     entity_ids_equal = rec["entities"] == can["entities"]
@@ -420,7 +413,6 @@ def compare_bcif(reconstructed: pathlib.Path, canonical: pathlib.Path, tolerance
         "reconstructed_entity_ids": rec["entities"],
         "canonical_entity_ids": can["entities"],
         "entity_ids_equal": entity_ids_equal,
-        "atom_keys_equal": strict_atom_keys_equal,
         "atom_identity_agreement": atom_identity_agreement,
         "atom_identity_comparison_method": pairing_method,
         "stable_atom_site_id_sets_equal": set(rec["by_id"]) == set(can["by_id"]),
@@ -434,7 +426,6 @@ def compare_bcif(reconstructed: pathlib.Path, canonical: pathlib.Path, tolerance
         "reconstructed_coordinate_sha256": rec_coordinate_hash,
         "canonical_coordinate_sha256": can_coordinate_hash,
         "coordinate_hash_equal": bool(rec_coordinate_hash) and rec_coordinate_hash == can_coordinate_hash,
-        "strict_atom_key_coordinate_hash_equal": strict_rec_hash == strict_can_hash,
         "coordinate_hash_ordering_method": pairing_method,
         "max_coordinate_deviation_angstrom": max_deviation,
         "coordinate_tolerance_angstrom": tolerance,

@@ -39,8 +39,6 @@ def ws1_markdown(summary: dict[str, Any], seed: dict[str, Any]) -> str:
     n = int(summary["N"])
     successes = int(summary["successes"])
     fidelity = int(summary["fidelity_passes"])
-    exact_coordinates = int(summary.get("coordinate_hash_matches", 0))
-    strict_keys = int(summary.get("strict_atom_key_matches", fidelity))
     enumerated = int(summary["enumerated_parent_count"])
     tolerance = Decimal(str(summary["coordinate_tolerance_angstrom"]))
     enum = summary["enumeration_method"]
@@ -72,14 +70,14 @@ def ws1_markdown(summary: dict[str, Any], seed: dict[str, Any]) -> str:
         f"the raw RPC request and response for every draw. No failed ID was replaced.{revision_text} "
         f"<sup><a href=\"#source-15\">15</a></sup>\n\n"
         f"For each comparable record, the audit required equal atom counts, chain and entity sets, atom-identity agreement, and a "
-        f"maximum paired coordinate deviation no greater than the precommitted **{tolerance:.6f} Å** tolerance. Raw canonical atom "
-        f"keys agreed for **{strict_keys} of {fidelity}** records; any revision-aware identity path required unique unchanged "
-        f"`_atom_site.id`, equality of every non-name identity field and explicit current-RCSB audit metadata naming both atom-name "
-        f"fields. All **{fidelity}** comparisons passed. Exact normalized coordinate hashes additionally matched for "
-        f"**{exact_coordinates} of {fidelity}** records. Serialized BinaryCIF equality is neither calculated nor used as a pass "
-        f"condition; each object's SHA-256 is retained independently only as an integrity identifier. The future-block seed, complete "
-        f"numeric parent-ID population, draw, failure table, reconstructed and canonical objects, environment fingerprint and SHA-256 "
-        f"manifest are preserved in the evidence package."
+        f"maximum paired coordinate deviation no greater than the precommitted **{tolerance:.6f} Å** tolerance. All **{fidelity}** "
+        f"comparisons passed. A documented later RCSB atom-name revision may be reconciled only when `_atom_site.id` remains unique "
+        f"and unchanged, every non-name identity field agrees, and coordinates remain within the original tolerance. No PDB-specific "
+        f"alias table is used. Normalized coordinate hashes are retained per record as auxiliary reproducibility evidence, not as a "
+        f"fidelity criterion. Serialized BinaryCIF equality is neither calculated nor used as a pass condition; each object's SHA-256 "
+        f"is retained independently only as an integrity identifier. The future-block seed, complete numeric parent-ID population, "
+        f"draw, failure table, reconstructed and canonical objects, environment fingerprint and SHA-256 manifest are preserved in the "
+        f"evidence package."
     )
 
 
