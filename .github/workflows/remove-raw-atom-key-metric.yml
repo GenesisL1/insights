@@ -78,28 +78,49 @@ jobs:
           facts = json.loads((root / 'content/article-02-next-verifiable-renaissance/network-state.json').read_text())['molnft_randomized']
           with (mol / 'results.csv').open(newline='', encoding='utf-8') as handle:
               rows = list(csv.DictReader(handle))
-          assert summary['fidelity_passes'] == 100 and summary['failures'] == 0
+
+          assert summary['fidelity_passes'] == 100
+          assert summary['successes'] == 100
+          assert summary['failures'] == 0
+          assert summary['failures_by_reason'] == {}
           for payload in (summary, latest, facts):
               assert 'strict_atom_key_matches' not in payload
               assert 'revision_aware_atom_identity_passes' not in payload
               assert 'coordinate_hash_matches' not in payload
+
           assert 'atom_keys_equal' not in rows[0]
           assert 'strict_atom_key_coordinate_hash_equal' not in rows[0]
+          assert all(row['outcome'] == 'SUCCESS' for row in rows)
+          assert all(row['fidelity_pass'].lower() == 'true' for row in rows)
           assert all(row['atom_identity_agreement'].lower() == 'true' for row in rows)
           assert all('reconstructed_coordinate_sha256' in row and 'canonical_coordinate_sha256' in row for row in rows)
-          for path in [
+
+          public_paths = [
               root / 'README.md',
               root / 'content/article-02-next-verifiable-renaissance/article.md',
               root / 'site/insights/genesisl1-decentralization-scientific-renaissance.html',
               mol / 'README.md',
-          ]:
+          ]
+          for path in public_paths:
               text = path.read_text(encoding='utf-8').lower()
               assert '99 of 100' not in text
               assert 'strict raw atom' not in text
               assert 'raw canonical-key' not in text
               assert 'exact normalized coordinate-hash matches' not in text
+
+          for path in public_paths[:3]:
+              text = path.read_text(encoding='utf-8').lower()
               assert '100 of 100 canonical structural-fidelity passes' in text
-          print('Validated: one public result only — 100/100 structural-fidelity passes, zero failures')
+              assert 'zero final failures' in text or 'zero failures' in text
+
+          evidence_text = (mol / 'README.md').read_text(encoding='utf-8').lower()
+          assert '| selected records | **100** |' in evidence_text
+          assert '| canonical structural-fidelity passes | **100** |' in evidence_text
+          assert '| final failures | **0** |' in evidence_text
+
+          qa_text = (root / 'tools/qa/validate_ws1_ws2_structural.py').read_text(encoding='utf-8').lower()
+          assert '99 exact coordinate hashes' not in qa_text
+          print('Validated: one scientific outcome only — 100/100 structural-fidelity passes, zero failures')
           PY
 
       - name: Commit corrected evidence and publication
