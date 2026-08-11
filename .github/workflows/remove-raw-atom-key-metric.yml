@@ -30,11 +30,8 @@ jobs:
           python -m pip install --disable-pip-version-check --upgrade pip
           python -m pip install --disable-pip-version-check -r requirements.lock
 
-      - name: Remove misleading aggregate from source and outputs
+      - name: Remove secondary aggregate from source and outputs
         run: |
-          python tools/maintenance/remove_raw_atom_key_metric.py
-          python tools/maintenance/remove_stale_atom_key_summary_fields.py
-          python tools/maintenance/remove_stale_atom_key_qa_assertions.py
           python tools/maintenance/remove_auxiliary_99_aggregate.py
           python -m py_compile \
             tools/evidence/molnft_structural_compare.py \
