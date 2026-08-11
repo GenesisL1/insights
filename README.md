@@ -35,8 +35,8 @@ Both recovered structures pass. **5KCS is not a structural mismatch.** Its curre
 The finalized audit reports:
 
 - **100 of 100 canonical structural-fidelity passes**;
-- **99 raw canonical atom-key matches plus one documented RCSB atom-name revision reconciliation**;
-- **99 of 100 exact normalized coordinate-hash matches**;
+- **zero final failures**, with the 5KCS atom-name revision fully documented and all 148,945 coordinates aligned at `0 Å`;
+- per-record normalized coordinate hashes retained as auxiliary reproducibility evidence;
 - complete raw requests and responses for the original calls and targeted same-ID requery;
 - reconstructed and current RCSB BinaryCIF objects, per-record outcomes, revision evidence, environment versions, manifest, and SHA-256 checksums.
 

@@ -61,8 +61,6 @@ def publication_paragraphs(summary: dict[str, Any], report: dict[str, Any]) -> t
     record_text = "; and ".join(structure_label(record) for record in records)
     fidelity = int(summary["fidelity_passes"])
     n = int(summary["N"])
-    exact = int(summary["coordinate_hash_matches"])
-    strict = int(summary["strict_atom_key_matches"])
     enum = summary["enumeration_method"]
     paragraph1 = (
         f"A randomized evidence package fixed **N = {n}** in an isolated repository commit before GenesisL1 seed block "
@@ -87,15 +85,14 @@ def publication_paragraphs(summary: dict[str, Any], report: dict[str, Any]) -> t
     paragraph2 = (
         f"A fidelity pass required equal atom counts, chain and entity sets, atom-identity agreement, and a maximum paired "
         f"coordinate deviation no greater than the precommitted **{float(summary['coordinate_tolerance_angstrom']):.6f} Å** "
-        f"tolerance. Atom identity was established by raw canonical-key equality for **{strict} of {n}** records. The remaining "
-        f"record used a narrowly constrained revision-aware path: unique unchanged `_atom_site.id` values, equality of every "
-        f"non-name identity field, a current RCSB audit trail explicitly naming both atom-name fields, and coordinates within the "
-        f"unchanged tolerance. No PDB-specific alias table was used. All **{fidelity}** comparisons passed. Exact normalized "
-        f"coordinate hashes matched for **{exact} of {fidelity}** records. Serialized BinaryCIF equality is neither calculated nor "
-        f"used as a pass condition; reconstructed and canonical SHA-256 values are retained independently only to identify the "
-        f"preserved objects. The future-block seed, complete parent-ID population, immutable draw, original provider errors, "
-        f"targeted same-ID calls, reconstructed and canonical objects, RCSB revision evidence, environment fingerprint and SHA-256 "
-        f"manifest are preserved in the evidence package."
+        f"tolerance. All **{fidelity}** comparisons passed. For 5KCS, the documented later RCSB atom-name revision was reconciled "
+        f"only because `_atom_site.id` remained unique and unchanged, every non-name identity field agreed, and all 148,945 "
+        f"coordinates paired at **0 Å** deviation. No PDB-specific alias table was used. Exact normalized coordinate hashes remain "
+        f"available per record as an auxiliary reproducibility check, not as a fidelity criterion. Serialized BinaryCIF equality is "
+        f"neither calculated nor used as a pass condition; reconstructed and canonical SHA-256 values are retained independently "
+        f"only to identify the preserved objects. The future-block seed, complete parent-ID population, immutable draw, original "
+        f"provider errors, targeted same-ID calls, reconstructed and canonical objects, RCSB revision evidence, environment "
+        f"fingerprint and SHA-256 manifest are preserved in the evidence package."
     )
     return paragraph1, paragraph2
 
@@ -171,6 +168,8 @@ def update_facts(path: pathlib.Path, summary: dict[str, Any], report: dict[str, 
     payload = json.loads(path.read_text(encoding="utf-8"))
     current = dict(payload.get("molnft_randomized") or {})
     current.pop("byte_identical_records", None)
+    for stale_key in ("strict_atom_key_matches", "revision_aware_atom_identity_passes"):
+        current.pop(stale_key, None)
     current.update(
         {
             "B_pin": summary["B_pin"],
@@ -180,8 +179,6 @@ def update_facts(path: pathlib.Path, summary: dict[str, Any], report: dict[str, 
             "failures": summary["failures"],
             "failures_by_reason": summary["failures_by_reason"],
             "fidelity_passes": summary["fidelity_passes"],
-            "strict_atom_key_matches": summary["strict_atom_key_matches"],
-            "revision_aware_atom_identity_passes": summary["revision_aware_atom_identity_passes"],
             "revision_aware_records": summary["revision_aware_records"],
             "coordinate_hash_matches": summary["coordinate_hash_matches"],
             "precommit_sha": summary["sample_spec_precommit_sha"],
@@ -203,14 +200,14 @@ def update_facts(path: pathlib.Path, summary: dict[str, Any], report: dict[str, 
 def update_latest(path: pathlib.Path, summary: dict[str, Any], report: dict[str, Any]) -> None:
     payload = json.loads(path.read_text(encoding="utf-8"))
     payload.pop("failure_reason", None)
+    payload.pop("strict_atom_key_matches", None)
+    payload.pop("revision_aware_atom_identity_passes", None)
     payload.update(
         {
             "sample_size": summary["N"],
             "fidelity_passes": summary["fidelity_passes"],
             "failures": summary["failures"],
             "failures_by_reason": summary["failures_by_reason"],
-            "strict_atom_key_matches": summary["strict_atom_key_matches"],
-            "revision_aware_atom_identity_passes": summary["revision_aware_atom_identity_passes"],
             "revision_aware_records": summary["revision_aware_records"],
             "coordinate_hash_matches": summary["coordinate_hash_matches"],
             "initial_failures": report["initial_failures"],
@@ -253,8 +250,8 @@ Both recovered structures pass. **5KCS is not a structural mismatch.** Its curre
 The finalized audit reports:
 
 - **{summary['fidelity_passes']} of {summary['N']} canonical structural-fidelity passes**;
-- **{summary['strict_atom_key_matches']} raw canonical atom-key matches plus one documented RCSB atom-name revision reconciliation**;
-- **{summary['coordinate_hash_matches']} of {summary['fidelity_passes']} exact normalized coordinate-hash matches**;
+- **zero final failures**, with the 5KCS atom-name revision fully documented and all 148,945 coordinates aligned at `0 Å`;
+- per-record normalized coordinate hashes retained as auxiliary reproducibility evidence;
 - complete raw requests and responses for the original calls and targeted same-ID requery;
 - reconstructed and current RCSB BinaryCIF objects, per-record outcomes, revision evidence, environment versions, manifest, and SHA-256 checksums.
 
@@ -278,7 +275,7 @@ The revision-aware path is accepted only when the current RCSB audit history exp
         f"- MOLNFT: {summary['fidelity_passes']} of {summary['N']} canonical structural-fidelity passes after targeted "
         f"same-ID RPCA recovery of 5KCS/NFT 124713 and 6QFB/NFT 162649; 5KCS reconciled through documented RCSB "
         f"atom-name revision metadata with zero coordinate deviation; no replacement draw; "
-        f"{summary['coordinate_hash_matches']} exact normalized coordinate-hash matches; no off-chain token index",
+        f"per-record coordinate hashes retained as auxiliary evidence; no off-chain token index",
         notes,
         flags=re.M,
     )

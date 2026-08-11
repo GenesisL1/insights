@@ -22,7 +22,7 @@ The sample specification fixed `N = 100` before the seed block existed. The seed
 
 Final failure accounting: **none**.
 
-A fidelity pass requires equal atom counts, chain/entity sets, atom identity agreement and maximum paired coordinate deviation within the precommitted tolerance. Atom identity agreement is either raw canonical-key equality or the narrowly documented RCSB revision-aware path described below. Serialized-object equality is not calculated or reported. The separately recorded SHA-256 value for each object is an integrity identifier only.
+A fidelity pass requires equal atom counts, chain/entity sets, atom-identity agreement and maximum paired coordinate deviation within the precommitted tolerance. A documented later RCSB atom-name revision may be reconciled only under the narrow, evidence-preserving conditions described below. Serialized-object equality is not calculated or reported. The separately recorded SHA-256 value for each object is an integrity identifier only.
 
 ## Targeted same-ID requery
 
