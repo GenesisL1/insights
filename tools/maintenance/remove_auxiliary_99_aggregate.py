@@ -3,7 +3,7 @@ from pathlib import Path
 root = Path('.')
 
 # The publication has one scientific pass/fail result: 100/100 structural
-# fidelity, zero failures. Exact coordinate hashes remain available per record,
+# fidelity, zero failures. Coordinate hashes remain available per record,
 # but no aggregate secondary score is published.
 
 # Capture summaries
@@ -41,12 +41,26 @@ text = text.replace('    coordinate_hash_matches = 0\n', '')
 text = text.replace('        coordinate_hash_matches += is_true(row["coordinate_hash_equal"])\n', '')
 text = text.replace('    assert coordinate_hash_matches == int(summary["coordinate_hash_matches"]) == 99\n', '')
 needle = '    assert "revision_aware_atom_identity_passes" not in randomized_facts\n'
-if needle in text:
+if needle in text and '    assert "coordinate_hash_matches" not in randomized_facts\n' not in text:
     text = text.replace(needle, needle + '    assert "coordinate_hash_matches" not in randomized_facts\n', 1)
+text = text.replace(
+'''    print(
+        "Final WS-1/WS-2 acceptance passed: 100/100 structural-fidelity passes; "
+        "5KCS reconciled through documented 2026-07-01 RCSB atom-name revision metadata with zero coordinate deviation; "
+        "99 exact coordinate hashes; two same-ID RPCA payload recoveries; no replacement draw"
+    )
+''',
+'''    print(
+        "Final WS-1/WS-2 acceptance passed: 100/100 structural-fidelity passes, zero failures; "
+        "5KCS reconciled through documented 2026-07-01 RCSB atom-name revision metadata with zero coordinate deviation; "
+        "two same-ID RPCA payload recoveries; no replacement draw"
+    )
+'''
+)
 p.write_text(text, encoding='utf-8')
 
-# Generic publication helper already keeps hashes per record and should never
-# describe them as an aggregate success metric.
+# Generic publication helper keeps hashes per record and never describes them
+# as an aggregate success metric.
 p = root / 'tools/publication/apply_ws1_ws2_direct_article.py'
 text = p.read_text(encoding='utf-8')
 text = text.replace(
@@ -55,4 +69,4 @@ text = text.replace(
 )
 p.write_text(text, encoding='utf-8')
 
-print('Removed all auxiliary 99/100 aggregate reporting; per-record hashes remain preserved')
+print('Removed all secondary 99-of-100 aggregate reporting; per-record integrity data remain preserved')
