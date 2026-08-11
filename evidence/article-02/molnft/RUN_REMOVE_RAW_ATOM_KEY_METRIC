@@ -1,1 +1,1 @@
-Final regeneration: publish only 100 of 100 canonical structural-fidelity passes and zero failures; remove all raw atom-name-key aggregate fields, CSV columns, QA assertions, and public 99-of-100 phrasing.
+Final regeneration v2: publish only 100 of 100 canonical structural-fidelity passes and zero failures; remove raw atom-name-key aggregate fields, CSV columns, all stale QA scoring, and public 99-of-100 phrasing.
