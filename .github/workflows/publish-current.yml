@@ -1,0 +1,219 @@
+name: Publish current Article 02 state
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publish-current.yml"
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: publish-current-article-02
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Assemble the compact publication renderer
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat tools/publication/_publish_current_parts/part* > tools/publication/publish_current.py
+          test "$(sha256sum tools/publication/publish_current.py | awk '{print $1}')" = "b16fc3ea77b4810684fd148c8660b8762bd58acb70c134bb6a152c6c95d462ed"
+          rm -rf tools/publication/_publish_current_parts
+          python -m py_compile tools/publication/publish_current.py tools/evidence/capture_molnft_counts.py tools/qa/validate_current_publication.py
+
+      - name: Install publication dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Capture one current network and protocol state
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .tmp/current-state
+          mkdir -p .tmp/current-state
+          python tools/evidence/capture_network_state.py --output-root .tmp/current-state
+          SNAP=$(find .tmp/current-state -mindepth 1 -maxdepth 1 -type d -name 'block-*' | sort | tail -1)
+          test -n "$SNAP"
+          HEIGHT=$(python - "$SNAP/snapshot.json" <<'PY'
+          import json, sys
+          print(json.load(open(sys.argv[1], encoding="utf-8"))["metadata"]["pinned_height"])
+          PY
+          )
+          rm -rf evidence/article-02/network-state/block-*
+          DEST="evidence/article-02/network-state/block-${HEIGHT}"
+          mkdir -p evidence/article-02/network-state
+          mv "$SNAP" "$DEST"
+          python tools/evidence/capture_molnft_counts.py \
+            --block "$HEIGHT" \
+            --output-directory "$DEST"
+          echo "CURRENT_HEIGHT=$HEIGHT" >> "$GITHUB_ENV"
+          echo "CURRENT_SNAPSHOT=$DEST" >> "$GITHUB_ENV"
+
+      - name: Remove superseded run history from the publication tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf migration
+          rm -rf evidence/article-02/consensus
+          rm -rf evidence/article-02/molnft/block-13412747
+          rm -f deployment/WS1_WS2_DEPLOYMENT_NOTES.md
+          rm -f .github/workflows/package-article-02.yml
+          rm -f .github/workflows/publish-article-02.yml
+          rm -f .github/workflows/verify-article-02-evidence.yml
+          rm -f tools/evidence/capture_molnft_snapshot.py
+          rm -f tools/evidence/capture_validator_snapshot.py
+          rm -f tools/evidence/upgrade_ws2_metrics.py
+          rm -f tools/evidence/upgrade_ws2_metrics_direct.py
+          rm -f tools/publication/apply_molnft_targeted_requery.py
+          rm -f tools/publication/apply_ws1_ws2_article.py
+          rm -f tools/publication/apply_ws1_ws2_direct_article.py
+          rm -f tools/publication/refresh_network_state.py
+          rm -f tools/qa/validate_repository.py
+          rm -f tools/qa/validate_ws1_ws2_structural.py
+
+      - name: Render the article, press release and evidence pages
+        run: |
+          python tools/publication/publish_current.py \
+            --snapshot "$CURRENT_SNAPSHOT/snapshot.json" \
+            --molnft "$CURRENT_SNAPSHOT/molnft-state.json"
+          python tools/graphics/create_graphics.py
+
+      - name: Rebuild the current-state integrity manifest
+        run: |
+          python - "$CURRENT_SNAPSHOT" <<'PY'
+          from __future__ import annotations
+          import hashlib, json, pathlib, sys
+          directory = pathlib.Path(sys.argv[1])
+          excluded = {"SHA256SUMS.txt", "MANIFEST.json"}
+          files = sorted(path for path in directory.rglob("*") if path.is_file() and path.name not in excluded)
+          rows = []
+          manifest = []
+          for path in files:
+              digest = hashlib.sha256(path.read_bytes()).hexdigest()
+              rel = path.relative_to(directory).as_posix()
+              rows.append(f"{digest}  {rel}")
+              manifest.append({"path": rel, "bytes": path.stat().st_size, "sha256": digest})
+          (directory / "SHA256SUMS.txt").write_text("\n".join(rows) + "\n", encoding="utf-8")
+          (directory / "MANIFEST.json").write_text(
+              json.dumps({"algorithm": "SHA-256", "files": manifest}, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Validate current evidence and publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd "$CURRENT_SNAPSHOT" && sha256sum -c SHA256SUMS.txt)
+          (cd evidence/article-02/molnft/block-13436937 && sha256sum -c SHA256SUMS.txt)
+          python tools/evidence/finalize_molnft_structural_evidence.py \
+            --evidence evidence/article-02/molnft/block-13436937 \
+            --verify-deterministic
+          python tools/qa/validate_current_publication.py \
+            --snapshot "$CURRENT_SNAPSHOT/snapshot.json" \
+            --molnft "$CURRENT_SNAPSHOT/molnft-state.json"
+
+      - name: Commit one current publication state
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .tmp
+          git config user.name "GenesisL1 Insights Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "data: publish current Article 02 state at block ${CURRENT_HEIGHT}"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Build current source, deploy and evidence bundles
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf release-artifacts
+          mkdir -p release-artifacts
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib, pathlib, zipfile
+          root = pathlib.Path('.').resolve()
+          artifacts = root / 'release-artifacts'
+          height = __import__('json').loads((root / 'content/article-02-next-verifiable-renaissance/network-state.json').read_text())['pinned_height']
+          skip = {'.git', '.tmp', 'release-artifacts', '__pycache__'}
+
+          def allowed(path: pathlib.Path) -> bool:
+              rel = path.relative_to(root)
+              return not any(part in skip for part in rel.parts) and path.suffix not in {'.pyc', '.pyo'}
+
+          def add_tree(zf: zipfile.ZipFile, source: pathlib.Path, prefix: str = '') -> None:
+              for path in sorted(source.rglob('*')):
+                  if path.is_file() and allowed(path):
+                      zf.write(path, f"{prefix}/{path.relative_to(source).as_posix()}".strip('/'))
+
+          full = artifacts / f'GenesisL1_Insights_Current_block-{height}_FULL.zip'
+          with zipfile.ZipFile(full, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+              add_tree(zf, root, 'GenesisL1-insights')
+
+          deploy = artifacts / f'GenesisL1_Article_02_Current_block-{height}_DEPLOY.zip'
+          with zipfile.ZipFile(deploy, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+              add_tree(zf, root / 'site', 'site')
+              add_tree(zf, root / 'deployment', 'deployment')
+
+          evidence = artifacts / f'GenesisL1_Current_Evidence_block-{height}.zip'
+          with zipfile.ZipFile(evidence, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+              add_tree(zf, root / f'evidence/article-02/network-state/block-{height}', f'current-state-block-{height}')
+              for name in ['README.md', 'LATEST.json', 'sample-spec.json']:
+                  path = root / 'evidence/article-02/molnft' / name
+                  if path.exists():
+                      zf.write(path, f'molnft-audit/{name}')
+
+          lines = []
+          for path in sorted(artifacts.glob('*.zip')):
+              lines.append(f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}")
+          (artifacts / 'SHA256SUMS.txt').write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          PY
+
+      - name: Upload the current publication bundles
+        uses: actions/upload-artifact@v4
+        with:
+          name: genesisl1-current-article-02-block-${{ env.CURRENT_HEIGHT }}
+          path: release-artifacts/*
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Remove obsolete branches and earlier Actions runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for branch in \
+            current-publication-20260811 \
+            evidence-ws1-ws2-upgrade-20260810 \
+            fix-5kcs-rcsb-atom-name-revision-20260811 \
+            molnft-rpca-failed-only-20260811 \
+            remove-legacy-molnft-aggregate-identifiers-20260811 \
+            remove-misleading-raw-key-metric-20260811 \
+            ws1-ws2-bootstrap; do
+            git push origin --delete "$branch" 2>/dev/null || true
+          done
+          gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/runs?per_page=100" --jq '.workflow_runs[].id' | while read -r run_id; do
+            if [ "$run_id" != "$GITHUB_RUN_ID" ]; then
+              gh api --method DELETE "repos/${GITHUB_REPOSITORY}/actions/runs/${run_id}" >/dev/null 2>&1 || true
+            fi
+          done
