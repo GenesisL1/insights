@@ -8,7 +8,7 @@ on:
       - "CAPTURE_LATEST_DELEGATION"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   capture:
@@ -19,6 +19,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: capture-latest-delegation-20260815
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -63,21 +64,72 @@ jobs:
               manifest.append({'path':rel,'bytes':path.stat().st_size,'sha256':digest})
           (directory/'SHA256SUMS.txt').write_text('\n'.join(rows)+'\n', encoding='utf-8')
           (directory/'MANIFEST.json').write_text(json.dumps({'algorithm':'SHA-256','files':manifest},indent=2,sort_keys=True)+'\n',encoding='utf-8')
-          snap=json.loads((directory/'snapshot.json').read_text())
-          print(json.dumps({
-              'height':snap['metadata']['pinned_height'],
-              'time':snap['metadata']['block_time_utc'],
-              'provider':snap['metadata']['provider_name'],
-              'consensus':snap['metrics']['consensus'],
-              'delegation':snap['metrics']['delegation'],
-              'staking':snap['metrics']['staking'],
-          },indent=2,sort_keys=True))
           PY
           echo "SNAP=$SNAP" >> "$GITHUB_ENV"
           echo "HEIGHT=$HEIGHT" >> "$GITHUB_ENV"
 
       - name: Verify checksums
         run: (cd "$SNAP" && sha256sum -c SHA256SUMS.txt)
+
+      - name: Stage captured evidence in the branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST="evidence/article-02/delegation-state/block-${HEIGHT}"
+          rm -rf evidence/article-02/delegation-state
+          mkdir -p "$DEST"
+          cp -a "$SNAP"/. "$DEST"/
+          python - "$DEST" <<'PY'
+          import json, pathlib, sys
+          d = pathlib.Path(sys.argv[1])
+          s = json.loads((d/'snapshot.json').read_text(encoding='utf-8'))
+          c=s['metrics']['consensus']; g=s['metrics']['delegation']; t=s['metrics']['staking']; m=s['metadata']
+          out={
+            'schema':'org.genesisl1.delegation_evidence_pointer.v1',
+            'pinned_height':m['pinned_height'],
+            'block_time_utc':m['block_time_utc'],
+            'block_hash':m['block_hash'],
+            'path':d.as_posix(),
+            'active_validators':c['active_consensus_validators'],
+            'largest_validator_share_percent':c['largest_validator_share_percent'],
+            'top_3_validator_share_percent':c['top_3_share_percent'],
+            'top_5_validator_share_percent':c['top_5_share_percent'],
+            'top_10_validator_share_percent':c['top_10_share_percent'],
+            'one_third_coefficient':c['coefficient_strictly_above_one_third'],
+            'two_thirds_coefficient':c['coefficient_strictly_above_two_thirds'],
+            'validator_hhi_10000':c['hhi_10000'],
+            'effective_validator_count':c['effective_validator_count'],
+            'bonded_l1':t['pool_bonded_tokens_l1'],
+            'bonded_ratio_total_supply_percent':t['bonded_ratio_total_supply_percent'],
+            'active_delegators':g['unique_delegators_to_active_validators'],
+            'active_relationships':g['active_delegation_relationships'],
+            'multi_validator_delegators':g['delegators_spread_across_multiple_active_validators'],
+            'largest_delegator_share_percent':g['active_delegator_largest_share_percent'],
+            'top_3_delegator_share_percent':g['active_delegator_top_3_share_percent'],
+            'top_5_delegator_share_percent':g['active_delegator_top_5_share_percent'],
+            'top_10_delegator_share_percent':g['active_delegator_top_10_share_percent'],
+            'top_25_delegator_share_percent':g['active_delegator_top_25_share_percent'],
+            'delegator_one_third_coefficient':g['active_delegator_coefficient_strictly_above_one_third'],
+            'delegator_two_thirds_coefficient':g['active_delegator_coefficient_strictly_above_two_thirds'],
+            'delegator_hhi_10000':g['active_delegator_hhi_10000'],
+            'effective_delegator_count':g['active_delegator_effective_count'],
+            'delegator_gini':g['active_delegator_gini_coefficient'],
+            'delegator_normalized_entropy':g['active_delegator_normalized_entropy']
+          }
+          pathlib.Path('evidence/article-02/delegation-state/LATEST.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          pathlib.Path('LATEST_DELEGATION_SUMMARY.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+
+      - name: Commit captured evidence to capture branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "GenesisL1 Evidence Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add evidence/article-02/delegation-state LATEST_DELEGATION_SUMMARY.json
+          git commit -m "data: capture delegation state at block ${HEIGHT}"
+          git push origin HEAD:capture-latest-delegation-20260815
 
       - name: Upload latest delegation snapshot
         uses: actions/upload-artifact@v4
