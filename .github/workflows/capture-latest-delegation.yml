@@ -1,0 +1,85 @@
+name: Capture latest delegation-focused network state
+
+on:
+  push:
+    branches: [capture-latest-delegation-20260815]
+    paths:
+      - ".github/workflows/capture-latest-delegation.yml"
+      - "CAPTURE_LATEST_DELEGATION"
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out capture branch
+        uses: actions/checkout@v4
+        with:
+          ref: capture-latest-delegation-20260815
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Capture one finalized network state
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .tmp/latest-delegation
+          mkdir -p .tmp/latest-delegation
+          python tools/evidence/capture_network_state.py \
+            --output-root .tmp/latest-delegation \
+            --finality-lag 3 \
+            --timeout 45 \
+            --retries 4
+          SNAP=$(find .tmp/latest-delegation -mindepth 1 -maxdepth 1 -type d -name 'block-*' | sort | tail -1)
+          test -n "$SNAP"
+          HEIGHT=$(python - "$SNAP/snapshot.json" <<'PY'
+          import json, sys
+          print(json.load(open(sys.argv[1], encoding='utf-8'))['metadata']['pinned_height'])
+          PY
+          )
+          python tools/evidence/capture_molnft_counts.py \
+            --block "$HEIGHT" \
+            --output-directory "$SNAP"
+          python - "$SNAP" <<'PY'
+          from __future__ import annotations
+          import hashlib, json, pathlib, sys
+          directory = pathlib.Path(sys.argv[1])
+          excluded = {'SHA256SUMS.txt', 'MANIFEST.json'}
+          files = sorted(p for p in directory.rglob('*') if p.is_file() and p.name not in excluded)
+          rows=[]; manifest=[]
+          for path in files:
+              digest=hashlib.sha256(path.read_bytes()).hexdigest()
+              rel=path.relative_to(directory).as_posix()
+              rows.append(f'{digest}  {rel}')
+              manifest.append({'path':rel,'bytes':path.stat().st_size,'sha256':digest})
+          (directory/'SHA256SUMS.txt').write_text('\n'.join(rows)+'\n', encoding='utf-8')
+          (directory/'MANIFEST.json').write_text(json.dumps({'algorithm':'SHA-256','files':manifest},indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          snap=json.loads((directory/'snapshot.json').read_text())
+          print(json.dumps({
+              'height':snap['metadata']['pinned_height'],
+              'time':snap['metadata']['block_time_utc'],
+              'provider':snap['metadata']['provider_name'],
+              'consensus':snap['metrics']['consensus'],
+              'active_delegators':snap['metrics']['delegators']['active'],
+              'staking':snap['metrics']['staking'],
+          },indent=2,sort_keys=True))
+          PY
+          echo "SNAP=$SNAP" >> "$GITHUB_ENV"
+          echo "HEIGHT=$HEIGHT" >> "$GITHUB_ENV"
+
+      - name: Verify checksums
+        run: (cd "$SNAP" && sha256sum -c SHA256SUMS.txt)
+
+      - name: Upload latest delegation snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: genesisl1-latest-delegation-state-block-${{ env.HEIGHT }}
+          path: ${{ env.SNAP }}/
+          if-no-files-found: error
+          retention-days: 14
