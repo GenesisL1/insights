@@ -33,7 +33,7 @@ jobs:
           mkdir -p .tmp/latest-delegation
           python tools/evidence/capture_network_state.py \
             --output-root .tmp/latest-delegation \
-            --finality-lag 3 \
+            --lag-blocks 3 \
             --timeout 45 \
             --retries 4
           SNAP=$(find .tmp/latest-delegation -mindepth 1 -maxdepth 1 -type d -name 'block-*' | sort | tail -1)
