@@ -1,0 +1,10 @@
+{
+  "id": 1002,
+  "jsonrpc": "2.0",
+  "method": "eth_getBlockByNumber",
+  "params": [
+    "0xcd7c15",
+    false
+  ],
+  "url": "https://rpc.genesisl1.org"
+}

@@ -1,0 +1,47 @@
+{
+  "captured_at_utc": "2026-08-15T21:31:49Z",
+  "child_counter_function": "nextChildId()",
+  "contracts": [
+    {
+      "address": "0xd58B01f6C18086e5202cdC5D7Ad3E41790360102",
+      "key": "pdb_v2",
+      "name": "MOLNFT PDB v2",
+      "runtime_code_sha256": "04c29a062d00d31991be9932c3c74ef70b4ada396cfa4a7ff630a81edafccc92",
+      "storage_generation": "v2_full_payload",
+      "total_supply": 265786
+    },
+    {
+      "address": "0xDE3723766Bc32dcACD03C17BaA400A7B36837Eba",
+      "key": "pdb_v1",
+      "name": "MOLNFT PDB v1",
+      "runtime_code_sha256": "0ebcbd1db1a6d6a6fbc4b48f3c246ea9061c1649366f7d7068885180661b7d2b",
+      "storage_generation": "v1_legacy",
+      "total_supply": 191600
+    },
+    {
+      "address": "0xBf7491af3407816DFa88a5EA4c82e8A2B1D721eD",
+      "key": "af_v1",
+      "name": "MOLNFT AlphaFold/Swiss-Prot v1",
+      "runtime_code_sha256": "0ebcbd1db1a6d6a6fbc4b48f3c246ea9061c1649366f7d7068885180661b7d2b",
+      "storage_generation": "v1_legacy",
+      "total_supply": 542319
+    }
+  ],
+  "counts": {
+    "af_v1_tokens": 542319,
+    "legacy_v1_subtotal": 733919,
+    "pdb_v1_tokens": 191600,
+    "pdb_v2_child_chunks": 36515,
+    "pdb_v2_parent_records": 229271,
+    "pdb_v2_total_tokens": 265786
+  },
+  "evm_block_hash": "0x1456253dad093c5fc89fd1197a6f9b8050a08fbb73a88ef9de2e6c94e81af9b3",
+  "evm_block_time_utc": "2026-08-15T21:29:15Z",
+  "evm_chain_id": 29,
+  "parent_counter_function": "nextNFTId()",
+  "pinned_height": 13466645,
+  "provider_name": "GenesisL1 public",
+  "provider_url": "https://rpc.genesisl1.org",
+  "schema": "org.genesisl1.molnft_current_state.v1",
+  "scope": "Current contract counters only. Reconstruction fidelity is reported separately by the immutable 100-record audit."
+}
