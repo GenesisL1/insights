@@ -19,23 +19,37 @@ The network’s community pool provides a second public mechanism. Protocol-fund
 ## Current network state
 
 <!-- CURRENT_NETWORK_BEGIN -->
-At GenesisL1 block **13,439,825**, dated **August 11, 2026**, the active consensus set contained **28 validators** out of a protocol maximum of 50. The largest validator held **9.03%** of voting power; the top three held **23.20%**, the top five **35.89%**, and the top ten **63.22%**. 5 validators were required to reach one third of voting power and 11 to reach two thirds. The validator HHI was **520.73**, corresponding to an effective validator count of **19.20**. <sup><a href="#source-2">2</a></sup>
+The Article 02 evidence is now deliberately **longitudinal**. The August 11 snapshot remains preserved as a historical measurement rather than being overwritten; a second delegation-focused snapshot records the network four days later. Together they show why decentralization is better treated as a dynamic, reproducible process than as a permanent label.
 
-| Current observable state | Result |
+At GenesisL1 block **13,466,645**, dated **August 15, 2026**, the active consensus set contained **29 validators** out of a protocol maximum of 50. The largest validator held **8.69%** of voting power; the top three held **22.62%**, the top five **31.78%**, and the top ten **49.73%**. **6 validators** were required to reach one third of voting power and **16** to reach two thirds. Validator HHI was **426.59**, corresponding to an effective validator count of **23.44**. <sup><a href="#source-2b">2b</a></sup>
+
+| Latest observable state — block 13,466,645 | Result |
 |---|---:|
-| Active consensus validators | **28 / 50** |
-| Largest validator share | **9.03%** |
-| Top-three / top-five / top-ten share | **23.20% / 35.89% / 63.22%** |
-| Validators required for one third / two thirds | **5 / 11** |
-| Validator HHI / effective validator count | **520.73 / 19.20** |
-| Bonded stake | **24,957,676.89 L1** |
-| Bonded share of native supply | **53.36%** |
-| Unique delegator addresses to active validators | **1,371** |
-| Largest / top-ten active-delegator share | **5.71% / 29.98%** |
+| Active consensus validators | **29 / 50** |
+| Largest / top-three / top-five share | **8.69% / 22.62% / 31.78%** |
+| Validators required for one third / two thirds | **6 / 16** |
+| Validator HHI / effective validator count | **426.59 / 23.44** |
+| Bonded stake / native supply bonded | **24,794,964.00 L1 / 52.94%** |
+| Active delegator addresses / relationships | **1,372 / 2,099** |
+| Largest / top-five / top-ten active-delegator share | **5.78% / 18.26% / 29.76%** |
+| Active-delegator HHI / effective address count | **177.68 / 56.28** |
+| Delegator one-third / two-thirds coefficients | **12 / 35** |
 
-Compared on the same two-decimal basis with the whitepaper reference state, the active set expanded from **20 to 28 validators**. The largest-validator share moved from **13.09% to 9.03%** (−4.06 percentage points), the top-three share from **35.62% to 23.20%** (−12.42 points), and the top-five share from **51.07% to 35.89%** (−15.18 points). The one-third coefficient widened from **3 to 5 validators**, and the two-thirds coefficient from **8 to 11**.
+The delegation layer is visible separately from validator voting power. At the latest snapshot, **1,372 addresses** delegated to active validators across **2,099 active delegation relationships**; **224** addresses delegated across multiple active validators. The largest active-delegator address represented **5.78%** of active delegated stake, while the top five represented **18.26%**, the top ten **29.76%**, and the top 25 **55.08%**. Active-delegator HHI was **177.68**, with an effective address count of **56.28**.
 
-Delegation was also distributed across **1,371 active delegator addresses** and **2,063 active validator–delegator relationships**; **218 addresses** delegated across more than one active validator. The largest active delegator address represented **5.71%** of bonded delegation and the top ten represented **29.98%**. An address is not necessarily one beneficial owner: custodians can aggregate many users, while one party can control multiple addresses. These figures therefore measure observable ledger distribution, not complete social independence.
+An address is not an entity. Exchanges, custodians and multisigs can aggregate many beneficiaries into one address, while one party can control many addresses. Address-level dispersion is therefore neither an upper nor a lower bound on beneficial-owner dispersion; it is a distinct, weaker measurement of observable ledger distribution.
+
+### Decentralization as an observed trajectory
+
+| Pinned measurement | Active validators | Largest | Top 5 | ⅓ coefficient | ⅔ coefficient | HHI | Effective validators |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| July whitepaper reference | **20** | **13.09%** | **51.07%** | **3** | **8** | — | — |
+| Aug. 11 · block 13,439,825 | **28** | **9.03%** | **35.89%** | **5** | **11** | **520.73** | **19.20** |
+| Aug. 15 · block 13,466,645 | **29** | **8.69%** | **31.78%** | **6** | **16** | **426.59** | **23.44** |
+
+From the whitepaper reference to the latest pinned state, the active set expanded from **20 to 29 validators**; the largest-validator share declined from **13.09% to 8.69%** and the top-five share from **51.07% to 31.78%**. The one-third cohort widened from **3 to 6 validators**, while the two-thirds cohort expanded from **8 to 16**. Between the two reproducible August snapshots, top-five share moved from **35.89% to 31.78%**, HHI from **520.73 to 426.59**, and effective validator count from **19.20 to 23.44**.
+
+These are measurements, not guarantees about future topology or organizational independence. Their value is precisely that they can be measured again. The repository preserves both August snapshots, raw responses, complete validator and delegation tables, calculations and SHA-256 manifests so later states can be compared without erasing earlier ones.
 <!-- CURRENT_NETWORK_END -->
 
 This is a snapshot, not a permanent label. Validator power, delegations and supply change continuously. The repository preserves the pinned block, raw responses, complete CSV tables, exact calculations and checksums so the published figures can be reproduced rather than trusted as screenshots.
@@ -130,7 +144,7 @@ The result is not a promise that every claim is true. It is a stronger foundatio
 
 ### What is the current GenesisL1 validator state?
 
-At the latest pinned publication block, GenesisL1 had 28 active consensus validators. The largest held 9.03% of voting power; 5 validators were required to reach one third and 11 to reach two thirds. Exact data and raw responses are preserved in the current evidence snapshot.
+At the latest delegation-focused snapshot, GenesisL1 had 29 active consensus validators. The largest held 8.69% of voting power; 6 validators were required to reach one third and 16 to reach two thirds. The earlier block-13,439,825 snapshot remains preserved as a historical comparison point.
 
 ### What did the randomized MOLNFT audit find?
 
@@ -152,7 +166,8 @@ L1 coin pays network fees, meters smart-contract execution, secures consensus th
 
 <!-- CURRENT_SOURCES_BEGIN -->
 1. <span id="source-1"></span>**GenesisL1 Technical Whitepaper, Version 1.0, July 2026.** Public distribution, protocol architecture, L1 coin utility, governance and institutional operation. [Whitepaper ↗](https://genesisl1.com/whitepaper.pdf)
-2. <span id="source-2"></span>**GenesisL1 current network and protocol-state snapshot at block 13,439,825.** Raw CometBFT, Cosmos and EVM responses; complete validator and delegation tables; current MOLNFT counters; calculations and SHA-256 manifest. [Current evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/network-state/block-13439825)
+2. <span id="source-2"></span>**GenesisL1 preserved network and protocol-state snapshot at block 13,439,825.** Raw CometBFT, Cosmos and EVM responses; complete validator and delegation tables; current MOLNFT counters; calculations and SHA-256 manifest. [Current evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/network-state/block-13439825)
+2b. <span id="source-2b"></span>**GenesisL1 latest delegation-focused snapshot at block 13,466,645.** Raw validator and delegation responses, complete tables, concentration metrics and SHA-256 manifest. [Latest delegation evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/delegation-state/block-13466645)
 3. <span id="source-3"></span>**GenesisL1 randomized MOLNFT reconstruction evidence at block 13,436,937.** Published sample specification, future-block seed, direct NFT-ID calls, reconstructed and canonical BinaryCIF objects, per-record outcomes and checksums. [Audit evidence ↗](https://github.com/GenesisL1/insights/tree/main/evidence/article-02/molnft/block-13436937)
 4. <span id="source-4"></span>**GenesisL1 Forest / GL1F.** Deterministic model representation and inference tooling. [Source ↗](https://github.com/GenesisL1/Forest) · [Technical paper ↗](https://gl1f.com/GL1F.pdf)
 5. <span id="source-5"></span>**GenesisL1 CIPNFT.** Client-side encryption, on-chain ciphertext provenance and recipient-bound disclosure. [Source ↗](https://github.com/GenesisL1/cipnft)

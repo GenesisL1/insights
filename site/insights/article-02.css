@@ -2,7 +2,7 @@
 :root {
   --ink: #0B1420; --navy:#071522; --muted:#617086; --line:#D8E0E9; --line-dark:#B8C5D5;
   --blue:#2164DF; --blue-2:#6EA6FF; --pale:#F4F8FD; --white:#fff;
-  --max: 1320px; --article: 790px; --toc: 250px;
+  --max: 1580px; --article: 980px; --toc: 260px;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; background:#fff; }
@@ -23,7 +23,7 @@ button { font:inherit; }
 .primary-nav .nav-cta:hover { background:var(--blue); color:#fff; }
 .menu-toggle { display:none; width:44px; height:44px; background:#fff; border:1px solid var(--line); cursor:pointer; }
 .menu-toggle span { display:block; width:19px; height:1px; background:var(--ink); margin:5px auto; }
-.article-shell { width:min(var(--max), calc(100% - 48px)); margin:0 auto; display:grid; grid-template-columns:var(--toc) minmax(0,var(--article)); gap:86px; justify-content:center; padding:62px 0 100px; }
+.article-shell { width:min(var(--max), calc(100% - 48px)); margin:0 auto; display:grid; grid-template-columns:var(--toc) minmax(0,var(--article)); gap:72px; justify-content:center; padding:62px 0 100px; }
 .toc-panel { position:relative; }
 .toc-inner { position:sticky; top:118px; border-top:1px solid var(--ink); padding-top:18px; }
 .toc-label { margin:0 0 18px; font-size:11px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }

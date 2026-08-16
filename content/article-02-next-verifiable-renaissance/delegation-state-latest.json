@@ -1,0 +1,45 @@
+{
+  "latest": {
+    "active_delegators": 1372,
+    "active_relationships": 2099,
+    "active_validators": 29,
+    "block_hash": "1456253DAD093C5FC89FD1197A6F9B8050A08FBB73A88EF9DE2E6C94E81AF9B3",
+    "block_time_utc": "2026-08-15T21:29:15.715639178Z",
+    "bonded_l1": "24794964.001088",
+    "bonded_ratio_total_supply_percent": "52.93784776",
+    "delegator_gini": "0.957902640886468037926037179216904847156629116905040578802756289551574932256600014700483540",
+    "delegator_hhi_10000": "177.680850036963347528645767381608279708948220408929516178757752136489343883153222451820802",
+    "delegator_normalized_entropy": "0.5991688453516362",
+    "delegator_one_third_coefficient": 12,
+    "delegator_two_thirds_coefficient": 35,
+    "effective_delegator_count": "56.2806852731719680038530246844379024264985442960164386431932260525850928800947706492125996",
+    "effective_validator_count": "23.4417535955755078730068869819473590898567548296158766655618360054375005855927886468034767",
+    "largest_delegator_share_percent": "5.78052199",
+    "largest_validator_share_percent": "8.68746257",
+    "multi_validator_delegators": 224,
+    "one_third_coefficient": 6,
+    "path": "evidence/article-02/delegation-state/block-13466645",
+    "pinned_height": 13466645,
+    "schema": "org.genesisl1.delegation_evidence_pointer.v1",
+    "top_10_delegator_share_percent": "29.76238025",
+    "top_10_validator_share_percent": "49.73033622",
+    "top_25_delegator_share_percent": "55.0793346",
+    "top_3_delegator_share_percent": "12.75692577",
+    "top_3_validator_share_percent": "22.61602867",
+    "top_5_delegator_share_percent": "18.25737919",
+    "top_5_validator_share_percent": "31.7835648",
+    "two_thirds_coefficient": 16,
+    "validator_hhi_10000": "426.589246373080244390829998895976550080681322556416660298607758855023471772524539977833257"
+  },
+  "preserved_history": [
+    {
+      "pinned_height": 13439825,
+      "role": "Article 02 historical network/protocol snapshot"
+    },
+    {
+      "pinned_height": 13466645,
+      "role": "latest delegation-focused snapshot"
+    }
+  ],
+  "schema": "org.genesisl1.article02.delegation_latest.v1"
+}
