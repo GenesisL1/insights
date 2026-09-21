@@ -1,0 +1,57 @@
+name: Publish final GenesisL1 Insights payload
+
+on:
+  push:
+    branches: [publish-final-insights-20260921]
+    paths:
+      - ".publication-payload/READY"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-final-insights-20260921
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out publication branch
+        uses: actions/checkout@v4
+        with:
+          ref: publish-final-insights-20260921
+          fetch-depth: 0
+
+      - name: Reconstruct reviewed publication package
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .publication-payload/chunk-*.b64 > /tmp/genesisl1-insights.b64
+          base64 --decode /tmp/genesisl1-insights.b64 > /tmp/genesisl1-insights.zip
+          echo "8374091a5a26d8e74ef61238dd4c7506c067d0ff3079a0e36e15bba6b70821f0  /tmp/genesisl1-insights.zip" | sha256sum -c -
+          rm -rf /tmp/genesisl1-insights-release
+          mkdir -p /tmp/genesisl1-insights-release
+          unzip -q /tmp/genesisl1-insights.zip -d /tmp/genesisl1-insights-release
+          test -d /tmp/genesisl1-insights-release/GenesisL1-insights
+          rsync -a --delete --exclude='.git/' /tmp/genesisl1-insights-release/GenesisL1-insights/ ./
+
+      - name: Validate publication and evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check Pillow
+          python tools/qa/validate_insights_collection.py
+          (cd evidence/stake-distribution/block-13690968 && sha256sum -c SHA256SUMS.txt)
+          sha256sum -c SHA256SUMS.txt
+
+      - name: Commit final reviewed publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "GenesisL1 Publication Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "publish: final GenesisL1 Insights collection at block 13690968"
+          git push origin HEAD:publish-final-insights-20260921
