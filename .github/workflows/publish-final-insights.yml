@@ -16,7 +16,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - name: Check out publication branch
         uses: actions/checkout@v4
@@ -24,27 +24,55 @@ jobs:
           ref: publish-final-insights-20260921
           fetch-depth: 0
 
-      - name: Reconstruct reviewed publication package
+      - name: Install publication dependencies
+        run: python -m pip install --disable-pip-version-check Pillow
+
+      - name: Reconstruct reviewed publication tree
         shell: bash
         run: |
           set -euo pipefail
-          cat .publication-payload/chunk-*.b64 > /tmp/genesisl1-insights.b64
-          base64 --decode /tmp/genesisl1-insights.b64 > /tmp/genesisl1-insights.zip
-          echo "8374091a5a26d8e74ef61238dd4c7506c067d0ff3079a0e36e15bba6b70821f0  /tmp/genesisl1-insights.zip" | sha256sum -c -
-          rm -rf /tmp/genesisl1-insights-release
-          mkdir -p /tmp/genesisl1-insights-release
-          unzip -q /tmp/genesisl1-insights.zip -d /tmp/genesisl1-insights-release
-          test -d /tmp/genesisl1-insights-release/GenesisL1-insights
-          rsync -a --delete --exclude='.git/' /tmp/genesisl1-insights-release/GenesisL1-insights/ ./
+          rm -rf /tmp/old-tree /tmp/delta /tmp/final-tree
+          mkdir -p /tmp/old-tree /tmp/delta /tmp/final-tree
+          rsync -a --exclude='.git/' ./ /tmp/old-tree/
+          cat .publication-payload/chunk-*.b85 > /tmp/genesisl1-insights.b85
+          python - <<'PY'
+          import base64, hashlib, pathlib
+          encoded = pathlib.Path('/tmp/genesisl1-insights.b85').read_text(encoding='ascii')
+          payload = base64.b85decode(encoded.encode('ascii'))
+          digest = hashlib.sha256(payload).hexdigest()
+          expected = '8fa245e23b070246b06653681c126e3112a85a240f454c16ed2711935da2f361'
+          if digest != expected:
+              raise SystemExit(f'delta SHA-256 mismatch: {digest} != {expected}')
+          pathlib.Path('/tmp/genesisl1-insights-delta.tar.xz').write_bytes(payload)
+          PY
+          tar -xJf /tmp/genesisl1-insights-delta.tar.xz -C /tmp/delta
+          python /tmp/delta/build_final.py \
+            --old /tmp/old-tree \
+            --delta /tmp/delta \
+            --out /tmp/final-tree
+          rsync -a --delete --exclude='.git/' /tmp/final-tree/ ./
 
       - name: Validate publication and evidence
         shell: bash
         run: |
           set -euo pipefail
-          python -m pip install --disable-pip-version-check Pillow
           python tools/qa/validate_insights_collection.py
           (cd evidence/stake-distribution/block-13690968 && sha256sum -c SHA256SUMS.txt)
           sha256sum -c SHA256SUMS.txt
+          python - <<'PY'
+          from pathlib import Path
+          required = [
+              Path('site/insights/index.html'),
+              Path('site/insights/genesisl1-desci-blockchain-verifiable-ai-model-nfts.html'),
+              Path('site/insights/genesisl1-decentralization-scientific-renaissance.html'),
+              Path('site/insights/genesisl1-stake-distribution-decentralization-evidence.html'),
+              Path('press/genesisl1-next-verifiable-renaissance-press-release.md'),
+              Path('press/genesisl1-stake-distribution-decentralization-press-release.md'),
+          ]
+          missing=[str(p) for p in required if not p.exists()]
+          if missing: raise SystemExit(f'missing final files: {missing}')
+          print('Final publication tree validated')
+          PY
 
       - name: Commit final reviewed publication
         shell: bash
