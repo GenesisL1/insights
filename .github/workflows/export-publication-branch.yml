@@ -1,0 +1,26 @@
+name: Export publication branch
+
+on:
+  push:
+    branches: [publish-final-insights-20260921]
+    paths:
+      - ".github/EXPORT_PUBLICATION_BRANCH"
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: publish-final-insights-20260921
+      - uses: actions/upload-artifact@v4
+        with:
+          name: genesisl1-publication-branch-export
+          path: |
+            .
+            !.git/**
+          include-hidden-files: true
+          retention-days: 1
