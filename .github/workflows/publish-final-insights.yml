@@ -37,7 +37,7 @@ jobs:
           cat .publication-payload/chunk-*.b85 > /tmp/genesisl1-insights.b85
           python - <<'PY'
           import base64, hashlib, pathlib
-          encoded = pathlib.Path('/tmp/genesisl1-insights.b85').read_text(encoding='ascii')
+          encoded = ''.join(pathlib.Path('/tmp/genesisl1-insights.b85').read_text(encoding='ascii').split())
           payload = base64.b85decode(encoded.encode('ascii'))
           digest = hashlib.sha256(payload).hexdigest()
           expected = '8fa245e23b070246b06653681c126e3112a85a240f454c16ed2711935da2f361'
