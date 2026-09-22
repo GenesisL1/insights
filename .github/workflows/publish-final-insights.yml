@@ -35,16 +35,17 @@ jobs:
           mkdir -p /tmp/old-tree /tmp/delta /tmp/final-tree
           rsync -a --exclude='.git/' ./ /tmp/old-tree/
           python - <<'PY'
-          import base64, hashlib, pathlib
-          marker = '[... truncated ...]'
+          import base64, hashlib, pathlib, re
           pieces = []
+          pattern = re.compile(r'\[\.\.\. [^\]]+ \.\.\.\]')
           for path in sorted(pathlib.Path('.publication-payload').glob('chunk-*.b85')):
               raw = path.read_text(encoding='ascii')
-              count = raw.count(marker)
-              if count != 1:
-                  raise SystemExit(f'{path}: expected one transport marker, found {count}')
-              clean = ''.join(raw.replace(marker, '').split())
-              print(f'{path}: raw_length={len(raw)}, clean_length={len(clean)}, marker_removed={count}')
+              matches = pattern.findall(raw)
+              if len(matches) != 1:
+                  window = raw[9985:10050]
+                  raise SystemExit(f'{path}: expected one transport marker, found {len(matches)}; boundary={window!r}')
+              clean = ''.join(pattern.sub('', raw).split())
+              print(f'{path}: raw_length={len(raw)}, clean_length={len(clean)}, removed={matches[0]!r}')
               pieces.append(clean)
           encoded = ''.join(pieces)
           payload = base64.b85decode(encoded.encode('ascii'))
