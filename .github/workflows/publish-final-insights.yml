@@ -36,20 +36,22 @@ jobs:
           rsync -a --exclude='.git/' ./ /tmp/old-tree/
           python - <<'PY'
           import base64, hashlib, pathlib
-          paths = sorted(pathlib.Path('.publication-payload').glob('chunk-*.b85'))
-          alphabet = set(base64._b85alphabet.decode('ascii'))
+          marker = '[... truncated ...]'
           pieces = []
-          for path in paths:
+          for path in sorted(pathlib.Path('.publication-payload').glob('chunk-*.b85')):
               raw = path.read_text(encoding='ascii')
-              bad = [(i, repr(ch), ord(ch)) for i, ch in enumerate(raw) if ch not in alphabet]
-              print(f'{path}: length={len(raw)}, invalid={len(bad)}, first_invalid={bad[:20]}')
-              pieces.append(''.join(ch for ch in raw if ch in alphabet))
+              count = raw.count(marker)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected one transport marker, found {count}')
+              clean = ''.join(raw.replace(marker, '').split())
+              print(f'{path}: raw_length={len(raw)}, clean_length={len(clean)}, marker_removed={count}')
+              pieces.append(clean)
           encoded = ''.join(pieces)
           payload = base64.b85decode(encoded.encode('ascii'))
           digest = hashlib.sha256(payload).hexdigest()
           expected = '8fa245e23b070246b06653681c126e3112a85a240f454c16ed2711935da2f361'
           if digest != expected:
-              raise SystemExit(f'delta SHA-256 mismatch after invalid-character filtering: {digest} != {expected}; encoded_length={len(encoded)}')
+              raise SystemExit(f'delta SHA-256 mismatch: {digest} != {expected}; encoded_length={len(encoded)}')
           pathlib.Path('/tmp/genesisl1-insights-delta.tar.xz').write_bytes(payload)
           PY
           tar -xJf /tmp/genesisl1-insights-delta.tar.xz -C /tmp/delta
