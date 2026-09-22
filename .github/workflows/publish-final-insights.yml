@@ -52,6 +52,26 @@ jobs:
             --out /tmp/final-tree
           rsync -a --delete --exclude='.git/' /tmp/final-tree/ ./
 
+      - name: Keep press material outside the Insights repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf press
+          rm -f content/article-02-next-verifiable-renaissance/press-release.md
+          rm -f site/insights/genesisl1-verifiable-ai-sovereign-science-press-release.html
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('README.md')
+          if path.exists():
+              text = path.read_text(encoding='utf-8')
+              start = text.find('\n## Press-release drafts\n')
+              if start != -1:
+                  end = text.find('\n## Verify\n', start)
+                  if end != -1:
+                      text = text[:start] + text[end:]
+              path.write_text(text, encoding='utf-8')
+          PY
+
       - name: Validate publication and evidence
         shell: bash
         run: |
@@ -66,12 +86,17 @@ jobs:
               Path('site/insights/genesisl1-desci-blockchain-verifiable-ai-model-nfts.html'),
               Path('site/insights/genesisl1-decentralization-scientific-renaissance.html'),
               Path('site/insights/genesisl1-stake-distribution-decentralization-evidence.html'),
-              Path('press/genesisl1-next-verifiable-renaissance-press-release.md'),
-              Path('press/genesisl1-stake-distribution-decentralization-press-release.md'),
+              Path('content/initial/article.md'),
+              Path('content/renaissance/article.md'),
+              Path('content/stake-distribution/article.md'),
           ]
-          missing=[str(p) for p in required if not p.exists()]
-          if missing: raise SystemExit(f'missing final files: {missing}')
-          print('Final publication tree validated')
+          missing = [str(p) for p in required if not p.exists()]
+          if missing:
+              raise SystemExit(f'missing final files: {missing}')
+          forbidden = [p for p in Path('.').rglob('*') if p.is_file() and 'press-release' in p.name.lower()]
+          if forbidden:
+              raise SystemExit(f'press-release files must remain outside repository: {forbidden}')
+          print('Final publication tree validated without press-release files')
           PY
 
       - name: Commit final reviewed publication
