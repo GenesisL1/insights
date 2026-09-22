@@ -1,0 +1,15 @@
+{
+  "active_delegators": 1402,
+  "active_validators": 33,
+  "block_hash": "5D8408FDBE889C2146A2A215DED9407C40CBC75FE943AD07D8B4458C05C3BC87",
+  "block_time_utc": "2026-09-21T04:58:47.770959488Z",
+  "checksum_count": 158,
+  "history_paths": [
+    "history/block-13439825",
+    "history/block-13466645",
+    "history/block-13553561"
+  ],
+  "latest_height": 13690968,
+  "latest_path": "block-13690968",
+  "schema": "org.genesisl1.stake_distribution_pointer.v2"
+}

@@ -1,30 +1,42 @@
 # GenesisL1 Insights
 
-Current evidence-backed publications and reproducible source data for GenesisL1 scientific infrastructure.
+Source publications, deployable pages and reproducible evidence for GenesisL1 scientific infrastructure.
 
-## Current publication
+## Publications
 
-- [Article: GenesisL1 — Public Infrastructure for Verifiable AI and Sovereign Science](content/article-02-next-verifiable-renaissance/article.md)
-- [Press release](content/article-02-next-verifiable-renaissance/press-release.md)
-- [Production HTML](site/insights/genesisl1-decentralization-scientific-renaissance.html)
-- [Current evidence page](site/decentralization/index.html)
+- [GenesisL1: The DeSci Layer 1 Where Scientific Data, Verifiable AI and Digital Rights Become One System](content/initial/article.md)
+- [GenesisL1 and the Next Verifiable Renaissance](content/renaissance/article.md)
+- [GenesisL1 Stake Distribution and Decentralization](content/stake-distribution/article.md)
 
-## Current verified state
+## Current evidence
 
-Pinned GenesisL1 block: **13,439,825** (August 11, 2026)
+The latest stake and delegation package is pinned to GenesisL1 block **13,690,968**.
 
-- **28** active validators; largest share **9.03%**; top five **35.89%**.
-- **24,957,676.89 L1** bonded across **1,371** active delegator addresses.
-- MOLNFT PDB v2: **229,271** parent records and **265,786** total tokens.
-- Randomized MOLNFT audit: **100/100 structural-fidelity passes, zero failures**.
+- **33** active validators
+- largest validator share: **9.27%**
+- top-five validator share: **27.38%**
+- **25,555,236.79 L1** bonded
+- **1,402** active delegator addresses
+- validator HHI: **373.47**
+- effective validator count: **26.78**
 
-[Open the current raw snapshot and checksums](evidence/article-02/network-state/block-13439825)
+Historical snapshots are preserved for longitudinal comparison.
+
+[Open the current evidence package](evidence/stake-distribution/block-13690968)
 
 ## Verify
 
 ```bash
-cd evidence/article-02/network-state/block-13439825
+cd evidence/stake-distribution/block-13690968
 sha256sum -c SHA256SUMS.txt
 ```
 
-The repository intentionally retains one current network/protocol snapshot and one immutable randomized MOLNFT audit. Historical workflow notes, temporary migration files and superseded network snapshots are not part of the current publication tree.
+## Preserved evidence
+
+- `evidence/stake-distribution/history/` — the August 11, August 15 and August 29 stake snapshots (blocks 13,439,825 / 13,466,645 / 13,553,561), kept for longitudinal comparison.
+- `evidence/article-02/molnft/block-13436937` — the randomized MOLNFT reconstruction audit (100 of 100 structural-fidelity passes, 853 checksummed files); `methodology/molnft.md` describes it.
+- `evidence/article-02/network-state/` and `evidence/article-02/delegation-state/` — the original August network and delegation snapshots at the paths earlier publications cite.
+
+## Licensing
+
+Code is MIT licensed; original editorial text and figures are CC BY 4.0; original derived evidence tables and metrics are CC0 1.0. See [`LICENSES.md`](LICENSES.md).
