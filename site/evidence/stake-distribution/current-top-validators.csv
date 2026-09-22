@@ -1,0 +1,11 @@
+consensus_rank,moniker,operator_address,voting_power,voting_power_share_percent,cumulative_voting_power_share_percent,commission_rate,delegation_relationships,delegated_balance_l1
+1,⚡ FirstTensor.com ⚡,genesisvaloper1pscc4p8cynm6zcam3wcz7rnnzsazkh3ljumyza,2368117,9.26666537,9.26666537,0.100000000000000000,44,2368117.749304
+2,anodeofzen,genesisvaloper1x4sj6d9r9scxef8urmdfxcx37ut7yk2s2m8r68,1450895,5.6774891,14.94415447,0.070000000000000000,300,1450895.036068
+3,BlueHole-II,genesisvaloper1nlunvpqm6mcw69cgfraqgcfve63c6pqs3mdxvf,1175482,4.59977203,19.5439265,0.050000000000000000,17,1175482.465153
+4,Calcium by Faust,genesisvaloper15ua6k8dtusen4zzdqvuna2sscw6zz4y5n9awff,1019752,3.99038584,23.53431234,0.050000000000000000,70,1019752.234493
+5,LCserve,genesisvaloper175rljmqvlrx9ykfkzxzt9azxkascdza4x4a5kd,983005,3.84659136,27.3809037,0.080000000000000000,31,983005.958538
+6,CryptmasGhost,genesisvaloper1wwxpj2wxnd63h597pwtzmxavyzmrr2kxt7aasj,833344,3.26095374,30.64185744,0.070000000000000000,114,833344.091629
+7,bgvcvaloper,genesisvaloper1qf0nkx5f3vz66fe3he4twf58kkfqcj3ly2favh,797650,3.12127975,33.76313719,0.050000000000000000,66,797650.687265
+8,NakoTurk,genesisvaloper1fmmh47668k05rj2muv3868xfsmxtvxp4cuuj8r,797209,3.11955407,36.88269126,0.050000000000000000,123,797209.050564
+9,OG Oganesson,genesisvaloper1vc0e9lze2qpqc745zz6ltwdr7s5lfxh9qpp0vw,796245,3.11578185,39.99847311,0.050000000000000000,204,796245.298500
+10,vanpe,genesisvaloper1uacumx6pkemysvdwwana6suad0lnhm9rm8ghru,793370,3.1045317,43.10300481,0.050000000000000000,17,793370.107140

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>GenesisL1 Stake Distribution and Decentralization Evidence | Block 13,690,968</title><meta content="A reproducible analysis of GenesisL1 validator voting power, bonded L1 and delegator-address concentration through block 13,690,968, with five preserved measurements and raw SHA-256 evidence." name="description"/><meta content="GenesisL1 stake distribution, validator decentralization, delegator concentration, proof of stake, CometBFT, blockchain evidence, HHI, effective validator count" name="keywords"/><meta content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" name="robots"/><link href="https://genesisl1.com/insights/genesisl1-stake-distribution-decentralization-evidence.html" rel="canonical"/><link href="./assets/genesisl1-official-logo.svg" rel="icon"/><link href="./insights.css" rel="stylesheet"/><meta content="article" property="og:type"/><meta content="GenesisL1 Insights" property="og:site_name"/><meta content="GenesisL1 Stake Distribution and Decentralization" property="og:title"/><meta content="A reproducible analysis of GenesisL1 validator voting power, bonded L1 and delegator-address concentration through block 13,690,968, with five preserved measurements and raw SHA-256 evidence." property="og:description"/><meta content="https://genesisl1.com/insights/genesisl1-stake-distribution-decentralization-evidence.html" property="og:url"/><meta content="https://genesisl1.com/insights/assets/genesisl1-stake-distribution-social-1200x630.jpg" property="og:image"/><meta content="1200" property="og:image:width"/><meta content="630" property="og:image:height"/><meta content="A low-contrast Renaissance scientific academy with GenesisL1 stake-distribution metrics and validator evidence" property="og:image:alt"/><meta content="summary_large_image" name="twitter:card"/><meta content="GenesisL1 Stake Distribution and Decentralization" name="twitter:title"/><meta content="A reproducible analysis of GenesisL1 validator voting power, bonded L1 and delegator-address concentration through block 13,690,968, with five preserved measurements and raw SHA-256 evidence." name="twitter:description"/><meta content="https://genesisl1.com/insights/assets/genesisl1-stake-distribution-social-1200x630.jpg" name="twitter:image"/><meta content="A low-contrast Renaissance scientific academy with GenesisL1 stake-distribution metrics and validator evidence" name="twitter:image:alt"/><script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"GenesisL1 Stake Distribution and Decentralization","description":"A reproducible analysis of GenesisL1 validator voting power, bonded L1 and delegator-address concentration through block 13,690,968, with five preserved measurements and raw SHA-256 evidence.","mainEntityOfPage":{"@type":"WebPage","@id":"https://genesisl1.com/insights/genesisl1-stake-distribution-decentralization-evidence.html"},"image":{"@type":"ImageObject","url":"https://genesisl1.com/insights/assets/genesisl1-stake-distribution-social-1200x630.jpg","width":1200,"height":630},"publisher":{"@type":"Organization","name":"GenesisL1","url":"https://genesisl1.com/","logo":{"@type":"ImageObject","url":"https://genesisl1.com/press/assets/brand/genesisl1-official-logo.svg"}},"keywords":"GenesisL1 stake distribution, validator decentralization, delegator concentration, proof of stake, CometBFT, blockchain evidence, HHI, effective validator count","url":"https://genesisl1.com/insights/genesisl1-stake-distribution-decentralization-evidence.html","isPartOf":{"@type":"CollectionPage","name":"GenesisL1 Insights","url":"https://genesisl1.com/insights/"},"about":["GenesisL1 stake distribution","validator concentration","delegator distribution","block 13690968"]}</script><meta content="#ffffff" name="theme-color"/><meta content="en_US" property="og:locale"/><meta content="https://genesisl1.com/insights/assets/genesisl1-stake-distribution-social-1200x630.jpg" property="og:image:secure_url"/><link as="image" href="./assets/genesisl1-stake-distribution-cover.webp" rel="preload"/><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"GenesisL1","item":"https://genesisl1.com/"},{"@type":"ListItem","position":2,"name":"Insights","item":"https://genesisl1.com/insights/"},{"@type":"ListItem","position":3,"name":"GenesisL1 Stake Distribution and Decentralization","item":"https://genesisl1.com/insights/genesisl1-stake-distribution-decentralization-evidence.html"}]}</script></head><body><a class="skip" href="#content">Skip to article</a><header class="site-header"><nav class="nav"><a aria-label="GenesisL1 home" class="brand" href="https://genesisl1.com/"><img alt="GenesisL1" height="36" src="./assets/genesisl1-official-logo.svg" width="36"/><span class="brand-lockup"><strong>GenesisL1</strong><small>CHAIN 29</small></span></a><div class="nav-links"><a href="https://genesisl1.com/">Home</a><a href="https://genesisl1.com/overview.html">Overview</a><a href="https://genesisl1.com/ecosystem.html">Ecosystem</a><a aria-current="page" href="./index.html">Insights</a><a href="https://genesisl1.com/whitepaper.pdf">Whitepaper ↗</a><a class="cta" href="https://explorer.genesisl1.org/validators">Validators ↗</a></div></nav></header><main class="article-shell" id="content"><aside aria-label="Article contents" class="toc"><div class="toc-title">Contents</div><div class="toc-links"><a href="#executive-finding"><span class="toc-num">01</span><span>Executive finding</span></a><a href="#measurement-design"><span class="toc-num">02</span><span>Measurement design</span></a><a href="#validator-voting-power-distribution"><span class="toc-num">03</span><span>Validator voting-power distribution</span></a><a href="#delegator-address-distribution"><span class="toc-num">04</span><span>Delegator-address distribution</span></a><a href="#a-longitudinal-record-not-an-overwritten-dashboard"><span class="toc-num">05</span><span>A longitudinal record, not an overwritten dashboard</span></a><a href="#bonded-stake-and-distribution-are-separate-dimensions"><span class="toc-num">06</span><span>Bonded stake and distribution are separate dimensions</span></a><a href="#what-the-evidence-proves"><span class="toc-num">07</span><span>What the evidence proves</span></a><a href="#reproduce-the-current-package"><span class="toc-num">08</span><span>Reproduce the current package</span></a><a href="#one-technical-proof-within-a-larger-renaissance-thesis"><span class="toc-num">09</span><span>One technical proof within a larger Renaissance thesis</span></a><a href="#sources"><span class="toc-num">10</span><span>Sources</span></a></div><div class="toc-actions"><a class="toc-action" href="./index.html"><span>Browse Insights</span><span aria-hidden="true">↗</span></a><a class="toc-action" href="https://github.com/GenesisL1/insights"><span>Evidence repository</span><span aria-hidden="true">↗</span></a></div></aside><article class="article-main"><div class="breadcrumbs"><a href="./index.html">Insights</a> / GenesisL1 Stake Distribution and Decentralization</div><div class="article-kicker">Article 03 · Technical evidence</div><h1 class="article-title">GenesisL1 Stake Distribution and Decentralization</h1><p class="article-deck">A reproducible block-pinned analysis of GenesisL1 validator voting power, bonded L1, delegation concentration and decentralization across five preserved measurements.</p><div class="meta-row"><span>9 min read</span></div><figure class="hero-figure"><button class="hero-button" data-lightbox="./assets/genesisl1-stake-distribution-cover.webp" type="button"><img alt="A low-contrast Renaissance scientific academy with GenesisL1 stake-distribution metrics and validator evidence" fetchpriority="high" height="941" src="./assets/genesisl1-stake-distribution-cover.webp" width="1672"/></button><figcaption>Current stake and delegation evidence at block 13,690,968, with prior snapshots preserved for longitudinal comparison.</figcaption></figure><div class="metric-strip"><div class="metric"><span class="metric-label">Active validators</span><b>33 / 50</b><small>at block 13,690,968</small></div><div class="metric"><span class="metric-label">Top five</span><b>27.38%</b><small>voting power</small></div><div class="metric"><span class="metric-label">Active delegators</span><b>1,402</b><small>addresses</small></div><div class="metric"><span class="metric-label">Bonded L1</span><b>25,555,236.79</b><small>53.94% of supply</small></div></div><div class="related-strip"><a href="./genesisl1-decentralization-scientific-renaissance.html"><span><small>Visionary anchor</small><b>GenesisL1 and the Next Verifiable Renaissance</b></span><span>↗</span></a><a href="./genesisl1-desci-blockchain-verifiable-ai-model-nfts.html"><span><small>Technical foundation</small><b>The DeSci Layer 1: Data, AI and Rights</b></span><span>↗</span></a></div><div class="prose">
+<p>This article tests one proposition from <strong><a href="./genesisl1-decentralization-scientific-renaissance.html">GenesisL1 and the Next Verifiable Renaissance</a></strong>: public scientific infrastructure should not ask institutions to trust a permanent adjective such as “decentralized.” It should publish states that can be independently measured, compared and reproduced.</p>
+<p>The latest stake-distribution package is pinned to GenesisL1 block <strong>13,690,968</strong>, dated <strong>September 21, 2026 at 04:58:47 UTC</strong>. It preserves raw CometBFT, Cosmos staking, delegation, bank-supply and EVM responses; complete validator, delegation and delegator CSV files; exact calculations; a manifest; and <strong>158 SHA-256 checksums</strong>.</p>
+<h2 id="executive-finding">Executive finding</h2>
+<p>At the latest pinned height, GenesisL1 recorded:</p>
+<table>
+<thead>
+<tr>
+<th>Current observable state</th>
+<th style="text-align:right">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Active consensus validators</td>
+<td style="text-align:right"><strong>33 / 50</strong></td>
+</tr>
+<tr>
+<td>Largest validator share</td>
+<td style="text-align:right"><strong>9.27%</strong></td>
+</tr>
+<tr>
+<td>Top-three / top-five / top-ten share</td>
+<td style="text-align:right"><strong>19.54% / 27.38% / 43.10%</strong></td>
+</tr>
+<tr>
+<td>Validators required to exceed one third / two thirds</td>
+<td style="text-align:right"><strong>7 / 18</strong></td>
+</tr>
+<tr>
+<td>Validator HHI / effective validator count</td>
+<td style="text-align:right"><strong>373.47 / 26.78</strong></td>
+</tr>
+<tr>
+<td>Validator Gini / normalized entropy</td>
+<td style="text-align:right"><strong>0.2140 / 0.9708</strong></td>
+</tr>
+<tr>
+<td>Bonded stake</td>
+<td style="text-align:right"><strong>25,555,236.79 L1</strong></td>
+</tr>
+<tr>
+<td>Bonded share of native supply</td>
+<td style="text-align:right"><strong>53.94%</strong></td>
+</tr>
+<tr>
+<td>Active delegator addresses / relationships</td>
+<td style="text-align:right"><strong>1,402 / 2,197</strong></td>
+</tr>
+<tr>
+<td>Largest / top-five / top-ten delegator-address share</td>
+<td style="text-align:right"><strong>3.62% / 15.77% / 26.94%</strong></td>
+</tr>
+<tr>
+<td>Delegator-address HHI / effective address count</td>
+<td style="text-align:right"><strong>153.98 / 64.94</strong></td>
+</tr>
+<tr>
+<td>Delegator-address Gini / normalized entropy</td>
+<td style="text-align:right"><strong>0.9546 / 0.6123</strong></td>
+</tr>
+<tr>
+<td>Delegator one-third / two-thirds coefficients</td>
+<td style="text-align:right"><strong>14 / 38</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Current GenesisL1 validator voting-power distribution" src="assets/genesisl1-current-validator-distribution.webp"/></p>
+<p><em>Current active-validator distribution at block 13,690,968. Shares are calculated from the exact CometBFT voting-power vector.</em></p>
+<p>Since the July reference, the active validator set expanded by <strong>13 validators</strong>, the largest-validator share declined by <strong>3.82 percentage points</strong>, and the top-five share declined by <strong>23.69 points</strong>. The one-third coefficient widened from <strong>3 to 7</strong>, and the two-thirds coefficient from <strong>8 to 18</strong>.</p>
+<p>The newest interval is deliberately less simple. From August 29 to September 21, the active set expanded from <strong>31 to 33</strong>, top-ten share fell from <strong>43.88% to 43.10%</strong>, HHI improved from <strong>377.24 to 373.47</strong>, and effective validator count rose from <strong>26.51 to 26.78</strong>. At the same time, the largest-validator share rose from <strong>7.96% to 9.27%</strong>, while top-five share was nearly unchanged. Decentralization is therefore observable and dynamic, but not monotonic in every measure.</p>
+<p>This does not establish permanent decentralization or organizational independence. It establishes a reproducible trajectory in voting-power and delegation distribution.</p>
+<h2 id="measurement-design">Measurement design</h2>
+<p>The headline consensus metrics use the exact CometBFT validator set and integer <code>voting_power</code> values returned at the pinned height. Cosmos staking records attach operator metadata, token balances, status and commission information. Delegation endpoints enumerate the relationships associated with registered validators. Staking-pool and bank-supply responses provide the denominator for the bonded-ratio calculation.</p>
+<p>The package computes:</p>
+<ul>
+<li>rank and cumulative voting-power share;</li>
+<li>largest, top-three, top-five and top-ten share;</li>
+<li>the smallest leading cohort strictly exceeding one third and two thirds;</li>
+<li>Herfindahl–Hirschman Index, scaled to 10,000;</li>
+<li>effective validator count, <code>1 / Σsᵢ²</code>;</li>
+<li>Gini coefficient;</li>
+<li>normalized entropy;</li>
+<li>the same concentration family over total bonded delegation per active delegator address;</li>
+<li>bonded stake as a percentage of total native supply.</li>
+</ul>
+<p>CometBFT uses more than two thirds of voting power for commit formation. The one-third coefficient is therefore principally liveness-relevant: coordinated non-participation or correlated outage at that scale can prevent the remaining voting power from reaching the commit threshold. It should not be described as the number of validators that can unilaterally rewrite state.</p>
+<h2 id="validator-voting-power-distribution">Validator voting-power distribution</h2>
+<p>The current validator set contains <strong>33 active consensus operators</strong>. The largest holds <strong>9.27%</strong>, while the top five collectively hold <strong>27.38%</strong>. The first 6 validators remain below one third; the 7th moves the leading cumulative share above it. The first 17 remain below two thirds; the 18th moves the cumulative share above the commit threshold.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Rank</th>
+<th>Validator</th>
+<th style="text-align:right">Share</th>
+<th style="text-align:right">Cumulative</th>
+<th style="text-align:right">Delegation relationships</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">1</td>
+<td>⚡ FirstTensor.com ⚡</td>
+<td style="text-align:right">9.27%</td>
+<td style="text-align:right">9.27%</td>
+<td style="text-align:right">44</td>
+</tr>
+<tr>
+<td style="text-align:right">2</td>
+<td>anodeofzen</td>
+<td style="text-align:right">5.68%</td>
+<td style="text-align:right">14.94%</td>
+<td style="text-align:right">300</td>
+</tr>
+<tr>
+<td style="text-align:right">3</td>
+<td>BlueHole-II</td>
+<td style="text-align:right">4.60%</td>
+<td style="text-align:right">19.54%</td>
+<td style="text-align:right">17</td>
+</tr>
+<tr>
+<td style="text-align:right">4</td>
+<td>Calcium by Faust</td>
+<td style="text-align:right">3.99%</td>
+<td style="text-align:right">23.53%</td>
+<td style="text-align:right">70</td>
+</tr>
+<tr>
+<td style="text-align:right">5</td>
+<td>LCserve</td>
+<td style="text-align:right">3.85%</td>
+<td style="text-align:right">27.38%</td>
+<td style="text-align:right">31</td>
+</tr>
+<tr>
+<td style="text-align:right">6</td>
+<td>CryptmasGhost</td>
+<td style="text-align:right">3.26%</td>
+<td style="text-align:right">30.64%</td>
+<td style="text-align:right">114</td>
+</tr>
+<tr>
+<td style="text-align:right">7</td>
+<td>bgvcvaloper</td>
+<td style="text-align:right">3.12%</td>
+<td style="text-align:right">33.76%</td>
+<td style="text-align:right">66</td>
+</tr>
+<tr>
+<td style="text-align:right">8</td>
+<td>NakoTurk</td>
+<td style="text-align:right">3.12%</td>
+<td style="text-align:right">36.88%</td>
+<td style="text-align:right">123</td>
+</tr>
+<tr>
+<td style="text-align:right">9</td>
+<td>OG Oganesson</td>
+<td style="text-align:right">3.12%</td>
+<td style="text-align:right">40.00%</td>
+<td style="text-align:right">204</td>
+</tr>
+<tr>
+<td style="text-align:right">10</td>
+<td>vanpe</td>
+<td style="text-align:right">3.10%</td>
+<td style="text-align:right">43.10%</td>
+<td style="text-align:right">17</td>
+</tr>
+</tbody>
+</table>
+<p>The HHI of <strong>373.47</strong> corresponds to an effective validator count of <strong>26.78</strong>. In plain terms, the observed voting-power distribution has the same HHI as an equally weighted set of about 26.78 validators. The normalized entropy of <strong>0.9708</strong> remains close to 1, while the validator Gini is <strong>0.2140</strong>.</p>
+<p>The latest state illustrates why a metric family is more informative than a single headline number. The leading share increased since August 29, but the active set expanded, top-ten concentration decreased, HHI improved and effective count increased. Top-share measures reveal the leading cohort; HHI emphasizes large shares; effective count converts HHI into an intuitive equivalent set size; Gini measures inequality across the active vector; entropy measures proximity to maximum dispersion for the observed set size.</p>
+<h2 id="delegator-address-distribution">Delegator-address distribution</h2>
+<p>Validator voting power and delegator distribution answer different questions.</p>
+<p>At block 13,690,968, <strong>1,402 addresses</strong> held a nonzero bonded delegation to active validators. The package records <strong>2,197 delegation relationships</strong> to active validators, of which 1,910 carry a nonzero balance; <strong>229 addresses</strong> hold relationships with more than one active validator (167 with nonzero balances at more than one). Address counts include only nonzero bonded balances; relationship counts include zero-balance records exactly as returned. The largest active delegator address represented <strong>3.62%</strong> of bonded delegation; the top five represented <strong>15.77%</strong>, the top ten <strong>26.94%</strong>, and the top 25 <strong>51.72%</strong>.</p>
+<p>The smallest leading address cohort exceeding one third contained <strong>14 addresses</strong>, while the cohort exceeding two thirds contained <strong>38</strong>. Delegator-address HHI was <strong>153.98</strong>, corresponding to an effective address count of <strong>64.94</strong>.</p>
+<p>Compared with August 29, the largest-address share fell from <strong>3.85% to 3.62%</strong>, top-ten concentration fell from <strong>27.51% to 26.94%</strong>, delegator HHI fell from <strong>158.68 to 153.98</strong>, and effective address count rose from <strong>63.02 to 64.94</strong>. The active-delegator population increased from <strong>1,388 to 1,402</strong>.</p>
+<p><strong>An address is not an entity.</strong> Exchanges, custodians and multisigs can aggregate many beneficiaries into one address, while one party can control many addresses. Address-level dispersion is neither an upper nor a lower bound on beneficial-owner dispersion. It is a distinct and weaker measurement of what the ledger exposes.</p>
+<p>The high delegator Gini (0.9546) should also be interpreted with care. The address set contains a long tail of very small balances, so Gini remains high even as the largest shares decline. HHI, effective count and top-cohort shares are more directly useful for comparing leading concentration across pinned snapshots.</p>
+<h2 id="a-longitudinal-record-not-an-overwritten-dashboard">A longitudinal record, not an overwritten dashboard</h2>
+<table>
+<thead>
+<tr>
+<th>Measurement</th>
+<th style="text-align:right">July reference</th>
+<th style="text-align:right">Aug. 11 · 13,439,825</th>
+<th style="text-align:right">Aug. 15 · 13,466,645</th>
+<th style="text-align:right">Aug. 29 · 13,553,561</th>
+<th style="text-align:right">Sep. 21 · 13,690,968</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Active validators</td>
+<td style="text-align:right"><strong>20</strong></td>
+<td style="text-align:right"><strong>28</strong></td>
+<td style="text-align:right"><strong>29</strong></td>
+<td style="text-align:right"><strong>31</strong></td>
+<td style="text-align:right"><strong>33</strong></td>
+</tr>
+<tr>
+<td>Largest validator</td>
+<td style="text-align:right"><strong>13.09%</strong></td>
+<td style="text-align:right"><strong>9.03%</strong></td>
+<td style="text-align:right"><strong>8.69%</strong></td>
+<td style="text-align:right"><strong>7.96%</strong></td>
+<td style="text-align:right"><strong>9.27%</strong></td>
+</tr>
+<tr>
+<td>Top three</td>
+<td style="text-align:right"><strong>35.62%</strong></td>
+<td style="text-align:right"><strong>23.20%</strong></td>
+<td style="text-align:right"><strong>22.62%</strong></td>
+<td style="text-align:right"><strong>19.19%</strong></td>
+<td style="text-align:right"><strong>19.54%</strong></td>
+</tr>
+<tr>
+<td>Top five</td>
+<td style="text-align:right"><strong>51.07%</strong></td>
+<td style="text-align:right"><strong>35.89%</strong></td>
+<td style="text-align:right"><strong>31.78%</strong></td>
+<td style="text-align:right"><strong>27.33%</strong></td>
+<td style="text-align:right"><strong>27.38%</strong></td>
+</tr>
+<tr>
+<td>Top ten</td>
+<td style="text-align:right">—</td>
+<td style="text-align:right"><strong>63.22%</strong></td>
+<td style="text-align:right"><strong>49.73%</strong></td>
+<td style="text-align:right"><strong>43.88%</strong></td>
+<td style="text-align:right"><strong>43.10%</strong></td>
+</tr>
+<tr>
+<td>One-third coefficient</td>
+<td style="text-align:right"><strong>3</strong></td>
+<td style="text-align:right"><strong>5</strong></td>
+<td style="text-align:right"><strong>6</strong></td>
+<td style="text-align:right"><strong>7</strong></td>
+<td style="text-align:right"><strong>7</strong></td>
+</tr>
+<tr>
+<td>Two-thirds coefficient</td>
+<td style="text-align:right"><strong>8</strong></td>
+<td style="text-align:right"><strong>11</strong></td>
+<td style="text-align:right"><strong>16</strong></td>
+<td style="text-align:right"><strong>18</strong></td>
+<td style="text-align:right"><strong>18</strong></td>
+</tr>
+<tr>
+<td>Validator HHI</td>
+<td style="text-align:right">—</td>
+<td style="text-align:right"><strong>520.73</strong></td>
+<td style="text-align:right"><strong>426.59</strong></td>
+<td style="text-align:right"><strong>377.24</strong></td>
+<td style="text-align:right"><strong>373.47</strong></td>
+</tr>
+<tr>
+<td>Effective validator count</td>
+<td style="text-align:right">—</td>
+<td style="text-align:right"><strong>19.20</strong></td>
+<td style="text-align:right"><strong>23.44</strong></td>
+<td style="text-align:right"><strong>26.51</strong></td>
+<td style="text-align:right"><strong>26.78</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="GenesisL1 longitudinal stake-distribution trajectory" src="assets/genesisl1-stake-evolution.webp"/></p>
+<p><em>Five published measurements preserve the trajectory rather than replacing earlier states with a moving dashboard.</em></p>
+<p>From August 11 to September 21:</p>
+<ul>
+<li>active validators increased from <strong>28 to 33</strong>;</li>
+<li>top-five share fell from <strong>35.89% to 27.38%</strong>;</li>
+<li>validator HHI fell from <strong>520.73 to 373.47</strong>, a decline of <strong>28.3%</strong>;</li>
+<li>effective validator count rose from <strong>19.20 to 26.78</strong>, an increase of <strong>39.4%</strong>;</li>
+<li>the one-third coefficient widened from <strong>5 to 7</strong>;</li>
+<li>the two-thirds coefficient widened from <strong>11 to 18</strong>.</li>
+</ul>
+<p>The August 29 → September 21 interval is mixed in the leading shares: the largest share rose by <strong>1.31 points</strong> and top-five share rose by only <strong>0.05 points</strong>, while top-ten share fell, HHI improved and effective count increased. This is exactly why earlier snapshots remain in the evidence tree. A new state should not erase the old one, and no single concentration metric should be treated as the network’s permanent identity.</p>
+<p>The history itself is the evidence.</p>
+<h2 id="bonded-stake-and-distribution-are-separate-dimensions">Bonded stake and distribution are separate dimensions</h2>
+<p>The absolute bonded amount was <strong>24,957,676.89 L1</strong> on August 11, <strong>24,794,964.00 L1</strong> on August 15, <strong>25,159,069.15 L1</strong> on August 29 and <strong>25,555,236.79 L1</strong> on September 21. The bonded share of native supply moved from <strong>53.36%</strong> to <strong>52.94%</strong>, <strong>53.48%</strong> and <strong>53.94%</strong>.</p>
+<p>The path was not monotonic at first: bonded stake decreased between the first two August measurements, then recovered above the August 11 level and continued higher. Distribution metrics followed their own path. Between August 29 and September 21, the active set expanded and HHI improved even though the leading validator’s share increased.</p>
+<p>That distinction matters. More stake is not automatically more decentralization, and a lower bonded amount is not automatically less decentralization. Security participation, voting-power concentration, operator independence, key custody, hosting diversity and governance behavior are related but separate dimensions.</p>
+<h2 id="what-the-evidence-proves">What the evidence proves</h2>
+<p>The package establishes, at one exact block:</p>
+<ul>
+<li>the active consensus validator set and voting-power vector;</li>
+<li>the ranked threshold cohorts;</li>
+<li>the staking validator records and pool totals returned by the selected provider;</li>
+<li>the enumerated delegation relationships and address-level totals;</li>
+<li>the bank-supply denominator used for the bonded ratio;</li>
+<li>the exact calculations and their reproducible inputs;</li>
+<li>the block hash and timestamp to which the measurement is anchored.</li>
+</ul>
+<p>It does <strong>not</strong> establish:</p>
+<ul>
+<li>that differently named validators have different beneficial owners;</li>
+<li>that operators use independent hosting providers, jurisdictions or upgrade processes;</li>
+<li>that delegator addresses correspond one-to-one with people or institutions;</li>
+<li>that present distribution will persist;</li>
+<li>that consensus distribution alone proves scientific validity or application adoption.</li>
+</ul>
+<p>Those are additional evidence questions.</p>
+<h2 id="reproduce-the-current-package">Reproduce the current package</h2>
+<p>The bundle contains the complete current snapshot under:</p>
+<pre><code class="language-text">evidence/stake-distribution/block-13690968/
+</code></pre>
+<p>Verify its 158 listed files:</p>
+<pre><code class="language-bash">cd evidence/stake-distribution/block-13690968
+sha256sum -c SHA256SUMS.txt
+</code></pre>
+<p>Earlier snapshots remain under:</p>
+<pre><code class="language-text">evidence/stake-distribution/history/block-13439825/
+evidence/stake-distribution/history/block-13466645/
+evidence/stake-distribution/history/block-13553561/
+</code></pre>
+<p>Machine-readable analysis is provided in:</p>
+<pre><code class="language-text">content/stake-distribution/stake-analysis.json
+content/stake-distribution/stake-evolution.csv
+content/stake-distribution/current-top-validators.csv
+content/stake-distribution/current-top-delegators.csv
+</code></pre>
+<p>The public validator directory is available through the GenesisL1 explorer:<br/>
+https://explorer.genesisl1.org/validators</p>
+<h2 id="one-technical-proof-within-a-larger-renaissance-thesis">One technical proof within a larger Renaissance thesis</h2>
+<p>This analysis supports one claim in the visionary article: public infrastructure can distribute stewardship outward and publish evidence of that movement.</p>
+<p>It does not prove the entire Renaissance thesis. Molecular reconstruction, deterministic model execution, confidential rights, agent accountability, public patronage and institutional node economics require separate analyses.</p>
+<p>That separation is intentional. A scientific publication system becomes more credible when each claim has its own evidence boundary.</p>
+<blockquote>
+<p><strong><a href="https://genesisl1.com/insights/genesisl1-decentralization-scientific-renaissance.html">Return to GenesisL1 and the Next Verifiable Renaissance</a></strong></p>
+</blockquote>
+<hr/>
+<h2 id="sources">Sources</h2>
+<ol>
+<li><strong>Current GenesisL1 stake-distribution snapshot, block 13,690,968.</strong> <a href="/evidence/stake-distribution/">Open raw evidence and checksums ↗</a></li>
+<li><strong>Preserved August 29 snapshot, block 13,553,561.</strong> <a href="/evidence/stake-distribution/GenesisL1_longitudinal_stake_evidence_2026-09-21.zip">Open longitudinal evidence ↗</a></li>
+<li><strong>Preserved August 15 snapshot, block 13,466,645.</strong> <a href="/evidence/stake-distribution/GenesisL1_longitudinal_stake_evidence_2026-09-21.zip">Open longitudinal evidence ↗</a></li>
+<li><strong>Preserved August 11 snapshot, block 13,439,825.</strong> <a href="/evidence/stake-distribution/GenesisL1_longitudinal_stake_evidence_2026-09-21.zip">Open longitudinal evidence ↗</a></li>
+<li><strong>GenesisL1 Technical Whitepaper, Version 1.0.</strong> <a href="https://genesisl1.com/whitepaper.pdf">Open whitepaper ↗</a></li>
+<li><strong>CometBFT consensus specification, v0.38.</strong> <a href="https://docs.cometbft.com/v0.38/spec/consensus/consensus" rel="noopener noreferrer" target="_blank">Open specification ↗</a></li>
+<li><strong>GenesisL1 validator explorer.</strong> <a href="https://explorer.genesisl1.org/validators" rel="noopener noreferrer" target="_blank">Open validator directory ↗</a></li>
+</ol>
+<p>This article measures public ledger state. It does not identify beneficial owners, establish scientific validity or constitute investment advice.</p>
+</div></article></main><footer class="footer"><div class="nav"><span>GenesisL1 Insights · Technical and informational material</span><span><a href="https://github.com/GenesisL1/insights">Source and evidence</a></span></div></footer><div aria-label="Expanded image" aria-modal="true" class="lightbox" role="dialog"><button aria-label="Close" class="lightbox-close">×</button><img alt="Expanded publication image"/></div><script defer="" src="./insights.js"></script></body></html>
