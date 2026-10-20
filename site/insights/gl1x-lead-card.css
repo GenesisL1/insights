@@ -1,9 +1,0 @@
-/* Article 04 (GL1X): the newest publication leads the grid across its full width */
-.publication-card-lead{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.18fr) minmax(0,1fr)}
-.publication-card-lead .card-media{aspect-ratio:auto;height:auto;min-width:0;border-bottom:0;border-right:1px solid var(--line)}
-.publication-card-lead .card-media img{width:100%;height:100%;object-fit:cover}
-.publication-card-lead .card-copy{padding:44px 46px 38px;grid-template-rows:auto auto auto auto auto;align-content:center}
-.publication-card-lead h2{font-size:clamp(36px,3vw,54px)}
-.publication-card-lead p{font-size:17px;max-width:620px}
-@media(max-width:1020px){.publication-card-lead{grid-template-columns:minmax(300px,42%) 1fr}.publication-card-lead .card-copy{padding:31px 30px 27px}}
-@media(max-width:700px){.publication-card-lead{display:flex}.publication-card-lead .card-media{aspect-ratio:1100/620;border-right:0;border-bottom:1px solid var(--line)}.publication-card-lead .card-copy{padding:25px 22px 23px}}
