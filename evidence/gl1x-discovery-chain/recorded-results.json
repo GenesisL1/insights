@@ -1,0 +1,665 @@
+{
+  "about": "Excerpts of the answers gl1x.com's MCP server gave on 18 October 2026 (UTC) for the article 'GL1X: The Ledger Is Now a Laboratory': the fields the article quotes, copied from the tool results. Steps 1-9 were read at 08:13-08:37 UTC; the collection list, the record's mint, the BLAST tie check (step 8) and the dataset (step 10) at 09:30-09:37 UTC. Steps 4 and 5 quote one answer, so the ten steps took nine calls. Run capture.py for the complete raw answers of the same queries through the public API.",
+  "server": "https://gl1x.com/mcp (GL1X 3.4.0 at the time of capture; tools/call)",
+  "record": {
+    "pdb_id": "4HHB",
+    "collection": "MolNFT v2 / PDB Bank",
+    "contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102",
+    "token_id": "93945",
+    "page": "https://gl1x.com/token/0xd58B01f6C18086e5202cdC5D7Ad3E41790360102/instance/93945",
+    "minted": {
+      "route": "/api/v2/tokens/0xd58B01f6C18086e5202cdC5D7Ad3E41790360102/instances/93945/transfers (api_request)",
+      "block": 10624642,
+      "time": "2025-03-28T04:58:06Z",
+      "type": "token_minting",
+      "transaction": "0x77ec761744c4e5c728492173d20d24430b957249fdb4b69594a3084c108cf535"
+    }
+  },
+  "archive": {
+    "network_summary": {
+      "route": "/api/network/summary",
+      "latest_block": 13857850,
+      "time": "2026-10-18T08:36:12Z",
+      "records": 1035581,
+      "v1_records": 769729,
+      "v2_records": 265852,
+      "sequences": 2069579,
+      "residues": 611452589,
+      "protein": {
+        "sequences": 1990846,
+        "residues": 599296745
+      },
+      "nucleotide": {
+        "sequences": 78733,
+        "residues": 12155844
+      }
+    },
+    "bio_overview": {
+      "route": "/api/bio/overview",
+      "counted_at": "2026-10-18T08:36:35.636Z",
+      "structures": {
+        "analysed": 998926,
+        "complete": 998942,
+        "experimental": 456455,
+        "predicted": 542487
+      },
+      "chains": {
+        "protein": 2015401,
+        "nucleic": 86865,
+        "residues": 575948338
+      },
+      "pockets": {
+        "total": 4181598,
+        "druggable": 2220300,
+        "occupied": 375055
+      },
+      "interfaces": 2350501,
+      "ligands": {
+        "components": 42240,
+        "instances": 3678340
+      },
+      "ptms": 1757929
+    },
+    "molecule_collections": {
+      "tool": "molecule_collections",
+      "recognized_contracts": 9,
+      "discovered_contracts": 51,
+      "indexed_records": 1035581,
+      "indexed_sequences": 2069579,
+      "collections": [
+        {
+          "name": "MolNFT v1 / AlphaFold",
+          "contract": "0xbf7491af3407816dfa88a5ea4c82e8a2b1d721ed",
+          "version": "v1",
+          "storage": "ipfs",
+          "records": 542319
+        },
+        {
+          "name": "MolNFT v2 / PDB Bank",
+          "contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102",
+          "version": "v2",
+          "storage": "onchain",
+          "records": 265786
+        },
+        {
+          "name": "MolNFT v1 / PDB",
+          "contract": "0xde3723766bc32dcacd03c17baa400a7b36837eba",
+          "version": "v1",
+          "storage": "ipfs",
+          "records": 191600
+        },
+        {
+          "name": "MolNFT HLA",
+          "contract": "0xf8a9a5fc2cea6dca15e5e45712a48a33a7bb25fc",
+          "version": "v1",
+          "storage": "ipfs",
+          "records": 35810
+        },
+        {
+          "name": "MolNFT",
+          "contract": "0x08363bae41cbed54a47fc1e6eee29bf6f00cb2ba",
+          "version": "v2",
+          "storage": "onchain",
+          "records": 33
+        },
+        {
+          "name": "MolNFT",
+          "contract": "0x2c2b675374d4bba9be1b25e7efec05a03f85f0e5",
+          "version": "v2",
+          "storage": "onchain",
+          "records": 26
+        },
+        {
+          "name": "MolNFT",
+          "contract": "0x93b74a9334d8552aa90c825b42e66d36c70b778d",
+          "version": "v2",
+          "storage": "onchain",
+          "records": 4
+        },
+        {
+          "name": "MolNFT",
+          "contract": "0xcaad457bdcf084451b368f8c2ad7b6971a00d771",
+          "version": "v2",
+          "storage": "onchain",
+          "records": 2
+        },
+        {
+          "name": "MolNFT",
+          "contract": "0xa41e668c4ac4969ca1731f2db5423986e5cc0d0c",
+          "version": "v2",
+          "storage": "onchain",
+          "records": 1
+        }
+      ],
+      "collections_read_at": "2026-10-18T09:31Z"
+    },
+    "stats": {
+      "tool": "get_stats",
+      "indexed_height": 13857754,
+      "indexed_time": "2026-10-18T08:13:57.083Z",
+      "total_transactions": 1345667,
+      "total_accounts": 52804
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "tool": "molecule_search",
+      "arguments": {
+        "query": "4HHB",
+        "limit": 5
+      },
+      "result": {
+        "total": 2,
+        "records": [
+          {
+            "collection": "MolNFT v2 / PDB Bank",
+            "contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102",
+            "token_id": "93945",
+            "storage_model": "onchain",
+            "title": "THE CRYSTAL STRUCTURE OF HUMAN DEOXYHAEMOGLOBIN AT 1.74 ANGSTROMS RESOLUTION",
+            "provenance": "evm_call:getMetadata(uint256), verified"
+          },
+          {
+            "collection": "MolNFT v1 / PDB",
+            "contract": "0xde3723766bc32dcacd03c17baa400a7b36837eba",
+            "token_id": "93923",
+            "storage_model": "ipfs",
+            "accession": "P69905"
+          }
+        ]
+      }
+    },
+    {
+      "step": 2,
+      "tool": "molecule_sequence_proof",
+      "arguments": {
+        "contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102",
+        "token_id": "93945"
+      },
+      "result": {
+        "block": {
+          "number": 13857782,
+          "hash": "0x2f66f1a79814f8aa144685a4706686425179967dc2e1294f9b85fa871b8ad592",
+          "timestamp": "2026-10-18T08:20:29Z"
+        },
+        "chain_calls": [
+          {
+            "function": "getChildren(uint256)",
+            "result_bytes": 64
+          },
+          {
+            "function": "getMetadata(uint256)",
+            "result_bytes": 133472,
+            "result_sha256": "3470915c5f8cb88e86975647223743eabaccc4ba234cc1dfd01abcb1f45ff029"
+          },
+          {
+            "function": "ownerOf(uint256)",
+            "result_bytes": 32
+          },
+          {
+            "function": "tokenExists(uint256)",
+            "result_bytes": 32
+          },
+          {
+            "function": "tokenURI(uint256)",
+            "result_bytes": 25088
+          }
+        ],
+        "checks": [
+          {
+            "sequence_key": "pdb-chain:A",
+            "length": 141,
+            "sha256": "625c708d1e51d4df14c88a2fc08ec59355f96b51c0ea7a0a5eb5a910b92a0675",
+            "status": "verified"
+          },
+          {
+            "sequence_key": "pdb-chain:B",
+            "length": 146,
+            "sha256": "f01c9c95659c68488313db7ec922b165fcced63b80efd673e5410e311d20f60e",
+            "status": "verified"
+          },
+          {
+            "sequence_key": "pdb-chain:C",
+            "length": 141,
+            "sha256": "625c708d1e51d4df14c88a2fc08ec59355f96b51c0ea7a0a5eb5a910b92a0675",
+            "status": "verified"
+          },
+          {
+            "sequence_key": "pdb-chain:D",
+            "length": 146,
+            "sha256": "f01c9c95659c68488313db7ec922b165fcced63b80efd673e5410e311d20f60e",
+            "status": "verified"
+          }
+        ],
+        "verified": true,
+        "generated_at": "2026-10-18T08:21:08.099Z"
+      }
+    },
+    {
+      "step": 3,
+      "tool": "molecule_ligands",
+      "arguments": {
+        "contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102",
+        "token_id": "93945"
+      },
+      "result": {
+        "by_class": {
+          "ligand": 4,
+          "ion": 2
+        },
+        "components": 2,
+        "contact_distance": 4.5,
+        "ligands": [
+          {
+            "comp_id": "HEM",
+            "chain": "A",
+            "number": "142",
+            "closest": {
+              "residue": "HIS 87",
+              "distance": 2.14
+            }
+          },
+          {
+            "comp_id": "HEM",
+            "chain": "B",
+            "number": "148",
+            "closest": {
+              "residue": "HIS 92",
+              "distance": 2.22
+            }
+          },
+          {
+            "comp_id": "HEM",
+            "chain": "C",
+            "number": "142",
+            "closest": {
+              "residue": "HIS 87",
+              "distance": 2.26
+            }
+          },
+          {
+            "comp_id": "HEM",
+            "chain": "D",
+            "number": "148",
+            "closest": {
+              "residue": "HIS 92",
+              "distance": 1.98
+            }
+          },
+          {
+            "comp_id": "PO4",
+            "chain": "B",
+            "number": "147",
+            "contacts": [
+              "VAL 1 3.95",
+              "LEU 81 4.16",
+              "LYS 82 4.21"
+            ]
+          },
+          {
+            "comp_id": "PO4",
+            "chain": "D",
+            "number": "147",
+            "contacts": [
+              "VAL 1 3.49",
+              "ASP 79 4.36",
+              "ASN 80 4.44",
+              "LEU 81 3.77",
+              "LYS 82 4.09"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "step": 4,
+      "tool": "ligand_sites",
+      "arguments": {
+        "comp": "HEM",
+        "limit": 1
+      },
+      "result": {
+        "instances": 25030,
+        "records": 11026,
+        "entries": 5903,
+        "by_collection": [
+          {
+            "collection": "MolNFT v2 / PDB Bank",
+            "records": 5887,
+            "sites": 13474
+          },
+          {
+            "collection": "MolNFT v1 / PDB",
+            "records": 5134,
+            "sites": 11551
+          },
+          {
+            "collection": "MolNFT",
+            "records": 5,
+            "sites": 5
+          }
+        ],
+        "stats_sample": {
+          "records": 5000,
+          "sites": 20000
+        },
+        "binding_residues_share": {
+          "LEU": 0.1506,
+          "PHE": 0.1171,
+          "VAL": 0.0763,
+          "HIS": 0.0697
+        },
+        "elapsed_ms": 4015
+      },
+      "note": "binding_residues_share is counted over stats_sample.sites (the first 20,000 sites); the components found with haem (step 5) over stats_sample.records (the first 5,000 haem records)."
+    },
+    {
+      "step": 5,
+      "tool": "ligand_sites (found_with)",
+      "arguments": {
+        "comp": "HEM",
+        "limit": 1
+      },
+      "result": {
+        "found_with_records": {
+          "SO4": 801,
+          "GOL": 711,
+          "ZN": 657,
+          "H4B": 565,
+          "ACT": 506,
+          "CL": 431,
+          "CA": 349,
+          "CMO": 330,
+          "NAG": 242,
+          "OXY": 232,
+          "PO4": 217,
+          "NA": 187
+        }
+      },
+      "same_answer_as_step": 4,
+      "note": "Read from the answer of step 4, not a separate call. Each count is the number of the 5,000 sampled haem records that also hold the component: the same record, not necessarily the same site."
+    },
+    {
+      "step": 6,
+      "tool": "ph_environment",
+      "arguments": {
+        "contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102",
+        "token_id": "93945",
+        "chain": "B",
+        "environments": "blood,7.2,7.6,lysosome",
+        "max_groups": 12
+      },
+      "result": {
+        "model": "gl1x-ph-1",
+        "ionic_strength": 0.15,
+        "B:HIS146": {
+          "pka": 6.86,
+          "intrinsic_pka": 6.11,
+          "model_pka": 6.54,
+          "shift": {
+            "coupling": 0.75,
+            "desolvation": -0.43
+          },
+          "partners": [
+            {
+              "residue": "B:CTERM146",
+              "distance": 4.09,
+              "shift": 0.61
+            },
+            {
+              "residue": "B:ASP94",
+              "distance": 4.33,
+              "shift": 0.5
+            },
+            {
+              "residue": "C:LYS40",
+              "distance": 6.02,
+              "shift": -0.34
+            }
+          ]
+        },
+        "benchmark_row": {
+          "measured_pka": 8.1,
+          "gl1x_pka": 6.86,
+          "null_model_pka": 6.54,
+          "source": "Ohe & Kajita 1980, Biochemistry 19:4443 (PMID 7407084), via PKAD; in the GL1X pKa benchmark data"
+        }
+      }
+    },
+    {
+      "step": 7,
+      "tool": "structure_search",
+      "arguments": {
+        "contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102",
+        "token_id": "93945",
+        "chain": "B",
+        "limit": 8
+      },
+      "result": {
+        "database": {
+          "chains": 1558073,
+          "residues": 452387430,
+          "built_at": "2026-10-17T22:45:58.861Z",
+          "updated_at": "2026-10-18T04:45:38.152Z"
+        },
+        "elapsed_ms": 820,
+        "candidates": 2000,
+        "top_hits": [
+          {
+            "pdb_id": "4HHB",
+            "collection": "MolNFT v1 / PDB",
+            "tm_query": 1.0
+          },
+          {
+            "pdb_id": "2HHB",
+            "tm_query": 0.99893,
+            "rmsd": 0.15
+          },
+          {
+            "pdb_id": "1COH",
+            "tm_query": 0.99845,
+            "rmsd": 0.18
+          },
+          {
+            "pdb_id": "1BAB",
+            "tm_query": 0.99828,
+            "rmsd": 0.19
+          }
+        ]
+      }
+    },
+    {
+      "step": 8,
+      "tool": "blast_search",
+      "arguments": {
+        "query": "VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH",
+        "max_target_seqs": 5
+      },
+      "result": {
+        "database": {
+          "sequences": 1288423,
+          "letters": 395873664,
+          "generation": "27.28",
+          "updated_at": "2026-10-18T03:18:07.528Z"
+        },
+        "engine": "GL1X BLAST (NCBI BLAST+ 2.12.0 compatible)",
+        "program": "blastp",
+        "elapsed_seconds": 0.24872,
+        "top_hits": [
+          {
+            "pdb_id": "7VDE",
+            "title": "3.6 A STRUCTURE OF THE HUMAN HEMOGLOBIN"
+          },
+          {
+            "pdb_id": "7UF7",
+            "title": "CRYSTAL STRUCTURE OF LIGANDED HB WITH THE 5-HMF ANALOG, MMA503"
+          },
+          {
+            "pdb_id": "7UF6",
+            "title": "CRYSTAL STRUCTURE OF LIGANDED HB WITH THE 5-HMF ANALOG, MMA509"
+          },
+          {
+            "pdb_id": "7UD8",
+            "title": "CRYSTAL STRUCTURE OF CARBON MONOXY HEMOGLOBIN IN COMPLEX WITH 5HMF AT 1.8 ANGSTROM"
+          },
+          {
+            "pdb_id": "7UD7",
+            "title": "CRYSTAL STRUCTURE OF DEOXYGENATED HEMOGLOBIN IN COMPLEX WITH 5HMF-NO AT 1.8 ANGSTROM"
+          }
+        ],
+        "best": {
+          "evalue": "8.88e-105",
+          "identities": "146/146"
+        }
+      },
+      "recheck": {
+        "at": "2026-10-18T09:30Z",
+        "arguments": {
+          "query": "(the same β chain)",
+          "max_target_seqs": 8
+        },
+        "database": {
+          "sequences": 1288423,
+          "letters": 395873664,
+          "generation": "40.41"
+        },
+        "elapsed_seconds": 0.25121,
+        "hits": [
+          {
+            "rank": 1,
+            "pdb_id": "7VDE",
+            "token_id": "189379",
+            "bit_score": 298,
+            "evalue": "8.88e-105",
+            "identities": "146/146"
+          },
+          {
+            "rank": 2,
+            "pdb_id": "7UF7",
+            "token_id": "188817",
+            "bit_score": 298,
+            "evalue": "8.88e-105",
+            "identities": "146/146"
+          },
+          {
+            "rank": 3,
+            "pdb_id": "7UF6",
+            "token_id": "188816",
+            "bit_score": 298,
+            "evalue": "8.88e-105",
+            "identities": "146/146"
+          },
+          {
+            "rank": 4,
+            "pdb_id": "7UD8",
+            "token_id": "188782",
+            "bit_score": 298,
+            "evalue": "8.88e-105",
+            "identities": "146/146"
+          },
+          {
+            "rank": 5,
+            "pdb_id": "7UD7",
+            "token_id": "188781",
+            "bit_score": 298,
+            "evalue": "8.88e-105",
+            "identities": "146/146"
+          },
+          {
+            "rank": 6,
+            "pdb_id": "7CUE",
+            "token_id": "175557",
+            "bit_score": 298,
+            "evalue": "8.88e-105",
+            "identities": "146/146"
+          },
+          {
+            "rank": 7,
+            "pdb_id": "6KYE",
+            "token_id": "155148",
+            "bit_score": 298,
+            "evalue": "8.88e-105",
+            "identities": "146/146"
+          },
+          {
+            "rank": 8,
+            "pdb_id": "1DXT",
+            "token_id": "4762",
+            "bit_score": 298,
+            "evalue": "8.88e-105",
+            "identities": "146/146"
+          }
+        ],
+        "note": "All eight hits tie (bit score 298, E = 8.88e-105, 146/146 identities, MolNFT v1 / PDB): equal scores are listed by database position, larger token id first, so their order carries no meaning. Four of the first five are haemoglobins with 5-HMF or its analogues."
+      }
+    },
+    {
+      "step": 9,
+      "tool": "pubmed_search",
+      "arguments": {
+        "title": "THE CRYSTAL STRUCTURE OF HUMAN DEOXYHAEMOGLOBIN AT 1.74 ANGSTROMS RESOLUTION",
+        "max": 3
+      },
+      "result": {
+        "digest": {
+          "query": "human deoxyhaemoglobin",
+          "count": 3029
+        },
+        "page": "/bio/pubmed#q=human+deoxyhaemoglobin",
+        "records_include": {
+          "pmid": "6726807",
+          "citation": "Fermi G, Perutz MF, Shaanan B, Fourme R. J Mol Biol 1984;175(2):159-74",
+          "doi": "10.1016/0022-2836(84)90472-8"
+        }
+      }
+    },
+    {
+      "step": 10,
+      "tool": "bio_dataset",
+      "arguments": {
+        "source": "blast",
+        "query": "VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH",
+        "format": "gl1f",
+        "max_rows": 25
+      },
+      "result": {
+        "name": "gl1x-blast-20261018-093054",
+        "format": "gl1x-dataset-gl1f/1",
+        "created_at": "2026-10-18T09:30:54.542Z",
+        "rows": 25,
+        "inputs": 89,
+        "feature_sets": [
+          "gl1x-protein-1",
+          "gl1x-structure-1"
+        ],
+        "inputs_by_set": {
+          "protein (p_)": 46,
+          "structure (s_)": 43
+        },
+        "scale_q": 1000,
+        "clamped": 0,
+        "left_out": 0,
+        "label": null,
+        "packing": "one little-endian int32 per input in feature order: the bytes the GL1F runtime's predict functions take"
+      },
+      "next": "Not run for the article: a model trained off chain on such inputs (with a label) is minted as a GL1F model NFT and then runs on GenesisL1 through gl1f_predict."
+    }
+  ],
+  "recheck_3_4_1": {
+    "at": "2026-10-18T12:29Z",
+    "backend_version": "gl1x 3.4.1 (/api/v2/config/backend-version)",
+    "mcp_tools": 87,
+    "api_routes": 186,
+    "docs_resources": 30,
+    "records": 1035581,
+    "sequences": 2069579,
+    "structures_analysed": 998926,
+    "pockets": 4181598,
+    "interfaces": 2350501,
+    "ligand_components": 42240,
+    "ligand_instances": 3678340,
+    "modifications": 1757929,
+    "note": "the same values the article quotes"
+  }
+}

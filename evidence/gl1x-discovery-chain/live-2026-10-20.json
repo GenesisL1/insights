@@ -1,0 +1,140 @@
+{
+ "about": "Live answers from gl1x.com (GL1X 3.4.1) used in the GenesisL1 / GL1X campaign texts, read on 20 October 2026 (UTC) through its MCP server: the archive, server counts and example searches at 05:34–05:44, the L1 figures at 06:27, after the Cosmos node that gl1x.com reads had answered again and every chain-state snapshot had been refreshed (06:24–06:26).",
+ "server": {
+  "backend_version": "gl1x 3.4.1",
+  "mcp_tools": 87,
+  "api_routes": 186,
+  "docs_resources": 30,
+  "read_at": "2026-10-20T05:34Z"
+ },
+ "l1_coin": {
+  "read_at": "2026-10-20T06:27Z",
+  "tool": "get_stats, /api/validators/summary, get_indexer_status (state_sync)",
+  "native": {
+   "symbol": "L1",
+   "denom": "el1",
+   "decimals": 18,
+   "chain_id_cosmos": "genesis_29-2",
+   "chain_id_evm": 29
+  },
+  "total_supply_L1": 47805499.8,
+  "circulating_supply_L1": 42248619.12,
+  "total_staked_L1": 25131300.85,
+  "staked_percent": 52.57,
+  "community_pool_L1": 5556880.68,
+  "community_pool_percent": 11.62,
+  "active_validators": 37,
+  "validators_known": 116,
+  "unique_stakers": 3153,
+  "delegation_positions": 4768,
+  "staking_snapshot_height": 13869679,
+  "governance_proposals": 113,
+  "transactions": 1345838,
+  "accounts": 52811,
+  "average_block_time_s": 13.72,
+  "height": 13869694,
+  "economics_snapshot_height": 13869687,
+  "snapshots": {
+   "economics": "2026-10-20T06:26:24Z (height 13,869,687)",
+   "validators": "2026-10-20T06:24:43Z (height 13,869,679, complete, current)",
+   "governance": "2026-10-20T06:26:45Z"
+  },
+  "note": "Price and market fields that the API also returns are deliberately not used: the texts describe L1 by its functions only."
+ },
+ "archive": {
+  "records": 1035581,
+  "collections": 9,
+  "sequences": 2069579,
+  "residues": 611452589,
+  "structures_analysed": 998926,
+  "pockets": 4181598,
+  "interfaces": 2350501,
+  "ligand_components": 42240,
+  "ligand_instances": 3678340,
+  "modifications": 1757929,
+  "blast_protein_sequences": 1288423,
+  "structure_search_chains": 1558073
+ },
+ "examples": {
+  "read_at": "2026-10-20T05:4xZ",
+  "tool": "molecule_search",
+  "semaglutide": {
+   "records": 4,
+   "highlight": {
+    "pdb_id": "7KI0",
+    "title": "Semaglutide-bound GLP-1 receptor in complex with Gs protein",
+    "collection": "MolNFT v2 / PDB Bank (on chain)",
+    "token_id": "184543"
+   }
+  },
+  "tirzepatide": {
+   "records": 12,
+   "highlights": [
+    {
+     "pdb_id": "7VBI",
+     "title": "non-acylated tirzepatide-bound human GLP-1R-Gs complex",
+     "token_id": "197659"
+    },
+    {
+     "pdb_id": "7VAB",
+     "title": "non-acylated tirzepatide-bound human GIPR-Gs complex",
+     "token_id": "197616"
+    }
+   ]
+  },
+  "SIRT6": {
+   "records": 64,
+   "highlights": [
+    {
+     "pdb_id": "8OF4",
+     "title": "Nucleosome-bound human SIRT6",
+     "token_id": "215389"
+    },
+    {
+     "pdb_id": "9G7H",
+     "title": "Human SIRT6 with ADP-ribose and an inhibitor",
+     "token_id": "228651"
+    }
+   ]
+  },
+  "klotho": {
+   "records": 20,
+   "highlight": {
+    "pdb_id": "8UF8",
+    "title": "Cryo-EM structure of alpha-Klotho",
+    "token_id": "222049"
+   }
+  },
+  "telomerase": {
+   "records": 185
+  },
+  "rapamycin": {
+   "records": 103,
+   "highlight": {
+    "pdb_id": "1AUE",
+    "title": "FKBP-rapamycin binding domain (FRB) of mTOR",
+    "token_id": "1202"
+   }
+  }
+ },
+ "assistants": {
+  "claude": "Custom connectors (remote MCP) on Free (one), Pro, Max, Team and Enterprise: https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp",
+  "chatgpt": "Custom remote MCP servers through developer mode on paid plans (Settings > Apps > Advanced > Developer mode > Create app), per https://hjarni.com/blog/how-to-use-mcp-with-chatgpt (May 2026)"
+ },
+ "walkthrough_2026_10_20": {
+  "read_at": "2026-10-20T05:34:48Z/05:43:38Z",
+  "full_record": "recorded-results-2026-10-20.json",
+  "proof_block": 13869469,
+  "structure_search_chains": 1558073,
+  "blast_sequences": 1288423,
+  "unchanged_from_18_october": "mint block, proof result, ligands, haem counts and found-with counts, pKa, structure hits, BLAST hits, PubMed count, dataset shape",
+  "structure_search_ms": {
+   "route_call": 1006,
+   "second_call_limit_10": 851
+  },
+  "blast_seconds": {
+   "route_call_8_hits": 0.248,
+   "tool_call_5_hits": 0.283
+  }
+ }
+}

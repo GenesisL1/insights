@@ -1,0 +1,522 @@
+{
+  "about": "Re-run on 20 October 2026 (UTC) of the discovery-chain measurements quoted by 'GL1X: The Ledger Is Now a Laboratory', against the live gl1x.com, through the GL1X MCP connector only (mcp__GL1X__*; no WebFetch, no curl). Each step called the capture.py route (same method, path, query and body) through api_request; the 18 October named tools were also called where the template used them, for a like-for-like comparison. Same shape as recorded-results.json (18 October), plus the extra figures (L1 coin, server counts, example searches, snapshot ages, timings). All calls were made 05:34:48-05:43:38 UTC; none failed and none was rate limited.",
+  "server": "https://gl1x.com/mcp (GL1X 3.4.1 at the time of capture, /api/v2/config/backend-version; tools/call through the GL1X connector)",
+  "capture": {
+    "date": "2026-10-20",
+    "window_utc": "2026-10-20T05:34:48Z/2026-10-20T05:43:38Z",
+    "via": "mcp__GL1X__api_request (capture.py routes) and named GL1X tools",
+    "rate_limited": false,
+    "timing_method": "wall_s = time between two sandbox-clock timestamps taken immediately before and after the call in the same message (calls ran serially, verified: 0.77 s between the bracketing timestamps of the first call). It includes the connector round trip and the transfer of the answer, so it is an upper bound on server time. Server-reported times (elapsed_ms, elapsed_seconds, stats.*_ms) are quoted where the answer has them; answers' own timestamps are the server's clock, which can differ from the sandbox clock by a few seconds."
+  },
+  "record": {
+    "pdb_id": "4HHB",
+    "collection": "MolNFT v2 / PDB Bank",
+    "contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102",
+    "token_id": "93945",
+    "page": "https://gl1x.com/token/0xd58B01f6C18086e5202cdC5D7Ad3E41790360102/instance/93945",
+    "minted": {
+      "route": "GET /api/v2/tokens/0xd58b01f6c18086e5202cdc5d7ad3e41790360102/instances/93945/transfers (api_request)",
+      "block": 10624642,
+      "time": "2025-03-28T04:58:06Z",
+      "type": "token_minting",
+      "transaction": "0x77ec761744c4e5c728492173d20d24430b957249fdb4b69594a3084c108cf535",
+      "timing": {"called_at": "2026-10-20T05:35:33.945Z", "wall_s": 1.102}
+    }
+  },
+  "archive": {
+    "network_summary": {
+      "route": "GET /api/network/summary (api_request)",
+      "latest_block": 13869464,
+      "time": "2026-10-20T05:34:19Z",
+      "records": 1035581,
+      "v1_records": 769729,
+      "v2_records": 265852,
+      "sequences": 2069579,
+      "residues": 611452589,
+      "protein": {"sequences": 1990846, "residues": 599296745},
+      "nucleotide": {"sequences": 78733, "residues": 12155844},
+      "timing": {"called_at": "2026-10-20T05:34:48.056Z", "wall_s": 0.769}
+    },
+    "bio_overview": {
+      "route": "GET /api/bio/overview (api_request)",
+      "counted_at": "2026-10-20T05:34:58.367Z",
+      "structures": {"analysed": 998926, "complete": 998942, "experimental": 456455, "predicted": 542487, "assemblies_read": 451221, "with_assemblies": 415423},
+      "chains": {"protein": 2015401, "nucleic": 86865, "residues": 575948338},
+      "pockets": {"total": 4181598, "druggable": 2220300, "occupied": 375055},
+      "interfaces": 2350501,
+      "interfaces_by_assembly": {"same": 2049256, "different": 288596, "unknown": 12649},
+      "ligands": {"components": 42240, "instances": 3678340},
+      "ptms": 1757929,
+      "note": "assemblies_read, with_assemblies and interfaces_by_assembly were not recorded on 18 October (not necessarily new).",
+      "timing": {"called_at": "2026-10-20T05:34:55.404Z", "wall_s": 0.745}
+    },
+    "molecule_collections": {
+      "route": "GET /api/bio/collections (api_request; the 18 October capture used the molecule_collections tool)",
+      "recognized_contracts": 9,
+      "discovered_contracts": 51,
+      "indexed_records": 1035581,
+      "indexed_sequences": 2069579,
+      "status": "current",
+      "pending_records": 10,
+      "pending_note": "10 records of MolNFT v1 / PDB wait for enrichment (enrichment_pending_count 10); indexed_count is unaffected",
+      "collections": [
+        {"name": "MolNFT v1 / AlphaFold", "contract": "0xbf7491af3407816dfa88a5ea4c82e8a2b1d721ed", "version": "v1", "storage": "ipfs", "records": 542319},
+        {"name": "MolNFT v2 / PDB Bank", "contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102", "version": "v2", "storage": "onchain", "records": 265786},
+        {"name": "MolNFT v1 / PDB", "contract": "0xde3723766bc32dcacd03c17baa400a7b36837eba", "version": "v1", "storage": "ipfs", "records": 191600},
+        {"name": "MolNFT HLA", "contract": "0xf8a9a5fc2cea6dca15e5e45712a48a33a7bb25fc", "version": "v1", "storage": "ipfs", "records": 35810},
+        {"name": "MolNFT", "contract": "0x08363bae41cbed54a47fc1e6eee29bf6f00cb2ba", "version": "v2", "storage": "onchain", "records": 33},
+        {"name": "MolNFT", "contract": "0x2c2b675374d4bba9be1b25e7efec05a03f85f0e5", "version": "v2", "storage": "onchain", "records": 26},
+        {"name": "MolNFT", "contract": "0x93b74a9334d8552aa90c825b42e66d36c70b778d", "version": "v2", "storage": "onchain", "records": 4},
+        {"name": "MolNFT", "contract": "0xcaad457bdcf084451b368f8c2ad7b6971a00d771", "version": "v2", "storage": "onchain", "records": 2},
+        {"name": "MolNFT", "contract": "0xa41e668c4ac4969ca1731f2db5423986e5cc0d0c", "version": "v2", "storage": "onchain", "records": 1}
+      ],
+      "collections_read_at": "2026-10-20T05:35Z",
+      "timing": {"called_at": "2026-10-20T05:35:21.138Z", "wall_s": 0.735}
+    },
+    "stats": {
+      "tool": "get_stats (and GET /api/stats through api_request: identical answer)",
+      "indexed_height": 13868060,
+      "indexed_time": "2026-10-20T00:08:48.855Z",
+      "network_head": 13869466,
+      "total_transactions": 1345830,
+      "total_accounts": 52811,
+      "status": "stale: indexed_height is the Cosmos block index, stuck since 00:08:48Z (1,406 blocks behind network_head 13,869,466); the EVM index is current",
+      "timing": {"get_stats": {"called_at": "2026-10-20T05:35:27.748Z", "wall_s": 0.513}, "api_stats": {"called_at": "2026-10-20T05:35:08.105Z", "wall_s": 0.388}}
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "tool": "molecule_search",
+      "route": "GET /api/bio/search?q=4HHB&limit=5 (api_request)",
+      "arguments": {"query": "4HHB", "limit": 5},
+      "result": {
+        "total": 2,
+        "search_strategy": "PostgreSQL full-text rank with exact PDB/accession priority",
+        "records": [
+          {"collection": "MolNFT v1 / PDB", "contract": "0xde3723766bc32dcacd03c17baa400a7b36837eba", "token_id": "93923", "storage_model": "ipfs", "accession": "P69905", "score": 170},
+          {"collection": "MolNFT v2 / PDB Bank", "contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102", "token_id": "93945", "storage_model": "onchain", "title": "THE CRYSTAL STRUCTURE OF HUMAN DEOXYHAEMOGLOBIN AT 1.74 ANGSTROMS RESOLUTION", "provenance": "evm_call:getMetadata(uint256), verified", "score": 170}
+        ],
+        "order_note": "Both the route and the molecule_search tool list the v1 record first today; recorded-results.json lists the v2 record first. The two records score the same (170), so the order carries no meaning."
+      },
+      "timing": {"route": {"called_at": "2026-10-20T05:35:40.576Z", "wall_s": 1.133}, "tool": {"called_at": "2026-10-20T05:35:50.984Z", "wall_s": 0.792}}
+    },
+    {
+      "step": 2,
+      "tool": "molecule_sequence_proof",
+      "route": "GET /api/bio/records/0xd58b01f6c18086e5202cdc5d7ad3e41790360102/93945/proof (api_request)",
+      "arguments": {"contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102", "token_id": "93945"},
+      "result": {
+        "block": {
+          "number": 13869469,
+          "hash": "0xbf2d1fe73037ae8474e15434ebee24ea7cc998ecb94597ac6ed54d652707b767",
+          "timestamp": "2026-10-20T05:35:29Z"
+        },
+        "chain_calls": [
+          {"function": "getChildren(uint256)", "result_bytes": 64, "result_sha256": "1cca23f135d6a051c5bceab95d8bbc3983a92021783ffe3540c209f682c5c93b"},
+          {"function": "getMetadata(uint256)", "result_bytes": 133472, "result_sha256": "3470915c5f8cb88e86975647223743eabaccc4ba234cc1dfd01abcb1f45ff029"},
+          {"function": "ownerOf(uint256)", "result_bytes": 32, "result_sha256": "26bce63d9c367437a14335cb89dba32e1ad319de46ba686f57f4fdba1fc42eea"},
+          {"function": "tokenExists(uint256)", "result_bytes": 32, "result_sha256": "ec4916dd28fc4c10d78e287ca5d9cc51ee1ae73cbfde08c6b37324cbfaac8bc5"},
+          {"function": "tokenURI(uint256)", "result_bytes": 25088, "result_sha256": "96398ad0f042521c4cb08f74eb9c88e9755f122d520daf8877f43d9840a65f6f"}
+        ],
+        "checks": [
+          {"sequence_key": "pdb-chain:A", "length": 141, "sha256": "625c708d1e51d4df14c88a2fc08ec59355f96b51c0ea7a0a5eb5a910b92a0675", "status": "verified"},
+          {"sequence_key": "pdb-chain:B", "length": 146, "sha256": "f01c9c95659c68488313db7ec922b165fcced63b80efd673e5410e311d20f60e", "status": "verified"},
+          {"sequence_key": "pdb-chain:C", "length": 141, "sha256": "625c708d1e51d4df14c88a2fc08ec59355f96b51c0ea7a0a5eb5a910b92a0675", "status": "verified"},
+          {"sequence_key": "pdb-chain:D", "length": 146, "sha256": "f01c9c95659c68488313db7ec922b165fcced63b80efd673e5410e311d20f60e", "status": "verified"}
+        ],
+        "derivation_complete": true,
+        "verified": true,
+        "generated_at": "2026-10-20T05:36:04.383Z"
+      },
+      "timing": {"called_at": "2026-10-20T05:36:02.564Z", "wall_s": 0.869}
+    },
+    {
+      "step": 3,
+      "tool": "molecule_ligands",
+      "route": "GET /api/bio/records/0xd58b01f6c18086e5202cdc5d7ad3e41790360102/93945/ligands (api_request)",
+      "arguments": {"contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102", "token_id": "93945"},
+      "result": {
+        "source": "index",
+        "by_class": {"ligand": 4, "ion": 2},
+        "components": 2,
+        "contact_distance": 4.5,
+        "ligands": [
+          {"comp_id": "HEM", "chain": "A", "number": "142", "closest": {"residue": "HIS 87", "distance": 2.14}},
+          {"comp_id": "HEM", "chain": "B", "number": "148", "closest": {"residue": "HIS 92", "distance": 2.22}},
+          {"comp_id": "HEM", "chain": "C", "number": "142", "closest": {"residue": "HIS 87", "distance": 2.26}},
+          {"comp_id": "HEM", "chain": "D", "number": "148", "closest": {"residue": "HIS 92", "distance": 1.98}},
+          {"comp_id": "PO4", "chain": "B", "number": "147", "contacts": ["VAL 1 3.95", "LEU 81 4.16", "LYS 82 4.21"]},
+          {"comp_id": "PO4", "chain": "D", "number": "147", "contacts": ["VAL 1 3.49", "ASP 79 4.36", "ASN 80 4.44", "LEU 81 3.77", "LYS 82 4.09"]}
+        ]
+      },
+      "timing": {"called_at": "2026-10-20T05:36:13.765Z", "wall_s": 1.395}
+    },
+    {
+      "step": 4,
+      "tool": "ligand_sites",
+      "route": "GET /api/bio/ligands/HEM?limit=1 (api_request)",
+      "arguments": {"comp": "HEM", "limit": 1},
+      "result": {
+        "instances": 25030,
+        "records": 11026,
+        "entries": 5903,
+        "by_collection": [
+          {"collection": "MolNFT v2 / PDB Bank", "records": 5887, "sites": 13474},
+          {"collection": "MolNFT v1 / PDB", "records": 5134, "sites": 11551},
+          {"collection": "MolNFT", "records": 5, "sites": 5}
+        ],
+        "stats_sample": {"records": 5000, "sites": 20000, "complete": false, "records_total": 11026, "sites_total": 25030},
+        "binding_residues_share": {"LEU": 0.1506, "PHE": 0.1171, "VAL": 0.0763, "HIS": 0.0697},
+        "elapsed_ms": 3861
+      },
+      "timing": {"called_at": "2026-10-20T05:36:20.432Z", "wall_s": 1.268, "server": "elapsed_ms 3861 (answer field)", "note": "The whole round trip (1.268 s) was shorter than elapsed_ms, so the answer came from a server cache and elapsed_ms is the time of the computation that filled it."},
+      "note": "binding_residues_share is counted over stats_sample.sites (the first 20,000 sites); the components found with haem (step 5) over stats_sample.records (the first 5,000 haem records)."
+    },
+    {
+      "step": 5,
+      "tool": "ligand_sites (found_with)",
+      "arguments": {"comp": "HEM", "limit": 1},
+      "result": {
+        "found_with_records": {"SO4": 801, "GOL": 711, "ZN": 657, "H4B": 565, "ACT": 506, "CL": 431, "CA": 349, "CMO": 330, "NAG": 242, "OXY": 232, "PO4": 217, "NA": 187}
+      },
+      "same_answer_as_step": 4,
+      "note": "Read from the answer of step 4, not a separate call. Each count is the number of the 5,000 sampled haem records that also hold the component: the same record, not necessarily the same site."
+    },
+    {
+      "step": 6,
+      "tool": "ph_environment",
+      "route": "GET /api/bio/records/0xd58b01f6c18086e5202cdc5d7ad3e41790360102/93945/ph?env=blood,7.2,7.6,lysosome&chain=B (api_request; no max_groups, so every group of chain B)",
+      "arguments": {"contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102", "token_id": "93945", "chain": "B", "environments": "blood,7.2,7.6,lysosome"},
+      "result": {
+        "model": "gl1x-ph-1",
+        "ionic_strength": 0.15,
+        "B:HIS146": {
+          "pka": 6.86,
+          "intrinsic_pka": 6.11,
+          "model_pka": 6.54,
+          "shift": {"coupling": 0.75, "desolvation": -0.43},
+          "partners": [
+            {"residue": "B:CTERM146", "distance": 4.09, "shift": 0.61},
+            {"residue": "B:ASP94", "distance": 4.33, "shift": 0.5},
+            {"residue": "C:LYS40", "distance": 6.02, "shift": -0.34}
+          ]
+        },
+        "summary": {"groups": 173, "pi": 7.59, "stability_optimum": 8.1},
+        "model_accuracy_rule": "against 365 measured pKa values of 47 proteins (PKAD), root-mean-square error 0.88 pK units, against 0.91 for leaving every group at its model pKa (from the answer's rules.accuracy)",
+        "benchmark_row": {
+          "measured_pka": 8.1,
+          "gl1x_pka": 6.86,
+          "null_model_pka": 6.54,
+          "source": "Ohe & Kajita 1980, Biochemistry 19:4443 (PMID 7407084), via PKAD; in the GL1X pKa benchmark data",
+          "re_read_2026_10_20": false,
+          "note": "Not part of the ph answer and not re-read today (the documentation search finds no '4HHB' or 'Kajita' text: the row lives in the benchmark data). gl1x_pka and null_model_pka agree with today's answer (6.86, 6.54)."
+        }
+      },
+      "timing": {"called_at": "2026-10-20T05:36:33.180Z", "wall_s": 1.494}
+    },
+    {
+      "step": 7,
+      "tool": "structure_search",
+      "route": "POST /api/bio/structure/search {\"query\":{\"contract\":\"0xd58b01f6c18086e5202cdc5d7ad3e41790360102\",\"token_id\":\"93945\",\"chain\":\"B\"},\"limit\":8} (api_request)",
+      "arguments": {"contract": "0xd58b01f6c18086e5202cdc5d7ad3e41790360102", "token_id": "93945", "chain": "B", "limit": 8},
+      "result": {
+        "database": {
+          "chains": 1558073,
+          "residues": 452387430,
+          "built_at": "2026-10-17T22:46:02.127Z",
+          "updated_at": "2026-10-18T04:45:38.950Z"
+        },
+        "elapsed_ms": 1006,
+        "stats": {"shortlist_ms": 884, "align_ms": 22, "rescore_ms": 94, "shortlisted": 2000, "aligned": 2000, "rescored": 200, "refined": 10},
+        "candidates": 2000,
+        "top_hits": [
+          {"pdb_id": "4HHB", "collection": "MolNFT v1 / PDB", "tm_query": 1.0},
+          {"pdb_id": "2HHB", "tm_query": 0.99893, "rmsd": 0.15},
+          {"pdb_id": "1COH", "tm_query": 0.99845, "rmsd": 0.18},
+          {"pdb_id": "1BAB", "tm_query": 0.99828, "rmsd": 0.19}
+        ],
+        "hits": [
+          {"rank": 1, "pdb_id": "4HHB", "collection": "MolNFT v2 / PDB Bank", "token_id": "93945", "tm_query": 1, "rmsd": 0, "self": true},
+          {"rank": 2, "pdb_id": "4HHB", "collection": "MolNFT v1 / PDB", "token_id": "93923", "tm_query": 1, "rmsd": 0},
+          {"rank": 3, "pdb_id": "2HHB", "collection": "MolNFT v1 / PDB", "token_id": "39033", "tm_query": 0.99893, "rmsd": 0.15},
+          {"rank": 4, "pdb_id": "2HHB", "collection": "MolNFT v2 / PDB Bank", "token_id": "39044", "tm_query": 0.99893, "rmsd": 0.15},
+          {"rank": 5, "pdb_id": "1COH", "collection": "MolNFT v1 / PDB", "token_id": "3320", "tm_query": 0.99845, "rmsd": 0.18},
+          {"rank": 6, "pdb_id": "1COH", "collection": "MolNFT v2 / PDB Bank", "token_id": "3326", "tm_query": 0.99845, "rmsd": 0.18},
+          {"rank": 7, "pdb_id": "1BAB", "collection": "MolNFT v2 / PDB Bank", "token_id": "1724", "tm_query": 0.99828, "rmsd": 0.19},
+          {"rank": 8, "pdb_id": "1BAB", "collection": "MolNFT v1 / PDB", "token_id": "1723", "tm_query": 0.99827, "rmsd": 0.19}
+        ]
+      },
+      "timing": {"called_at": "2026-10-20T05:36:45.745Z", "wall_s": 1.799, "server": "elapsed_ms 1006 (answer field; stats.shortlist_ms 884, align_ms 22, rescore_ms 94)"},
+      "repeat_calls": [
+        {"tool": "structure_search", "arguments": {"chain": "B", "limit": 8}, "called_at": "2026-10-20T05:43:10.121Z", "wall_s": 1.196, "elapsed_ms": 1006, "note": "Identical answer down to every sub-timing: served from the server's cache, not a second measurement."},
+        {"tool": "structure_search", "arguments": {"chain": "B", "limit": 10}, "called_at": "2026-10-20T05:43:23.493Z", "wall_s": 1.143, "elapsed_ms": 851, "stats": {"shortlist_ms": 768, "align_ms": 14, "rescore_ms": 64}, "note": "Fresh computation (limit 10, the default, changes the cache key but not the work: 2,000 shortlisted, 200 rescored, 10 refined). Same eight hits, then 1BZZ (v2 2556, v1 2554) at TM 0.99812."}
+      ]
+    },
+    {
+      "step": 8,
+      "tool": "blast_search",
+      "arguments": {
+        "query": "VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH",
+        "max_target_seqs": 5
+      },
+      "result": {
+        "database": {
+          "sequences": 1288423,
+          "letters": 395873664,
+          "generation": "131.132",
+          "updated_at": "2026-10-20T03:18:24.165Z"
+        },
+        "engine": "GL1X BLAST (NCBI BLAST+ 2.12.0 compatible)",
+        "program": "blastp",
+        "threads": 48,
+        "elapsed_seconds": 0.28263,
+        "top_hits": [
+          {"pdb_id": "7VDE", "title": "3.6 A STRUCTURE OF THE HUMAN HEMOGLOBIN"},
+          {"pdb_id": "7UF7", "title": "CRYSTAL STRUCTURE OF LIGANDED HB WITH THE 5-HMF ANALOG, MMA503"},
+          {"pdb_id": "7UF6", "title": "CRYSTAL STRUCTURE OF LIGANDED HB WITH THE 5-HMF ANALOG, MMA509"},
+          {"pdb_id": "7UD8", "title": "CRYSTAL STRUCTURE OF CARBON MONOXY HEMOGLOBIN IN COMPLEX WITH 5HMF AT 1.8 ANGSTROM"},
+          {"pdb_id": "7UD7", "title": "CRYSTAL STRUCTURE OF DEOXYGENATED HEMOGLOBIN IN COMPLEX WITH 5HMF-NO AT 1.8 ANGSTROM"}
+        ],
+        "best": {"evalue": "8.88e-105", "identities": "146/146"}
+      },
+      "timing": {"called_at": "2026-10-20T05:43:35.733Z", "wall_s": 2.397, "server": "elapsed_seconds 0.28263 (answer field)"},
+      "recheck": {
+        "at": "2026-10-20T05:37:01Z",
+        "route": "POST /api/bio/blast {\"query\":\">4HHB_B\\n<the beta chain>\",\"max_target_seqs\":8} (api_request; the capture.py request)",
+        "arguments": {"query": "(the same β chain)", "max_target_seqs": 8},
+        "database": {"sequences": 1288423, "letters": 395873664, "generation": "131.132", "updated_at": "2026-10-20T03:18:23.722Z"},
+        "elapsed_seconds": 0.24814,
+        "hits": [
+          {"rank": 1, "pdb_id": "7VDE", "token_id": "189379", "bit_score": 298, "evalue": "8.88e-105", "identities": "146/146"},
+          {"rank": 2, "pdb_id": "7UF7", "token_id": "188817", "bit_score": 298, "evalue": "8.88e-105", "identities": "146/146"},
+          {"rank": 3, "pdb_id": "7UF6", "token_id": "188816", "bit_score": 298, "evalue": "8.88e-105", "identities": "146/146"},
+          {"rank": 4, "pdb_id": "7UD8", "token_id": "188782", "bit_score": 298, "evalue": "8.88e-105", "identities": "146/146"},
+          {"rank": 5, "pdb_id": "7UD7", "token_id": "188781", "bit_score": 298, "evalue": "8.88e-105", "identities": "146/146"},
+          {"rank": 6, "pdb_id": "7CUE", "token_id": "175557", "bit_score": 298, "evalue": "8.88e-105", "identities": "146/146"},
+          {"rank": 7, "pdb_id": "6KYE", "token_id": "155148", "bit_score": 298, "evalue": "8.88e-105", "identities": "146/146"},
+          {"rank": 8, "pdb_id": "1DXT", "token_id": "4762", "bit_score": 298, "evalue": "8.88e-105", "identities": "146/146"}
+        ],
+        "timing": {"called_at": "2026-10-20T05:37:01.282Z", "wall_s": 2.642, "server": "elapsed_seconds 0.24814 (answer field)"},
+        "note": "All eight hits tie (bit score 298, E = 8.88e-105, 146/146 identities, MolNFT v1 / PDB) in the same order as on 18 October. The database was rebuilt at 03:17:38-03:18:24Z today (generation 131.132); its size is unchanged."
+      }
+    },
+    {
+      "step": 9,
+      "tool": "pubmed_search",
+      "route": "GET /api/bio/pubmed/search?title=THE+CRYSTAL+STRUCTURE+OF+HUMAN+DEOXYHAEMOGLOBIN+AT+1.74+ANGSTROMS+RESOLUTION&max=3 (api_request)",
+      "arguments": {"title": "THE CRYSTAL STRUCTURE OF HUMAN DEOXYHAEMOGLOBIN AT 1.74 ANGSTROMS RESOLUTION", "max": 3},
+      "result": {
+        "digest": {"query": "human deoxyhaemoglobin", "count": 3029},
+        "page": "/bio/pubmed#q=human+deoxyhaemoglobin",
+        "ids": ["12077435", "6726807", "19683125"],
+        "records_include": {
+          "pmid": "6726807",
+          "citation": "Fermi G, Perutz MF, Shaanan B, Fourme R. J Mol Biol 1984;175(2):159-74",
+          "doi": "10.1016/0022-2836(84)90472-8"
+        }
+      },
+      "timing": {"called_at": "2026-10-20T05:37:10.808Z", "wall_s": 1.540}
+    },
+    {
+      "step": 10,
+      "tool": "bio_dataset",
+      "route": "POST /api/bio/dataset {\"blast\":{\"query\":\"<the beta chain>\"},\"max_rows\":25,\"format\":\"gl1f\",\"include_sequence\":false} (api_request)",
+      "arguments": {
+        "source": "blast",
+        "query": "VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH",
+        "format": "gl1f",
+        "max_rows": 25
+      },
+      "result": {
+        "name": "gl1x-blast-20261020-053720",
+        "format": "gl1x-dataset-gl1f/1",
+        "created_at": "2026-10-20T05:37:20.576Z",
+        "rows": 25,
+        "inputs": 89,
+        "feature_sets": ["gl1x-protein-1", "gl1x-structure-1"],
+        "inputs_by_set": {"protein (p_)": 46, "structure (s_)": 43},
+        "scale_q": 1000,
+        "clamped": 0,
+        "left_out": 0,
+        "label": null,
+        "packing": "one little-endian int32 per input in feature order: the bytes the GL1F runtime's predict functions take",
+        "rows_from": "the 8 tied MolNFT v1 / PDB BLAST hits first (189379, 188817, 188816, 188782, 188781, 175557, 155148, 4762), then 17 MolNFT v2 / PDB Bank chains"
+      },
+      "timing": {"called_at": "2026-10-20T05:37:18.576Z", "wall_s": 2.397, "server": "no timing field in the answer"},
+      "next": "Not run for the article: a model trained off chain on such inputs (with a label) is minted as a GL1F model NFT and then runs on GenesisL1 through gl1f_predict."
+    }
+  ],
+  "recheck_3_4_1": {
+    "at": "2026-10-20T05:34Z-05:40Z",
+    "backend_version": "gl1x 3.4.1 (/api/v2/config/backend-version)",
+    "mcp_tools": 87,
+    "mcp_tools_source": "the GL1X tools the connector exposes in this session (mcp__GL1X__*), counted",
+    "api_routes": 186,
+    "api_routes_source": "list_api_routes, counted by group",
+    "docs_resources": 30,
+    "docs_source": "GET /api/docs (pages; version 3.4.1)",
+    "records": 1035581,
+    "sequences": 2069579,
+    "structures_analysed": 998926,
+    "pockets": 4181598,
+    "interfaces": 2350501,
+    "ligand_components": 42240,
+    "ligand_instances": 3678340,
+    "modifications": 1757929,
+    "note": "the same values the article quotes"
+  },
+  "extras": {
+    "l1_coin": {
+      "read_at": "2026-10-20T05:35Z-05:41Z",
+      "tools": "get_stats and /api/stats, get_supply and /api/v1/supply, get_community_pool, /api/validators/summary, list_proposals, get_health, get_indexer_status, /api/cosmos/staking, /api/cosmos/status",
+      "native": {"symbol": "L1", "denom": "el1", "decimals": 18, "chain_id_cosmos": "genesis_29-2", "chain_id_evm": 29},
+      "total_supply_L1": 47801519.82,
+      "circulating_supply_L1": 42245434.67,
+      "total_staked_L1": 25131277.66,
+      "staked_percent": 52.57,
+      "community_pool_L1": 5556085.15,
+      "community_pool_percent": 11.62,
+      "active_validators": 37,
+      "validators_known": 116,
+      "unique_stakers": 3153,
+      "delegation_positions": 4768,
+      "staking_snapshot_height": 13868011,
+      "governance_proposals": 113,
+      "transactions": 1345830,
+      "accounts": 52811,
+      "average_block_time_s": 14.04,
+      "height": 13869466,
+      "note": "Price and market fields that the API also returns are deliberately not used, as on 18 October."
+    },
+    "l1_snapshots": {
+      "network_head_at_read": {"height": 13869466, "read_at": "2026-10-20T05:35:08Z", "source": "/api/stats latest_block = network_head"},
+      "health": {"status": "degraded", "background_status": "degraded", "live_ready": false, "live_status": "unavailable", "database": "ok", "evm_api": "ok", "state_sync_failing": ["economics", "governance", "validators"], "now": "2026-10-20T05:38:42.174Z", "source": "get_health"},
+      "figures": [
+        {"figure": "total supply", "value_L1": 47801519.82, "el1": "47801519816656031386184732", "source": "/api/stats total_supply (supply_source cosmos_bank_supply)", "snapshot_height": 13868046, "snapshot_time": "2026-10-20T00:06:13.857Z", "status": "stale (economics state sync; 1,420 blocks behind the head)"},
+        {"figure": "circulating supply", "value_L1": 42245434.67, "el1": "42245434666354155608162503", "source": "/api/stats circulating_supply (total minus community pool)", "snapshot_height": 13868046, "snapshot_time": "2026-10-20T00:06:13.857Z", "status": "stale (economics state sync)"},
+        {"figure": "total and circulating supply (supply routes)", "total_L1": 47801539.22, "circulating_L1": 42245450.67, "source": "get_supply = GET /api/v1/supply (identical)", "snapshot_height": null, "snapshot_time": null, "status": "stale, inferred: the answer carries no height or time; its total is 19.40 L1 above the economics snapshot, about 8 blocks of issuance at the 18-20 October rate (2.43 L1 per block), so about height 13,868,054, about 00:08 UTC"},
+        {"figure": "community pool", "value_L1": 5556085.15, "percent_of_total_supply": 11.623239, "source": "get_community_pool (snapshot_height in the answer) and /api/stats", "snapshot_height": 13868046, "snapshot_time": "2026-10-20T00:06:13.857Z", "status": "stale (economics state sync)"},
+        {"figure": "total staked", "value_L1": 25131277.66, "el1": "25131277661714848873537023", "staked_percent": 52.574223, "source": "/api/stats total_staked, equal to the answer's fallback_total_staked", "snapshot_height": "13868011 (validators/delegation snapshot) or 13868046 (economics); the answer does not say which", "snapshot_time": "2026-10-19T23:58:08.429Z / 2026-10-20T00:06:13.857Z", "status": "stale"},
+        {"figure": "bonded tokens (staking pool)", "value_L1": 25144227.48, "bonded_ratio": 52.6, "not_bonded_L1": 1255626.02, "source": "GET /api/cosmos/staking", "snapshot_height": null, "snapshot_time": null, "status": "unknown age, cached: no height or time in the answer; it answered in 0.67 s while the LCD it reads times out after about 14 s"},
+        {"figure": "active validators / known validators", "value": "37 / 116", "source": "/api/stats active_validators, validators", "snapshot_height": 13868011, "snapshot_time": "2026-10-19T23:58:08.429Z", "status": "stale (validators state sync, last completed 23:58:08Z on 19 October)"},
+        {"figure": "unique stakers / delegation positions", "value": "3153 / 4768", "source": "/api/validators/summary indexed_unique_stakers, indexed_delegation_positions", "snapshot_height": 13868011, "snapshot_time": "2026-10-19T23:58:08.429Z", "status": "stale: the answer itself says snapshot.current false, complete false (scope 'indexed delegation subset'); the validators sync detail counts 5,611 delegations, 6 unbondings"},
+        {"figure": "governance proposals", "value": 113, "source": "/api/stats governance_proposals; newest proposal genesis_29-2:134 (passed), updated_at 2026-10-20T00:00:10.471Z (list_proposals)", "snapshot_height": null, "snapshot_time": "2026-10-20T00:00:10.575Z", "status": "stale (governance state sync, last completed 00:00:10Z)"},
+        {"figure": "transactions", "value": 1345830, "parts": {"evm": 1228146, "sdk_only": 117684}, "source": "/api/stats", "snapshot_height": "EVM part 13869484 (caught up, 05:38:57Z); SDK part frozen with the Cosmos block index at 13868060-13868064", "snapshot_time": "SDK part 2026-10-20T00:08:48.855Z", "status": "EVM part current, SDK part stale"},
+        {"figure": "accounts", "value": 52811, "source": "/api/stats total_accounts = discovered_accounts = evm_index.total_addresses", "snapshot_height": 13869484, "snapshot_time": "EVM index, current", "status": "current for the EVM index; Cosmos-only accounts depend on the stalled Cosmos index"},
+        {"figure": "average block time", "value_s": 14.040863, "source": "/api/stats average_block_time over the last 100 Cosmos-indexed blocks", "snapshot_height": "13867961-13868060", "snapshot_time": "2026-10-19T23:45:38.809Z to 2026-10-20T00:08:48.855Z", "status": "stale window; the EVM index reports 14.03 s (evm_index.average_block_time 14030 ms, no window given)"},
+        {"figure": "latest block", "value": 13869464, "source": "/api/network/summary", "snapshot_time": "2026-10-20T05:34:19Z", "status": "current"}
+      ],
+      "state_sync": [
+        {"name": "economics", "status": "error", "last_completed_at": "2026-10-20T00:06:13.857Z", "snapshot_height": 13868046, "last_started_at": "2026-10-20T05:28:03.400Z", "last_error": "bank supply: Get https://api.genesisl1.org/cosmos/bank/v1beta1/supply/by_denom?denom=el1: context deadline exceeded"},
+        {"name": "governance", "status": "error", "last_completed_at": "2026-10-20T00:00:10.575Z", "last_started_at": "2026-10-20T05:03:50.623Z", "last_error": "Get https://api.genesisl1.org/cosmos/gov/v1/proposals?pagination.limit=200: context deadline exceeded"},
+        {"name": "validators", "status": "error", "last_completed_at": "2026-10-19T23:58:08.429Z", "snapshot_height": 13868011, "last_started_at": "2026-10-20T05:34:19.845Z", "last_error": "validators: Get https://api.genesisl1.org/cosmos/staking/v1beta1/validators?pagination.limit=500: context deadline exceeded"},
+        {"name": "rewards", "status": "ok", "last_completed_at": "2026-10-20T05:27:58.399Z", "details": {"accounts": 0}}
+      ],
+      "block_indexers": [
+        {"id": "evm:8853001-latest https://rpc.genesisl1.org", "status": "caught_up", "last_indexed_height": 13869484, "endpoint_head": 13869483, "last_indexed_at": "2026-10-20T05:38:57.975Z"},
+        {"id": "cosmos:7781001-latest https://26657.genesisl1.org", "status": "retrying", "consecutive_errors": 3, "last_indexed_height": 13868064, "endpoint_head": 13868063, "last_error": "Get https://26657.genesisl1.org/blockchain?minHeight=13868063&maxHeight=13868063: context deadline exceeded"}
+      ],
+      "endpoints_at_05_40Z": {"source": "/api/cosmos/status", "26657.genesisl1.org": "cooling down, latency 17,856 ms, last error /status deadline exceeded 05:40:37Z", "api.genesisl1.org (LCD)": "cooling down, latency 14,463 ms, last error node_info deadline exceeded 05:40:36Z", "rpc.genesisl1.org (EVM)": "ok, latency 102 ms"}
+    },
+    "blast_database": {
+      "tool": "blast_database",
+      "protein": {"sequences": 1288423, "letters": 395873664, "rows": 1990846, "segments": 6},
+      "nucleotide": {"sequences": 57755, "letters": 10077095, "rows": 78733, "segments": 5},
+      "generation": "131.132",
+      "built_at": "2026-10-20T03:17:38.162Z",
+      "updated_at": "2026-10-20T03:18:24.165Z",
+      "load_ms": 46002,
+      "threads_per_search": 48,
+      "searches_since_build_at_05_39Z": 5,
+      "timing": {"called_at": "2026-10-20T05:39:15.156Z", "wall_s": 0.365}
+    },
+    "structure_search_index": {
+      "source": "structure_search answer (database)",
+      "chains": 1558073,
+      "residues": 452387430,
+      "built_at": "2026-10-17T22:46:02.127Z",
+      "updated_at": "2026-10-18T04:45:38.950Z"
+    },
+    "server_counts": {
+      "backend_version": "gl1x 3.4.1",
+      "mcp_tools": 87,
+      "api_routes": 186,
+      "docs_resources": 30,
+      "timing": {"list_api_routes_wall_s": 0.436, "backend_version_wall_s": 1.093, "docs_wall_s": 0.640}
+    },
+    "examples": {
+      "read_at": "2026-10-20T05:41Z-05:43Z",
+      "tool": "molecule_search (limit 50, telomerase limit 1)",
+      "semaglutide": {
+        "records": 4,
+        "highlight": {"pdb_id": "7KI0", "title": "Semaglutide-bound Glucagon-Like Peptide-1 (GLP-1) Receptor in Complex with Gs protein", "collection": "MolNFT v2 / PDB Bank (on chain)", "token_id": "184543"},
+        "timing": {"called_at": "2026-10-20T05:41:39.513Z", "wall_s": 0.335}
+      },
+      "tirzepatide": {
+        "records": 12,
+        "highlights": [
+          {"pdb_id": "7VBI", "title": "Cryo-EM structure of the non-acylated tirzepatide (LY3298176)-bound human GLP-1R-Gs complex", "token_id": "197659"},
+          {"pdb_id": "7VAB", "title": "Cryo-EM structure of the non-acylated tirzepatide (LY3298176)-bound human GIPR-Gs complex", "token_id": "197616"}
+        ],
+        "timing": {"called_at": "2026-10-20T05:41:50.577Z", "wall_s": 1.119}
+      },
+      "SIRT6": {
+        "records": 64,
+        "highlights": [
+          {"pdb_id": "8OF4", "title": "Nucleosome Bound human SIRT6 (Composite)", "token_id": "215389"},
+          {"pdb_id": "9G7H", "title": "Human Sirt6 in complex with ADP-ribose and the inhibitor 2-Pr", "token_id": "228651"}
+        ],
+        "timing": {"called_at": "2026-10-20T05:42:01.409Z", "wall_s": 1.023}
+      },
+      "klotho": {
+        "records": 20,
+        "highlight": {"pdb_id": "8UF8", "title": "Cryo-EM structure of alpha-Klotho", "token_id": "222049"},
+        "timing": {"called_at": "2026-10-20T05:42:23.836Z", "wall_s": 0.744}
+      },
+      "telomerase": {
+        "records": 185,
+        "timing": {"called_at": "2026-10-20T05:42:41.373Z", "wall_s": 0.943}
+      },
+      "rapamycin": {
+        "records": 103,
+        "highlight": {"pdb_id": "1AUE", "title": "FKBP-RAPAMYCIN BINDING DOMAIN (FRB) OF THE FKBP-RAPAMYCIN ASSOCIATED PROTEIN", "collection": "MolNFT v2 / PDB Bank (on chain)", "token_id": "1202"},
+        "timing": {"called_at": "2026-10-20T05:42:50.776Z", "wall_s": 0.976}
+      },
+      "note": "Every highlighted record of 18 October is in today's answer with the same token id, all in MolNFT v2 / PDB Bank."
+    },
+    "article_timing_figures": {
+      "structure_search": {
+        "quoted_18_oct": "1,558,073 chains in 0.82 s (elapsed_ms 820)",
+        "today": [
+          {"call": "route POST /api/bio/structure/search, limit 8", "elapsed_ms": 1006, "wall_s": 1.799},
+          {"call": "structure_search tool, limit 8", "elapsed_ms": 1006, "wall_s": 1.196, "cached": true},
+          {"call": "structure_search tool, limit 10 (fresh)", "elapsed_ms": 851, "wall_s": 1.143}
+        ],
+        "chains": 1558073,
+        "source": "the answer's elapsed_ms (server-reported)"
+      },
+      "blast": {
+        "quoted_18_oct": "1,288,423 sequences in 0.25 s (elapsed_seconds 0.24872; recheck 0.25121)",
+        "today": [
+          {"call": "route POST /api/bio/blast, max_target_seqs 8", "elapsed_seconds": 0.24814, "wall_s": 2.642},
+          {"call": "blast_search tool, max_target_seqs 5", "elapsed_seconds": 0.28263, "wall_s": 2.397}
+        ],
+        "sequences": 1288423,
+        "source": "the answer's elapsed_seconds (server-reported)"
+      },
+      "ligand_sites_HEM": {"quoted_18_oct": "elapsed_ms 4015", "today": {"elapsed_ms": 3861, "wall_s": 1.268, "cached": true}}
+    },
+    "other_call_timings": [
+      {"call": "/api/validators/summary", "called_at": "2026-10-20T05:37:53.718Z", "wall_s": 0.922},
+      {"call": "get_supply", "called_at": "2026-10-20T05:38:00.428Z", "wall_s": 0.708},
+      {"call": "/api/v1/supply", "called_at": "2026-10-20T05:38:15.400Z", "wall_s": 1.008},
+      {"call": "get_community_pool", "called_at": "2026-10-20T05:38:24.220Z", "wall_s": 0.436},
+      {"call": "list_proposals (limit 2)", "called_at": "2026-10-20T05:38:40.077Z", "wall_s": 0.952},
+      {"call": "get_health", "called_at": "2026-10-20T05:38:46.932Z", "wall_s": 0.484},
+      {"call": "get_indexer_status", "called_at": "2026-10-20T05:38:57.912Z", "wall_s": 0.800},
+      {"call": "/api/cosmos/status", "called_at": "2026-10-20T05:40:46.576Z", "wall_s": 0.300},
+      {"call": "/api/cosmos/staking", "called_at": "2026-10-20T05:41:00.168Z", "wall_s": 0.668}
+    ]
+  }
+}

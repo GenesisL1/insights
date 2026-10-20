@@ -35,6 +35,7 @@ pages = {
     "initial": INSIGHTS / "genesisl1-desci-blockchain-verifiable-ai-model-nfts.html",
     "renaissance": INSIGHTS / "genesisl1-decentralization-scientific-renaissance.html",
     "stake": INSIGHTS / "genesisl1-stake-distribution-decentralization-evidence.html",
+    "gl1x": INSIGHTS / "gl1x-blockchain-explorer-mcp-bioinformatics.html",
     "evidence": SITE / "evidence/stake-distribution/index.html",
 }
 for label, path in pages.items():
@@ -50,10 +51,10 @@ for forbidden in (
 ):
     if forbidden in index:
         fail(f"obsolete landing-page copy remains: {forbidden}")
-if index.count('class="publication-card"') != 3:
-    fail("Insights landing page must contain exactly the three publication cards")
+if len(re.findall(r'class="publication-card[" ]', index)) != 4:
+    fail("Insights landing page must contain exactly the four publication cards")
 
-for label in ("initial", "renaissance", "stake"):
+for label in ("initial", "renaissance", "stake", "gl1x"):
     path = pages[label]
     html = path.read_text(encoding="utf-8")
     if len(re.findall(r"<h1(?:\s|>)", html, flags=re.I)) != 1:
@@ -109,6 +110,9 @@ expected_images = {
     "genesisl1-stake-distribution-social-1200x630.jpg": (1200, 630),
     "genesisl1-initial-article-social-1200x630.jpg": (1200, 630),
     "genesisl1-insights-social-1200x630.jpg": (1200, 630),
+    "gl1x-ledger-laboratory-cover.webp": (1672, 941),
+    "gl1x-ledger-laboratory-card-1100x620.webp": (1100, 620),
+    "gl1x-ledger-laboratory-social-1200x630.jpg": (1200, 630),
 }
 for filename, expected in expected_images.items():
     path = INSIGHTS / "assets" / filename
@@ -118,7 +122,7 @@ for filename, expected in expected_images.items():
     if actual != expected:
         fail(f"wrong image dimensions for {filename}: {actual} != {expected}")
 
-for label in ("initial", "renaissance", "stake"):
+for label in ("initial", "renaissance", "stake", "gl1x"):
     html = pages[label].read_text(encoding="utf-8")
     if "brand-lockup" not in html or "CHAIN 29" not in html:
         fail(f"{label} missing the canonical GenesisL1 header lockup")
@@ -132,6 +136,13 @@ if (ROOT / "press").exists():
 for html_path in SITE.rglob("*.html"):
     if "press-release" in html_path.name.lower():
         fail(f"press-release page must remain outside Insights: {html_path.relative_to(SITE)}")
+
+gl1x = pages["gl1x"].read_text(encoding="utf-8")
+if source_list_count(gl1x, "sources") != 13:
+    fail("GL1X source list must contain thirteen references")
+for required in ("1,035,581", "87 tools", "https://gl1x.com/mcp", "Decentralized Science Labs LLC", "Bioinformatics LLC", "MIT License"):
+    if required not in gl1x:
+        fail(f"GL1X article missing: {required}")
 
 readme = (ROOT / "README.md").read_text(encoding="utf-8")
 for required in ("13,690,968", "33", "9.27%", "27.38%", "1,402"):
